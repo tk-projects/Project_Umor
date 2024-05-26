@@ -8,7 +8,7 @@ i2c = busio.I2C(bord.SCL, board.SDA)
 adc = ads.ADS1115(i2c)
 
 
-class huidity_sensor:
+class humidity_sensor:
     def __init__(self, sensor_id, adc_channel, unit = None, ):
         self.sensor_id = sensor_id
         self.unit = "% air moisture"
