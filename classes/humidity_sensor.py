@@ -13,7 +13,7 @@ class humidity_sensor:
     def __init__(self, sensor_id, adc_channel, unit = None, ):
         self.sensor_id = sensor_id
         self.unit = "% air moisture"
-        self.adc_channel = AnalogIn(eval('adc, ads.' + str(adc_channel)))
+        self.adc_channel = AnalogIn(eval('adc, ads.P' + str(adc_channel)))
         self.sensor_data = []
 
     def read(self):
