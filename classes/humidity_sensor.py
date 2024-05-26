@@ -4,7 +4,7 @@ import busio
 import adafruit_ads1x15.ads1115 as ads
 from adafruit_ads1x15.analog_in import AnalogIn
 
-i2c = busio.I2C(bord.SCL, board.SDA)
+i2c = busio.I2C(board.SCL, board.SDA)
 adc = ads.ADS1115(i2c)
 
 
