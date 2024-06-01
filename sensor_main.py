@@ -15,7 +15,7 @@ print("Initializing")
 dauer = 32
 for _ in range(dauer):
     print(".", end="", flush=True)
-    time.sleep(0.04)
+    time.sleep(0.03)
 
 print("")
 
@@ -27,6 +27,5 @@ for sensor_name, sensor_json in sensor_json.items():
     print("Importet:",sensor_json["name"], "at channel:", sensor_json["adc_channel"], "with a max clibration value of: ", sensor_json["max_calibration_value"], "and with a min calibration value of:",sensor_json["min_calibration_value"])
     
 
-
-print("Sensor data: ", sensors)
+print("\nSensor data: ", sensors)
     
