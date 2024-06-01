@@ -10,15 +10,7 @@ print(sensor)
 number_of_sensors = 1
 
 # Load sensor mappings:
-sensor_channel_mapping = json.load("bin\sensor_channel_mapping.json")
+with open("bin\sensor_channel_mapping.json", "r") as file:
+        sensor_channel_mapping = json.load(file)
+
 print(sensor_channel_mapping)
-
-
-
-
-
-
-        
-
-
-
