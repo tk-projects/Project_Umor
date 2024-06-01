@@ -17,12 +17,14 @@ for _ in range(dauer):
     print(".", end="", flush=True)
     time.sleep(0.04)
 
+print("")
+
 
 sensors = {}
 
 for sensor_name, sensor_json in sensor_json.items():
     sensors[sensor_name] = humidity_sensor(sensor_json["sensor_id"], sensor_json["adc_channel"], sensor_json["name"], sensor_json["unit"], sensor_json["max_calibration_value"], sensor_json["min_calibration_value"])
-    print("/n",sensor_json["name"], "at channel:", sensor_json["adc_channel"], "with a max clibration value of: ", sensor_json["max_calibration_value"], "and with a min calibration value of:",sensor_json["min_calibration_value"])
+    print("Importet:",sensor_json["name"], "at channel:", sensor_json["adc_channel"], "with a max clibration value of: ", sensor_json["max_calibration_value"], "and with a min calibration value of:",sensor_json["min_calibration_value"])
     
 
 
