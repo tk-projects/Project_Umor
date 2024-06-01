@@ -91,8 +91,4 @@ class humidity_sensor:
             "unit": self.unit,
             "min_offset": self.min_offset,
             "max_offset": self.max_offset
-        }
-
-
-
-    
+        }  
