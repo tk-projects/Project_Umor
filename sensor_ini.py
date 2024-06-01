@@ -39,5 +39,5 @@ print(sensors)
 sensors_file_path = os.path.join(os.getcwd() + "/bin/sensors.pickle")
 
 # Schreiben der sensor_instances in die JSON-Datei
-with open(sensors_file_path, "w") as file:
+with open(sensors_file_path, "wb") as file:
     pickle.dump(sensors, file)
