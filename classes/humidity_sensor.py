@@ -17,8 +17,42 @@ class humidity_sensor:
         #self.adc_channel = AnalogIn(adc, ads.P0)
         self.adc_channel = AnalogIn(adc, getattr(ads, 'P' + str(adc_channel)))
         #self.adc_channel = AnalogIn(eval('adc, ads.P' + str(adc_channel)))
-        self.sensor_data = []
+        self.sensor_data = [];
+        self.max_offset = 0;
+        self.min_offset = 0;
 
     def read(self):
         print (self.adc_channel.value, self.adc_channel.voltage)
         time.sleep
+
+    def calibrate(self)
+        sensor_is_dry = input("Wenn der Sensor trocken ist ,,y"" eingeben")
+        if sensor_is_dry =="y":
+            self.max_offset = self.adc_channel.value;
+
+            print("Messwerte von Sensor", self.sensor_id, ":")
+
+            for i in range(0,10):
+                if self.adc_channel > self.max_offset:
+                    self.max_offset = self.adc_channel.value;
+                print("Wert ",i,": ",self.adc_channel.value)
+                time.sleep(0.4)
+
+        time.sleep(1)
+
+        sensor_is_humid = input("Jetzt den Sensor ins Wasser stellen und mit ,,y"" bestätigen")
+
+        if sensor_is_humid =="y":
+            self.min_offset = self.adc_channel.value;
+
+            print("Messwerte von Sensor", self.sensor_id, ":")
+
+            for i in range(0,10):
+                if self.adc_channel < self.min_offset:
+                    self.min_offset = self.adc_channel.value;
+                print("Wert ",i,": ",self.adc_channel.value)
+                time.sleep(0.4)
+
+
+
+    
