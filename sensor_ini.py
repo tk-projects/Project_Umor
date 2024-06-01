@@ -31,13 +31,14 @@ for i in range(1,number_of_sensors+1):
     sensor_name = f"sensor_{i}";
     print(sensor_name)
     sensor_channel = sensor_channel_mapping.get(sensor_name," Error: Sensor nicht gefunden. Prüfe die sensor_channel_mapping.json Datei im Ordner /bin/ !")
-    sensors[sensor_name] = humidity_sensor(sensor_idx, sensor_channel, sensor_name, "% Lufteuchte")
+    sensor_object = humidity_sensor(sensor_idx, sensor_channel, sensor_name, "% Lufteuchte")
+    sensors[sensor_name] = sensor_object.to_dict;
 
 print(sensors)
 
 # Dateipfad für die JSON-Datei
-sensors_file_path = os.path.join(os.getcwd() + "/bin/sensors.pickle")
+sensors_file_path = os.path.join(os.getcwd() + "/bin/sensors.json")
 
 # Schreiben der sensor_instances in die JSON-Datei
-with open(sensors_file_path, "wb") as file:
-    pickle.dump(sensors, file)
+with open(sensors_file_path, "w") as file:
+    json.dump(sensors, file, indent=4)

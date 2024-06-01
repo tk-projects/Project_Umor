@@ -82,6 +82,14 @@ class humidity_sensor:
         print("\n   Bei absoluter Feuchtigkeit:\t", self.min_offset)
         print("______________________________________________________________________________")
 
+    def to_dict(self):
+        return {
+            "sensor_id": self.sensor_id,
+            "name": self.name,
+            "adc_channel": self.adc_channel,
+            "unit": self.unit
+        }
+
 
 
     
