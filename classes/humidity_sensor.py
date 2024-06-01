@@ -32,7 +32,7 @@ class humidity_sensor:
         dauer = 30
         for _ in range(dauer):
             print(".", end="", flush=True)
-            time.sleep(0.15)
+            time.sleep(0.07)
         
         print("\nSensor bereit für Kalibrierung")
         time.sleep(1)
