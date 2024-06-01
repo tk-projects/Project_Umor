@@ -47,7 +47,7 @@ for i in range(1,number_of_sensors+1):
     sensor_object = humidity_sensor(sensor_idx, sensor_channel, sensor_name, "% Lufteuchte")
     sensor_object.calibrate();
 
-    if sensor_object.max_offset ==0 or sensor_object.min_offset ==0:
+    if sensor_object.max_calibration_value ==0 or sensor_object.min_calibration_value ==0:
         sys.exit()
 
 

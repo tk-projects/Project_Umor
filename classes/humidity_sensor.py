@@ -10,7 +10,7 @@ adc = ads.ADS1115(i2c)
 
 
 class humidity_sensor:
-    def __init__(self, sensor_id, adc_channel, name, unit = None, max_offset = 0, min_offset = 0):
+    def __init__(self, sensor_id, adc_channel, name, unit = None, max_calibration_value = 0, min_calibration_value = 0):
         self.sensor_id = sensor_id
         self.name = name
         self.unit = unit
@@ -20,8 +20,8 @@ class humidity_sensor:
         self.adc_channel = AnalogIn(adc, getattr(ads, 'P' + str(self.adc_channel_idx)))
         #self.adc_channel = AnalogIn(eval('adc, ads.P' + str(adc_channel)))
         self.sensor_data = [];
-        self.max_offset = max_offset;
-        self.min_offset = min_offset;
+        self.max_calibration_value = max_calibration_value;
+        self.min_calibration_value = min_calibration_value;
 
     def read(self):
         print (self.adc_channel.value, self.adc_channel.voltage)
@@ -42,14 +42,14 @@ class humidity_sensor:
     
 
         if sensor_is_dry =="":
-            max_offset = self.adc_channel.value;
+            max_calibration_value = self.adc_channel.value;
 
             print("\n\nMesswerte von Sensor ", self.sensor_id, " bei Trockenheit:")
             print("__________________________________________")
 
             for i in range(0,10):
-                if self.adc_channel.value > max_offset:
-                    max_offset = self.adc_channel.value;
+                if self.adc_channel.value > max_calibration_value:
+                    max_calibration_value = self.adc_channel.value;
                 print("Wert",i+1,":\t",self.adc_channel.value)
                 time.sleep(0.4)
         else:
@@ -61,26 +61,26 @@ class humidity_sensor:
         sensor_is_humid = input("\nJetzt den Sensor ins Wasser stellen und mit Enter bestätigen (andere Taste zum abbrechen)")
 
         if sensor_is_humid =="":
-            min_offset = self.adc_channel.value;
+            min_calibration_value = self.adc_channel.value;
 
             print("\n\nMesswerte von Sensor", self.sensor_id, " bei Feuchtigkeit:")
             print("__________________________________________")
 
             for i in range(0,10):
-                if self.adc_channel.value < min_offset:
-                    min_offset = self.adc_channel.value;
+                if self.adc_channel.value < min_calibration_value:
+                    min_calibration_value = self.adc_channel.value;
                 print("Wert ",i+1,":\t",self.adc_channel.value)
                 time.sleep(0.4)
         else:
             print("\nKalibrierung abgebrochen")
             return
         
-        self.min_offset = min_offset;
-        self.max_offset = max_offset;
+        self.min_calibration_value = min_calibration_value;
+        self.max_calibration_value = max_calibration_value;
 
         print("______________________________________________________________________________")
-        print("\nDie Sensor-Offsets wurden wie folgt kalibriert:\n\n   Bei absoluter Trockenheit:\t", self.max_offset)
-        print("\n   Bei absoluter Feuchtigkeit:\t", self.min_offset)
+        print("\nDie Sensor-calibration_values wurden wie folgt kalibriert:\n\n   Bei absoluter Trockenheit:\t", self.max_calibration_value)
+        print("\n   Bei absoluter Feuchtigkeit:\t", self.min_calibration_value)
         print("______________________________________________________________________________")
 
     def to_dict(self):
@@ -89,6 +89,6 @@ class humidity_sensor:
             "name": self.name,
             "adc_channel": self.adc_channel_idx,
             "unit": self.unit,
-            "min_offset": self.min_offset,
-            "max_offset": self.max_offset
+            "min_calibration_value": self.min_calibration_value,
+            "max_calibration_value": self.max_calibration_value
         }  
