@@ -1,4 +1,5 @@
 from  classes.humidity_sensor import humidity_sensor
+import os
 import json
 
 sensor = humidity_sensor(1, 0)
@@ -9,8 +10,15 @@ print(sensor)
 
 number_of_sensors = 1
 
-# Load sensor mappings:
-with open("bin/sensor_channel_mapping.json", "r") as file:
-        sensor_channel_mapping = json.load(file)
+
+# Get the current directory of the script
+current_directory = os.path.dirname(__file__)
+
+# Specify the path to the JSON file relative to the current directory
+json_file_path = os.path.join(current_directory, "bin", "sensor_channel_mapping.json")
+
+# Open and read the JSON file
+with open(json_file_path, "r") as file:
+    sensor_channel_mapping = json.load(file)
 
 print(sensor_channel_mapping)
