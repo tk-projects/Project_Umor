@@ -6,7 +6,7 @@ import pickle
 #sensor = humidity_sensor(1, 0)
 #print(sensor)
 
-#sensor.calibrate();
+
 
 
 number_of_sensors = 1
@@ -32,6 +32,7 @@ for i in range(1,number_of_sensors+1):
     print(sensor_name)
     sensor_channel = sensor_channel_mapping.get(sensor_name," Error: Sensor nicht gefunden. Prüfe die sensor_channel_mapping.json Datei im Ordner /bin/ !")
     sensor_object = humidity_sensor(sensor_idx, sensor_channel, sensor_name, "% Lufteuchte")
+    sensor_object.calibrate();
     print(sensor_object.to_dict())
     sensors[sensor_name] = sensor_object.to_dict();
 

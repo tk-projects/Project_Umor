@@ -88,7 +88,9 @@ class humidity_sensor:
             "sensor_id": self.sensor_id,
             "name": self.name,
             "adc_channel": self.adc_channel_idx,
-            "unit": self.unit
+            "unit": self.unit,
+            "min_offset": self.min_offset,
+            "max_offset": self.max_offset
         }
 
 
