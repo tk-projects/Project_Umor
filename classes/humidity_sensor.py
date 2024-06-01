@@ -32,13 +32,13 @@ class humidity_sensor:
         if sensor_is_dry =="":
             max_offset = self.adc_channel.value;
 
-            print("\nMesswerte von Sensor", self.sensor_id, ":")
-            print("_______________________")
+            print("\n\nMesswerte von Sensor", self.sensor_id, ":")
+            print("_________________________")
 
             for i in range(0,10):
                 if self.adc_channel.value > max_offset:
                     max_offset = self.adc_channel.value;
-                print("Wert ",i,": ",self.adc_channel.value)
+                print("Wert ",i+1,": ",self.adc_channel.value)
                 time.sleep(0.4)
         else:
             print("\nKalibrierung abgebrochen")
@@ -51,13 +51,13 @@ class humidity_sensor:
         if sensor_is_humid =="":
             min_offset = self.adc_channel.value;
 
-            print("\nMesswerte von Sensor", self.sensor_id, ":")
-            print("_______________________")
+            print("\n\nMesswerte von Sensor", self.sensor_id, ":")
+            print("_________________________")
 
             for i in range(0,10):
                 if self.adc_channel.value < min_offset:
                     min_offset = self.adc_channel.value;
-                print("Wert ",i,": ",self.adc_channel.value)
+                print("Wert ",i+1,": ",self.adc_channel.value)
                 time.sleep(0.4)
         else:
             print("\nKalibrierung abgebrochen")
@@ -66,10 +66,10 @@ class humidity_sensor:
         self.min_offset = min_offset;
         self.max_offset = max_offset;
 
-        print("_______________________________________________________________________________________________")
+        print("__________________________________________________________________________________")
         print("\nDie Sensor-Offsets wurden wie folgt kalibriert:\n\n   Bei absoluter Trockenheit: ", self.max_offset)
         print("\n   Bei absoluter Feuchtigkeit: ", self.min_offset)
-        print("_______________________________________________________________________________________________")
+        print("__________________________________________________________________________________")
 
 
 
