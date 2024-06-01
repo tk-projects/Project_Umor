@@ -33,7 +33,7 @@ class humidity_sensor:
             max_offset = self.adc_channel.value;
 
             print("\nMesswerte von Sensor", self.sensor_id, ":")
-            print("_____________________")
+            print("_______________________")
 
             for i in range(0,10):
                 if self.adc_channel.value > max_offset:
@@ -45,14 +45,14 @@ class humidity_sensor:
             return
 
         time.sleep(1)
-        print("_______________________________________________________________________________________________")
+
         sensor_is_humid = input("\nJetzt den Sensor ins Wasser stellen und mit Enter bestätigen (andere Taste zum abbrechen)")
 
-        if sensor_is_humid =="y":
+        if sensor_is_humid =="":
             min_offset = self.adc_channel.value;
 
             print("\nMesswerte von Sensor", self.sensor_id, ":")
-            print("_____________________")
+            print("_______________________")
 
             for i in range(0,10):
                 if self.adc_channel.value < min_offset:
