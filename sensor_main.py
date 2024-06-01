@@ -12,12 +12,12 @@ with open(sensors_file_path, "r") as json_file:
 print("________________________________________________________________________________________________________")
 print("________________________________________________________________________________________________________\n")
 print("Initializing")
-dauer = 32
+dauer = 12
 for _ in range(dauer):
     print(".", end="", flush=True)
-    time.sleep(0.03)
+    time.sleep(0.04)
 
-print("")
+print("\n")
 
 
 sensors = {}
@@ -27,5 +27,5 @@ for sensor_name, sensor_json in sensor_json.items():
     print(" • Imported: Sensor",sensor_json["sensor_id"], "| Channel:", sensor_json["adc_channel"], "| max value: ", sensor_json["max_calibration_value"], "| min value:",sensor_json["min_calibration_value"],"|")
     
 
-print("\nSensor data: ", sensors)
+print("\nSensor class data: ", sensors)
     
