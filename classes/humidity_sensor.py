@@ -16,7 +16,8 @@ class humidity_sensor:
         self.unit = "% air moisture"
         print('adc, ads.P' + str(adc_channel))
         #self.adc_channel = AnalogIn(adc, ads.P0)
-        self.adc_channel = AnalogIn(adc, getattr(ads, 'P' + str(adc_channel)))
+        self.adc_channel_idx = adc_channel
+        self.adc_channel = AnalogIn(adc, getattr(ads, 'P' + str(self.adc_channel_idx)))
         #self.adc_channel = AnalogIn(eval('adc, ads.P' + str(adc_channel)))
         self.sensor_data = [];
         self.max_offset = 0;
@@ -86,7 +87,7 @@ class humidity_sensor:
         return {
             "sensor_id": self.sensor_id,
             "name": self.name,
-            "adc_channel": self.adc_channel,
+            "adc_channel": self.adc_channel_idx,
             "unit": self.unit
         }
 
