@@ -28,4 +28,11 @@ for sensor_name, sensor_json in sensor_json.items():
     
 
 print("\nSensor class data: ", sensors)
-    
+
+
+print("Sensor 1 measurement:")
+
+while True:
+
+    sensors["sensor_1"].read()
+    time.sleep(0.3)
