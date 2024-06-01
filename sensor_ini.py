@@ -28,7 +28,7 @@ for i in range(1,number_of_sensors+1):
     sensor_idx = i;
     sensor_name = f"sensor_{i}";
     sensor_channel = sensor_channel_mapping.get(sensor_name,"Sensor nicht gefunden. Prüfe die sensor_channel_mapping.json Datei im Ordner /bin/ !")
-    sensors[sensor_name] = humidity_sensor(1,sensor_name,sensor_channel,"% Lufteuchte")
+    sensors[sensor_name] = humidity_sensor(sensor_idx, sensor_channel, sensor_name, "% Lufteuchte")
 
 print(sensors)
 
