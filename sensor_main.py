@@ -13,9 +13,9 @@ print("Initializing: ")
 sensors = {}
 
 for sensor_name, sensor_json in sensor_json.items():
-    print(sensor_json["name"], "at channel:", sensor_json["adc_channel"], "with a max clibration value of: ")
-    sensors[sensor_name] = humidity_sensor(sensor_json["sensor_id"], sensor_json["adc_channel"], sensor_json["name"], sensor_json["unit"], sensor_json["max_calibration_value"], sensor_json["min_alibration_value"])
-
+    sensors[sensor_name] = humidity_sensor(sensor_json["sensor_id"], sensor_json["adc_channel"], sensor_json["name"], sensor_json["unit"], sensor_json["max_calibration_value"], sensor_json["min_calibration_value"])
+    print(sensor_json["name"], "at channel:", sensor_json["adc_channel"], "with a max clibration value of: ", sensor_json["max_calibration_value"], "and with a min clibration value of:",sensor_json["min_calibration_value"])
+    
 
 
 print("Sensor data: ", sensors)
