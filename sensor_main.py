@@ -13,7 +13,7 @@ print("Loading succesful")
 sensors = {}
 
 for sensor_name, sensor_json in sensor_json.items():
-    sensors[sensor_name] = humidity_sensor(sensor_json["sensor_id"], sensor_json["adc_channel"], sensor_json["name"], sensor_json["unit"], sensor_json["min_offset"],sensor_json["max_offset"])
+    sensors[sensor_name] = humidity_sensor(sensor_json["sensor_id"], sensor_json["adc_channel"], sensor_json["name"], sensor_json["unit"], sensor_json["max_offset"], sensor_json["min_offset"])
 
 print("Sensor data: ", sensors)
     
