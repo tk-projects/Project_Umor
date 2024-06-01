@@ -27,9 +27,22 @@ class humidity_sensor:
 
     def calibrate(self):
         print("_____________________________________________________________________________")
-        print("_____________________________________________________________________________")     
+        print("_____________________________________________________________________________")
+        print(".")
+        print(" .")
+        print("  .")
+        print("   .")
+        print("  .")
+        print(" .")
+        print(".")
+        print(" .")
+        print("  .")
+        print("   .")
+        print("  .")
+        print(" .")
+        print(".")     
         print("\nSensor bereit für Kalibrierung")
-        time.sleep(0.6)
+        time.sleep(1)
         sensor_is_dry = input("\nWenn der Sensor trocken ist mit Enter bestätigen (andere Taste zum abbrechen)")
     
 
