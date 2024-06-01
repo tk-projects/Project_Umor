@@ -26,14 +26,18 @@ class humidity_sensor:
         time.sleep
 
     def calibrate(self):
+        print("_____________________________________________________________________________")
+        print("_____________________________________________________________________________")     
+        print("\nSensor bereit für Kalibrierung")
+        time.sleep(0.6)
         sensor_is_dry = input("\nWenn der Sensor trocken ist mit Enter bestätigen (andere Taste zum abbrechen)")
     
 
         if sensor_is_dry =="":
             max_offset = self.adc_channel.value;
 
-            print("\n\nMesswerte von Sensor bei Trockenheit", self.sensor_id, ":")
-            print("_________________________")
+            print("\n\nMesswerte von Sensor ", self.sensor_id, " bei Trockenheit:")
+            print("____________________________________")
 
             for i in range(0,10):
                 if self.adc_channel.value > max_offset:
@@ -51,8 +55,8 @@ class humidity_sensor:
         if sensor_is_humid =="":
             min_offset = self.adc_channel.value;
 
-            print("\n\nMesswerte von Sensor", self.sensor_id, ":")
-            print("_________________________")
+            print("\n\nMesswerte von Sensor", self.sensor_id, " bei Feuchtigkeit:")
+            print("____________________________________")
 
             for i in range(0,10):
                 if self.adc_channel.value < min_offset:
