@@ -1,6 +1,7 @@
 import time
 import board
 import busio
+import keyboard
 import adafruit_ads1x15.ads1115 as ads
 from adafruit_ads1x15.analog_in import AnalogIn
 
@@ -26,35 +27,50 @@ class humidity_sensor:
         time.sleep
 
     def calibrate(self):
-        sensor_is_dry = input("\nWenn der Sensor trocken ist ,,y'' eingeben: ")
-        if sensor_is_dry =="y":
-            self.max_offset = self.adc_channel.value;
+        sensor_is_dry = input("\nWenn der Sensor trocken ist mit Enter bestätigen (andere Taste zum abbrechen)")
+    
+
+        if sensor_is_dry =="":
+            max_offset = self.adc_channel.value;
 
             print("\nMesswerte von Sensor", self.sensor_id, ":")
+            print("_____________________")
 
             for i in range(0,10):
-                if self.adc_channel.value > self.max_offset:
-                    self.max_offset = self.adc_channel.value;
+                if self.adc_channel.value > max_offset:
+                    max_offset = self.adc_channel.value;
                 print("Wert ",i,": ",self.adc_channel.value)
                 time.sleep(0.4)
+        else:
+            print("\nKalibrierung abgebrochen")
+            return
 
         time.sleep(1)
-
-        sensor_is_humid = input("\nJetzt den Sensor ins Wasser stellen und mit ,,y'' bestätigen: ")
+        print("_______________________________________________________________________________________________")
+        sensor_is_humid = input("\nJetzt den Sensor ins Wasser stellen und mit Enter bestätigen (andere Taste zum abbrechen)")
 
         if sensor_is_humid =="y":
-            self.min_offset = self.adc_channel.value;
+            min_offset = self.adc_channel.value;
 
             print("\nMesswerte von Sensor", self.sensor_id, ":")
+            print("_____________________")
 
             for i in range(0,10):
-                if self.adc_channel.value < self.min_offset:
-                    self.min_offset = self.adc_channel.value;
+                if self.adc_channel.value < min_offset:
+                    min_offset = self.adc_channel.value;
                 print("Wert ",i,": ",self.adc_channel.value)
                 time.sleep(0.4)
+        else:
+            print("\nKalibrierung abgebrochen")
+            return
+        
+        self.min_offset = min_offset;
+        self.max_offset = max_offset;
 
+        print("_______________________________________________________________________________________________")
         print("\nDie Sensor-Offsets wurden wie folgt kalibriert:\n\n   Bei absoluter Trockenheit: ", self.max_offset)
-        print("\nBei absoluter Feuchtigkeit: ", self.min_offset)
+        print("\n   Bei absoluter Feuchtigkeit: ", self.min_offset)
+        print("_______________________________________________________________________________________________")
 
 
 
