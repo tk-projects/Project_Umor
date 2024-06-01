@@ -10,8 +10,9 @@ adc = ads.ADS1115(i2c)
 
 
 class humidity_sensor:
-    def __init__(self, sensor_id, adc_channel, unit = None, ):
+    def __init__(self, sensor_id, adc_channel, name, unit = None):
         self.sensor_id = sensor_id
+        self.name = name
         self.unit = "% air moisture"
         print('adc, ads.P' + str(adc_channel))
         #self.adc_channel = AnalogIn(adc, ads.P0)
