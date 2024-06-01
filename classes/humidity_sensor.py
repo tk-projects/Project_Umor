@@ -26,11 +26,13 @@ class humidity_sensor:
         time.sleep
 
     def calibrate(self):
-        dauer = 20
+        print("____________________________________________________")
+        print("____________________________________________________")
 
+        dauer = 30
         for _ in range(dauer):
             print(".", end="", flush=True)
-            time.sleep(0.1)
+            time.sleep(0.15)
         
         print("\nSensor bereit für Kalibrierung")
         time.sleep(1)
@@ -75,8 +77,8 @@ class humidity_sensor:
         self.max_offset = max_offset;
 
         print("__________________________________________________________________________________")
-        print("\nDie Sensor-Offsets wurden wie folgt kalibriert:\n\n  Bei absoluter Trockenheit:\t", self.max_offset)
-        print("\n  Bei absoluter Feuchtigkeit:\t", self.min_offset)
+        print("\nDie Sensor-Offsets wurden wie folgt kalibriert:\n\n   Bei absoluter Trockenheit:\t", self.max_offset)
+        print("\n   Bei absoluter Feuchtigkeit:\t", self.min_offset)
         print("__________________________________________________________________________________")
 
 
