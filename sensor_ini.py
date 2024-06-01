@@ -1,6 +1,7 @@
 from  classes.humidity_sensor import humidity_sensor
 import os
 import json
+import pickle
 
 #sensor = humidity_sensor(1, 0)
 #print(sensor)
@@ -35,8 +36,8 @@ for i in range(1,number_of_sensors+1):
 print(sensors)
 
 # Dateipfad für die JSON-Datei
-sensors_jason = os.path.join(os.getcwd() + "/bin/sensors.json")
+sensors_file_path = os.path.join(os.getcwd() + "/bin/sensors.pickle")
 
 # Schreiben der sensor_instances in die JSON-Datei
-with open(sensors_jason, "w") as file:
-    json.dump(sensors, file, indent=4)
+with open(sensors_file_path, "w") as file:
+    pickle.dump(sensors, file, indent=4)
