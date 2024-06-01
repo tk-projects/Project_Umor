@@ -23,19 +23,19 @@ class humidity_sensor:
 
     def read(self):
         print (self.adc_channel.value, self.adc_channel.voltage)
-        time.sleep
+        time.sleep(0.4)
 
     def calibrate(self):
         print("________________________________________________________________________________________________________")
         print("________________________________________________________________________________________________________\n")
         print("Verbinde mit Sensor.")
-        dauer = 35
+        dauer = 32
         for _ in range(dauer):
             print(".", end="", flush=True)
-            time.sleep(0.03)
+            time.sleep(0.04)
         
         print("\n\nSensor bereit für Kalibrierung.")
-        time.sleep(1)
+        time.sleep(2)
         sensor_is_dry = input("\nWenn der Sensor trocken ist mit Enter bestätigen (andere Taste zum abbrechen)")
     
 
@@ -76,10 +76,10 @@ class humidity_sensor:
         self.min_offset = min_offset;
         self.max_offset = max_offset;
 
-        print("__________________________________________________________________________________")
+        print("______________________________________________________________________________")
         print("\nDie Sensor-Offsets wurden wie folgt kalibriert:\n\n   Bei absoluter Trockenheit:\t", self.max_offset)
         print("\n   Bei absoluter Feuchtigkeit:\t", self.min_offset)
-        print("__________________________________________________________________________________")
+        print("______________________________________________________________________________")
 
 
 
