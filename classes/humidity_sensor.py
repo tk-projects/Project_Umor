@@ -14,7 +14,7 @@ class humidity_sensor:
         self.sensor_id = sensor_id
         self.name = name
         self.unit = unit
-        print('adc, ads.P' + str(adc_channel))
+        #print('adc, ads.P' + str(adc_channel))
         #self.adc_channel = AnalogIn(adc, ads.P0)
         self.adc_channel_idx = adc_channel
         self.adc_channel = AnalogIn(adc, getattr(ads, 'P' + str(self.adc_channel_idx)))
