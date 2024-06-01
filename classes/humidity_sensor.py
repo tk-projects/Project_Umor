@@ -37,7 +37,7 @@ class humidity_sensor:
             time.sleep(0.04)
         
         print("\n\nSensor bereit für Kalibrierung.")
-        time.sleep(2)
+        time.sleep(1)
         sensor_is_dry = input("\nWenn der Sensor trocken ist mit Enter bestätigen (andere Taste zum abbrechen)")
     
 
