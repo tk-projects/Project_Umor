@@ -12,7 +12,7 @@ with open(sensors_file_path, "r") as json_file:
 print("________________________________________________________________________________________________________")
 print("________________________________________________________________________________________________________\n")
 print("Importing Sensor Data:")
-dauer = 20
+dauer = 22
 for _ in range(dauer):
     print(".", end="", flush=True)
     time.sleep(0.05)
