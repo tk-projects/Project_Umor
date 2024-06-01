@@ -24,7 +24,7 @@ with open(json_file_path, "r") as file:
 # Create a dictionary to store sensor instances
 sensors = {}
 
-for i in range(1,number_of_sensors):
+for i in range(1,number_of_sensors+1):
     sensor_idx = i;
     sensor_name = f"sensor_{i}";
     sensor_channel = sensor_channel_mapping.get(sensor_name,"Sensor nicht gefunden. Prüfe die sensor_channel_mapping.json Datei im Ordner /bin/ !")
@@ -33,8 +33,8 @@ for i in range(1,number_of_sensors):
 print(sensors)
 
 # Dateipfad für die JSON-Datei
-sensors_jason = "/bin/sensor_instances.json"
+sensors_jason = os.path.join(os.getcwd() + "/bin/sensors.json")
 
 # Schreiben der sensor_instances in die JSON-Datei
-with open(json_file_path, "w") as file:
+with open(sensors_jason, "w") as file:
     json.dump(sensors, file, indent=4)
