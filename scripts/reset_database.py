@@ -5,7 +5,7 @@ import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Path to the database file
-db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
+db_path = os.path.join(current_dir, '..','SQL', 'sensor_data.db')
 
 # Connect to the SQLite database
 conn = sqlite3.connect(db_path)
