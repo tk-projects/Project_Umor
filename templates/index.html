@@ -43,7 +43,7 @@
         }
 
         .current-humidity-text {
-			font-size: 18px; /* Größe für das Label "Aktuelle Feuchtigkeit", den Wert und das Prozentzeichen */
+			font-size: 40px; /* Größe für das Label "Aktuelle Feuchtigkeit", den Wert und das Prozentzeichen */
 		}
     </style>
 </head>
@@ -71,7 +71,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in rows[-10:][::-1] %}
+                    {% for row in rows[-20:][::-1] %}
                     <tr>
                         <td>{{ row[1] }}</td>
                         <td>{{ row[3] }}</td>
