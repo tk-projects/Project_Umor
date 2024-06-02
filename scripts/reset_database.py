@@ -1,125 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sensor Data</title>
-    <style>
-        .container {
-            display: flex;
-            flex-direction: row;
-        }
+import sqlite3
+import os
 
-        .table-container {
-            width: 20%;
-            margin-right: 20px;
-        }
+# Get the absolute path to the current directory
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
-        .graph-container {
-            width: 75%;
-        }
+# Path to the database file
+db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            font-family: Arial, sans-serif;
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 4px;
-            font-size: 14px;
-            font-family: Arial, sans-serif;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .timestamp {
-            width: 60%;
-        }
-        .humidity {
-            width: 20%;
-        }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Function to reload the page every 5 seconds
-        function reloadPage() {
-            setTimeout(function() {
-                window.location.reload();
-            }, 5000); // 5 seconds
-        }
+# Connect to the SQLite database
+conn = sqlite3.connect(db_path)
+c = conn.cursor()
 
-        // Call the function when the page loads
-        window.onload = reloadPage;
+# Delete all records from the humidity_data table
+c.execute('DELETE FROM humidity_data')
 
-        // Function to render the chart
-        function renderChart() {
-            var timestamps = [];
-            var humidities = [];
-            {% for row in rows %}
-                timestamps.push("{{ row[1] }}");
-                humidities.push("{{ row[3] }}");
-            {% endfor %}
+# Commit changes and close the connection
+conn.commit()
+conn.close()
 
-            var ctx = document.getElementById('myChart').getContext('2d');
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: timestamps,
-                    datasets: [{
-                        label: 'Humidity',
-                        data: humidities,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1,
-                        fill: false
-                    }]
-                },
-                options: {
-                    animation: false, // Disable animation
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    }
-                }
-            });
-        }
-
-        // Call the function to render the chart when the page loads
-        window.onload = function() {
-            reloadPage();
-            renderChart();
-        };
-    </script>
-</head>
-<body>
-    <h1>Sensor Data (Sensor 1)</h1>
-    <div class="container">
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="timestamp">Timestamp</th>
-                        <th class="humidity">Humidity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in rows %}
-                    <tr>
-                        <td class="timestamp">{{ row[1] }}</td> <!-- Assuming timestamp is the second column -->
-                        <td class="humidity">{{ row[3] }}</td> <!-- Assuming humidity is the fourth column -->
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="graph-container">
-            <canvas id="myChart" width="800" height="400"></canvas>
-        </div>
-    </div>
-</body>
-</html>
+print("Database reset successfully.")
