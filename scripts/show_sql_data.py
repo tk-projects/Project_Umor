@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 # Get the absolute path to the current directory
 current_dir = os.path.dirname(os.path.abspath(__file__))
