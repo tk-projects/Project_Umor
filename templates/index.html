@@ -40,7 +40,7 @@
 
         .update-interval-container {
             margin-top: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .current-humidity-value {
@@ -51,7 +51,7 @@
 		}
 		.percent-sign {
 			font-size: 40px;
-			margin-bottom: 20px;
+			margin-bottom: 15px;
 		}
     </style>
 </head>
@@ -79,7 +79,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in rows[-20:][::-1] %}
+                    {% for row in rows[-18:][::-1] %}
                     <tr>
                         <td>{{ row[1] }}</td>
                         <td>{{ row[3] }}</td>
