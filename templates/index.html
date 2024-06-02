@@ -15,12 +15,12 @@
         }
 
         .table-container {
-            width: 25%; /* Adjusted table size */
+            width: 25%; /* Anpassung der Tabellengröße */
             margin-right: 20px;
         }
 
         .graph-container {
-            width: 75%; /* Adjusted graph size */
+            width: 75%; /* Anpassung der Tabellengröße */
         }
 
         table {
@@ -37,18 +37,17 @@
         }
 
         .update-interval-container {
-            margin-top: 20px; /* Added top margin */
-            margin-bottom: 20px; /* Added bottom margin */
+            margin-top: 20px; /* Abstand nach oben */
+            margin-bottom: 20px; /* Abstand nach unten */
         }
     </style>
 </head>
 <body>
-    <h1>Sensor Data (Sensor 1)</h1> <!-- Header restored -->
-    <div class="update-interval-container"> <!-- Container for dropdown list and spacing -->
+    <div class="update-interval-container"> <!-- Container für Dropdown-Liste und Abstand -->
         <label for="updateInterval">Update Interval: </label>
         <select id="updateInterval" onchange="updateInterval()">
             <option value="2000">Every 2 seconds</option>
-            <option value="10000" selected>Every 10 seconds</option>
+            <option value="10000">Every 10 seconds</option>
             <option value="60000">Every minute</option>
         </select>
     </div>
@@ -64,8 +63,8 @@
                 <tbody>
                     {% for row in rows %}
                     <tr>
-                        <td style="font-size: 14px;">{{ row[1] }}</td> <!-- Keeping font size -->
-                        <td style="font-size: 14px;">{{ row[3] }}</td> <!-- Keeping font size -->
+                        <td style="font-size: 14px;">{{ row[1] }}</td> <!-- Schriftgröße beibehalten -->
+                        <td style="font-size: 14px;">{{ row[3] }}</td> <!-- Schriftgröße beibehalten -->
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -78,45 +77,59 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Function to set selected option
-        function setSelectedOption() {
-            var selectedInterval = localStorage.getItem('selectedInterval');
-            if (selectedInterval) {
-                document.getElementById('updateInterval').value = selectedInterval;
-            }
-        }
+        var refreshInterval = 2000; // Default update interval (2 seconds)
+        var intervalId;
 
-        // Function to save selected option
-        function saveSelectedOption() {
-            var selectedInterval = document.getElementById('updateInterval').value;
-            localStorage.setItem('selectedInterval', selectedInterval);
-        }
-
-        // Function to fetch sensor data
         function fetchSensorData() {
-            saveSelectedOption();
             location.reload();
         }
 
-        // Function to start auto refresh
         function startAutoRefresh() {
             clearInterval(intervalId);
             intervalId = setInterval(fetchSensorData, refreshInterval);
         }
 
-        // Function to update interval
         function updateInterval() {
             var newInterval = document.getElementById('updateInterval').value;
             refreshInterval = parseInt(newInterval);
             startAutoRefresh();
         }
 
-        var refreshInterval = 10000; // Default update interval (10 seconds)
-        var intervalId;
+        // Assuming rows is a list of dictionaries with timestamp and humidity
+        var timestamps = [];
+        var humidities = [];
+        {% for row in rows %}
+            timestamps.push("{{ row[1] }}");
+            humidities.push("{{ row[3] }}");
+        {% endfor %}
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: timestamps,
+                datasets: [{
+                    label: 'Humidity',
+                    data: humidities,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                animation: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
 
         // Start auto-refresh with the default interval
         startAutoRefresh();
-        setSelectedOption();
     </script>
 </body>
 </html>
