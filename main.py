@@ -1,5 +1,4 @@
-import threading
-from  classes.humidity_sensor import humidity_sensor
+from classes.humidity_sensor import humidity_sensor
 from functions.save_sensor_data import save_sensor_data
 from flask import Flask, render_template
 import sqlite3
@@ -9,9 +8,26 @@ import time
 
 app = Flask(__name__, template_folder='templates')
 
-# Function to run the Flask app
-def run_flask_app():
-    app.run(host='0.0.0.0', port=8080, debug=True)
+# Function to fetch data from the database
+def fetch_data_from_db():
+    # Get the absolute path to the current directory
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Path to the database file
+    db_path = os.path.join(current_dir, '..', 'SQL', 'sensor_data.db')
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM humidity_data')
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
+
+# Route for the homepage
+@app.route('/')
+def index():
+    rows = fetch_data_from_db()
+    return render_template('index.html', rows=rows)
 
 # Function for the main script
 def main():
@@ -41,13 +57,25 @@ def main():
 
     print("Sensor 1 measurement:")
     while True:
+        # Read sensor data
         humidity = sensors["sensor_1"].read()
-        save_sensor_data(sensors["sensor_1"].name, humidity) # Update DB
+        
+        # Update database
+        save_sensor_data(sensors["sensor_1"].name, humidity)
+        
+        # Fetch data from the database
+        rows = fetch_data_from_db()
+        
+        # Render the template with the updated data
+        render_template('index.html', rows=rows)
+
+        # Pause execution for 10 seconds before the next iteration
         time.sleep(10)
 
-# Start Flask app in a separate thread
-flask_thread = threading.Thread(target=run_flask_app)
-flask_thread.start()
+# Start Flask app
+if __name__ == '__main__':
+    # Run the main script
+    main()
 
-# Run the main script
-main()
+    # Run the Flask app
+    app.run(host='0.0.0.0', port=8080, debug=True)
