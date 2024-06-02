@@ -36,8 +36,5 @@ print("Sensor 1 measurement:")
 while True:
 
     humidity = sensors["sensor_1"].read()
-    print(humidity)
-    print(sensors["sensor_1"].name)
-
-    save_sensor_data("sensor_1", humidity) # Update DB
+    save_sensor_data(sensors["sensor_1"].name, humidity) # Update DB
     time.sleep(10)

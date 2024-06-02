@@ -14,6 +14,7 @@ def save_sensor_data(sensor_name, humidity_value):
     
     conn.commit()
     conn.close()
+    print("Updated DB with data from",sensor_name, "and value:", humidity_value)
 
 # Beispiel: Speichern eines Sensormesswerts
 save_sensor_data("sensor_1", 45.3)
