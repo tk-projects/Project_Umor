@@ -18,7 +18,7 @@ def index():
     cursor.execute('SELECT * FROM humidity_data')
     rows = cursor.fetchall()
     conn.close()
-    return render_template('index.html', rows=rows)
+    return render_template(index_html_path, rows=rows)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
