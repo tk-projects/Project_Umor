@@ -1,5 +1,5 @@
 from  classes.humidity_sensor import humidity_sensor
-from functions import save_sensor_data
+from functions.save_sensor_data import save_sensor_data
 import os
 import json
 import time
@@ -37,6 +37,7 @@ while True:
 
     humidity = sensors["sensor_1"].read()
     print(humidity)
-    
-    save_sensor_data(sensors["sensor_1"].name, humidity) # Update DB
+    print(sensors["sensor_1"].name)
+
+    save_sensor_data("sensor_1", humidity) # Update DB
     time.sleep(10)
