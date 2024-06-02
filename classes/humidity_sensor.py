@@ -28,6 +28,7 @@ class humidity_sensor:
         humidity = round(-1*(self.adc_channel.value-self.max_calibration_value)/(self.max_calibration_value - self.min_calibration_value), 2)*100
         print("\n",humidity, self.unit)
         time.sleep(0.4)
+        return humidity
 
     def calibrate(self):
         print("________________________________________________________________________________________________________")
