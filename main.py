@@ -53,11 +53,32 @@ def update_sensor_data():
     except Exception as e:
         print(f"Error updating sensor data: {e}")
 
-# Background thread to update sensor data every 10 seconds
+# Background thread to update sensor data every n seconds
 def sensor_data_updater():
+    sampling_rate = 60
     while True:
-        update_sensor_data()
-        time.sleep(60)
+        last_datapoint = get_last_datapoint()
+        if last_datapoint:
+            last_timestamp = datetime.datetime.strptime(last_datapoint, '%Y-%m-%d %H:%M:%S')
+            current_timestamp = datetime.datetime.now()
+            time_difference = (current_timestamp - last_timestamp).total_seconds()
+            if time_difference >= sampling_rate-1:
+                update_sensor_data()
+        else:
+            update_sensor_data()  # No data in the database, insert the first datapoint
+        time.sleep(sampling_rate)
+
+def get_last_datapoint():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('SELECT timestamp FROM humidity_data ORDER BY timestamp DESC LIMIT 1')
+    row = cursor.fetchone()
+    conn.close()
+    if row:
+        return row[0]
+    return None
 
 # Route for the homepage
 @app.route('/')
