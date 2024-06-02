@@ -40,6 +40,12 @@
             margin-top: 20px; /* Abstand nach oben */
             margin-bottom: 20px; /* Abstand nach unten */
         }
+
+        .current-humidity {
+            font-size: 20px; /* Größere Schriftgröße */
+            margin-bottom: 10px;
+            text-align: center; /* Zentrierte Ausrichtung */
+        }
     </style>
 </head>
 <body>
@@ -71,6 +77,10 @@
             </table>
         </div>
         <div class="graph-container">
+            <div class="current-humidity">
+                Current Humidity: <!-- Hier wird die aktuelle Feuchtigkeit angezeigt -->
+                <!-- Hier können Sie den aktuellen Feuchtigkeitswert einfügen, wenn Sie ihn haben -->
+            </div>
             <canvas id="myChart"></canvas>
         </div>
     </div>
