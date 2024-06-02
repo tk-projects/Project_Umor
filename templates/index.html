@@ -41,7 +41,7 @@
             margin-bottom: 20px; /* Abstand nach unten */
         }
 
-        .current-humidity {
+        .current-info {
             font-size: 20px; /* Größere Schriftgröße */
             margin-bottom: 10px;
             text-align: center; /* Zentrierte Ausrichtung */
@@ -67,7 +67,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in rows %}
+                    {% for row in rows[:10] | reverse %}
                     <tr>
                         <td style="font-size: 14px;">{{ row[1] }}</td> <!-- Schriftgröße beibehalten -->
                         <td style="font-size: 14px;">{{ row[3] }}</td> <!-- Schriftgröße beibehalten -->
@@ -77,9 +77,10 @@
             </table>
         </div>
         <div class="graph-container">
-            <div class="current-humidity">
+            <div class="current-info">
                 Current Humidity: <!-- Hier wird die aktuelle Feuchtigkeit angezeigt -->
                 <!-- Hier können Sie den aktuellen Feuchtigkeitswert einfügen, wenn Sie ihn haben -->
+                <!-- Beispiel: {{ current_humidity }} -->
             </div>
             <canvas id="myChart"></canvas>
         </div>
