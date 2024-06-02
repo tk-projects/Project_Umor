@@ -23,7 +23,7 @@ for sensor_name, sensor_data in sensor_json.items():
 # Function to fetch data from the database
 def fetch_data_from_db():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(current_dir, '..', 'SQL', 'sensor_data.db')
+    db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM humidity_data')
