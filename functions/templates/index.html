@@ -29,7 +29,12 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Sensor data rows will be dynamically inserted here -->
+            {% for row in rows %}
+            <tr>
+                <td>{{ row[0] }}</td> <!-- Assuming timestamp is the first column -->
+                <td>{{ row[1] }}</td> <!-- Assuming humidity is the second column -->
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </body>
