@@ -57,7 +57,7 @@
             <option value="60000">Every minute</option>
         </select>
     </div>
-    <div class="current-humidity">Current Humidity: <span id="currentHumidity"></span></div>
+    <div class="current-humidity">Current Humidity: <span id="currentHumidity">{{ rows[0][3] }}</span></div> <!-- Anzeige des aktuellen Feuchtigkeitswerts -->
     <div class="container">
         <div class="table-container">
             <table>
@@ -68,7 +68,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in rows[:10]|reverse %} <!-- Nur die letzten 10 Werte und in umgekehrter Reihenfolge -->
+                    {% for row in rows[-10:][::-1] %} <!-- Nur die letzten 10 Werte und in umgekehrter Reihenfolge -->
                     <tr>
                         <td style="font-size: 14px;">{{ row[1] }}</td> <!-- Schriftgröße beibehalten -->
                         <td style="font-size: 14px;">{{ row[3] }}</td> <!-- Schriftgröße beibehalten -->
@@ -146,10 +146,4 @@
             }
         });
 
-        // Start auto-refresh with the default interval
-        startAutoRefresh();
-        // Initialen Feuchtigkeitswert aktualisieren
-        updateCurrentHumidity();
-    </script>
-</body>
-</html>
+        // Start auto
