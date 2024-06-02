@@ -8,14 +8,22 @@ import time
 
 app = Flask(__name__, template_folder='templates')
 
+# Load sensor configuration
+sensors_file_path = os.path.join(os.getcwd(), 'bin', 'sensors.json')
+print("Loading Sensor Data from: ", sensors_file_path)
+
+with open(sensors_file_path, "r") as json_file:
+    sensor_json = json.load(json_file)
+
+sensors = {}
+for sensor_name, sensor_data in sensor_json.items():
+    sensors[sensor_name] = humidity_sensor(sensor_data["sensor_id"], sensor_data["adc_channel"], sensor_data["name"], sensor_data["unit"], sensor_data["max_calibration_value"], sensor_data["min_calibration_value"])
+    print("  • Sensor", sensor_data["sensor_id"], "| Channel:", sensor_data["adc_channel"], "| max value: ", sensor_data["max_calibration_value"], "| min value:", sensor_data["min_calibration_value"], "|")
+
 # Function to fetch data from the database
 def fetch_data_from_db():
-    # Get the absolute path to the current directory
     current_dir = os.path.dirname(os.path.abspath(__file__))
-
-    # Path to the database file
-    db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
-
+    db_path = os.path.join(current_dir, '..', 'SQL', 'sensor_data.db')
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM humidity_data')
@@ -23,59 +31,17 @@ def fetch_data_from_db():
     conn.close()
     return rows
 
+# Function to update sensor data
+def update_sensor_data():
+    humidity = sensors["sensor_1"].read()
+    save_sensor_data(sensors["sensor_1"].name, humidity)  # Update DB
+
 # Route for the homepage
 @app.route('/')
 def index():
+    update_sensor_data()  # Update sensor data
     rows = fetch_data_from_db()
     return render_template('index.html', rows=rows)
 
-# Function for the main script
-def main():
-    sensors_file_path = os.path.join(os.getcwd() + "/bin/sensors.json")
-    print("Loading Sensor Data from: ", sensors_file_path)
-
-    with open(sensors_file_path, "r") as json_file:
-        sensor_json = json.load(json_file)
-
-    print("________________________________________________________________________________________________________")
-    print("________________________________________________________________________________________________________\n")
-    print("Importing Sensor Data:")
-    dauer = 22
-    for _ in range(dauer):
-        print(".", end="", flush=True)
-        time.sleep(0.05)
-
-    print("\n")
-
-    sensors = {}
-
-    for sensor_name, sensor_json in sensor_json.items():
-        sensors[sensor_name] = humidity_sensor(sensor_json["sensor_id"], sensor_json["adc_channel"], sensor_json["name"], sensor_json["unit"], sensor_json["max_calibration_value"], sensor_json["min_calibration_value"])
-        print("  • Sensor",sensor_json["sensor_id"], "| Channel:", sensor_json["adc_channel"], "| max value: ", sensor_json["max_calibration_value"], "| min value:",sensor_json["min_calibration_value"],"|")
-
-    print("\nSensor class data: ", sensors)
-
-    print("Sensor 1 measurement:")
-    while True:
-        # Read sensor data
-        humidity = sensors["sensor_1"].read()
-        
-        # Update database
-        save_sensor_data(sensors["sensor_1"].name, humidity)
-        
-        # Fetch data from the database
-        rows = fetch_data_from_db()
-        
-        # Render the template with the updated data
-        render_template('index.html', rows=rows)
-
-        # Pause execution for 10 seconds before the next iteration
-        time.sleep(10)
-
-# Start Flask app
 if __name__ == '__main__':
-    # Run the main script
-    main()
-
-    # Run the Flask app
     app.run(host='0.0.0.0', port=8080, debug=True)
