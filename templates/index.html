@@ -17,7 +17,7 @@
         .table-container {
             width: 25%;
             margin-right: 20px;
-            margin-bottom: 20px; /* Mehr Platz nach unten */
+            margin-bottom: 20px;
         }
 
         .graph-container {
@@ -43,8 +43,8 @@
         }
 
         .current-humidity {
-            font-size: 150%; /* Etwa 1/3 größer */
-            margin-bottom: 20px; /* Mehr Platz nach unten */
+            font-size: 200%; /* Verdoppeln */
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -52,12 +52,12 @@
     <div class="update-interval-container">
         <label for="updateInterval">Aktualisierungsintervall: </label>
         <select id="updateInterval" onchange="updateInterval()">
-            <option value="2000" selected>Jede 2 Sekunden</option> <!-- Standardmäßig ausgewählt -->
+            <option value="2000" selected>Jede 2 Sekunden</option>
             <option value="10000">Jede 10 Sekunden</option>
             <option value="60000">Jede Minute</option>
         </select>
     </div>
-    <div class="current-humidity">Aktuelle Feuchtigkeit: <span id="currentHumidity">{{ rows[-1][3] }}</span>%</div> <!-- Prozentzeichen hinzugefügt -->
+    <div class="current-humidity">Aktuelle Feuchtigkeit: <span id="currentHumidity" style="font-size: 150%;">{{ rows[-1][3] }}</span>%</div>
     <div class="container">
         <div class="table-container">
             <table>
@@ -68,7 +68,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in rows[-15:][::-1] %}
+                    {% for row in rows[-20:][::-1] %}
                     <tr>
                         <td>{{ row[1] }}</td>
                         <td>{{ row[3] }}</td>
@@ -130,10 +130,12 @@
                         scaleLabel: {
                             display: true,
                             labelString: 'Feuchtigkeit (%)',
-                            fontColor: '#666666'
+                            fontColor: '#666666',
+                            fontSize: 16 // Schriftgröße erhöhen
                         },
                         ticks: {
-                            beginAtZero: true
+                            beginAtZero: true,
+                            fontSize: 14 // Schriftgröße erhöhen
                         }
                     }],
                     xAxes: [{
