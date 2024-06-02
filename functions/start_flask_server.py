@@ -4,7 +4,9 @@ import sqlite3
 app = Flask(__name__)
 
 def get_sensor_data():
-    conn = sqlite3.connect('sensor_data.db')
+    # Path to the database file in the SQL directory
+    db_path = os.path.join('SQL', 'sensor_data.db')
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
     c.execute("SELECT * FROM humidity_data")
     data = c.fetchall()
