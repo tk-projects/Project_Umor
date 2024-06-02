@@ -57,7 +57,7 @@
             <option value="60000">Every minute</option>
         </select>
     </div>
-    <div class="current-humidity">Current Humidity: <span id="currentHumidity">{{ rows[0][3] }}</span></div> <!-- Anzeige des aktuellen Feuchtigkeitswerts -->
+    <div class="current-humidity">Current Humidity: <span id="currentHumidity"></span></div>
     <div class="container">
         <div class="table-container">
             <table>
@@ -68,7 +68,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in rows[-10:][::-1] %} <!-- Nur die letzten 10 Werte und in umgekehrter Reihenfolge -->
+                    {% for row in rows[:10]|reverse %} <!-- Nur die letzten 10 Werte und in umgekehrter Reihenfolge -->
                     <tr>
                         <td style="font-size: 14px;">{{ row[1] }}</td> <!-- Schriftgröße beibehalten -->
                         <td style="font-size: 14px;">{{ row[3] }}</td> <!-- Schriftgröße beibehalten -->
@@ -105,7 +105,7 @@
         // Aktuellen Feuchtigkeitswert aktualisieren
         function updateCurrentHumidity() {
             var currentHumidityElement = document.getElementById('currentHumidity');
-            currentHumidityElement.textContent = "{{ rows[0][3] }}"; // Erster Wert der Tabelle (neuester Wert)
+            currentHumidityElement.textContent = "{{ rows[-1][3] }}"; // Erster Wert der Tabelle (neuester Wert)
         }
 
         // Assuming rows is a list of dictionaries with timestamp and humidity
@@ -146,4 +146,10 @@
             }
         });
 
-        // Start auto
+        // Start auto-refresh with the default interval
+        startAutoRefresh();
+        // Initialen Feuchtigkeitswert aktualisieren
+        updateCurrentHumidity();
+    </script>
+</body>
+</html>
