@@ -15,12 +15,12 @@
         }
 
         .table-container {
-            width: 25%; /* Anpassung der Tabellengröße */
+            width: 25%; /* Adjusted table size */
             margin-right: 20px;
         }
 
         .graph-container {
-            width: 75%; /* Anpassung der Tabellengröße */
+            width: 75%; /* Adjusted graph size */
         }
 
         table {
@@ -37,17 +37,18 @@
         }
 
         .update-interval-container {
-            margin-top: 20px; /* Abstand nach oben */
-            margin-bottom: 20px; /* Abstand nach unten */
+            margin-top: 20px; /* Added top margin */
+            margin-bottom: 20px; /* Added bottom margin */
         }
     </style>
 </head>
 <body>
-    <div class="update-interval-container"> <!-- Container für Dropdown-Liste und Abstand -->
+    <h1>Sensor Data (Sensor 1)</h1> <!-- Header restored -->
+    <div class="update-interval-container"> <!-- Container for dropdown list and spacing -->
         <label for="updateInterval">Update Interval: </label>
         <select id="updateInterval" onchange="updateInterval()">
             <option value="2000">Every 2 seconds</option>
-            <option value="10000">Every 10 seconds</option>
+            <option value="10000" selected>Every 10 seconds</option>
             <option value="60000">Every minute</option>
         </select>
     </div>
@@ -63,8 +64,8 @@
                 <tbody>
                     {% for row in rows %}
                     <tr>
-                        <td style="font-size: 14px;">{{ row[1] }}</td> <!-- Schriftgröße beibehalten -->
-                        <td style="font-size: 14px;">{{ row[3] }}</td> <!-- Schriftgröße beibehalten -->
+                        <td style="font-size: 14px;">{{ row[1] }}</td> <!-- Keeping font size -->
+                        <td style="font-size: 14px;">{{ row[3] }}</td> <!-- Keeping font size -->
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -77,7 +78,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        var refreshInterval = 2000; // Default update interval (2 seconds)
+        var refreshInterval = 10000; // Default update interval (10 seconds)
         var intervalId;
 
         function fetchSensorData() {
