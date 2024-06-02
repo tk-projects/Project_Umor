@@ -20,6 +20,15 @@ c.execute('''CREATE TABLE IF NOT EXISTS humidity_data (
                  humidity_value REAL
              )''')
 
+
+# Example data to insert
+sensor_name = 'sensor_1'
+humidity_value = 0
+
+# Insert data into the table
+c.execute("INSERT INTO humidity_data (sensor_name, humidity_value) VALUES (?, ?)", (sensor_name, humidity_value))
+
+
 # Verbindung schließen
 conn.commit()
 conn.close()
