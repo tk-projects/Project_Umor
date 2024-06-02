@@ -42,18 +42,9 @@
             margin-bottom: 20px;
         }
 
-        .current-humidity {
-            font-size: 200%;
-            margin-bottom: 20px;
-        }
-
-        .current-humidity-label {
-            font-size: 200%; /* Gleiche Schriftgröße wie die Feuchtigkeit */
-        }
-
-        .percent-sign {
-            font-size: 200%; /* Gleiche Schriftgröße wie die Feuchtigkeit */
-        }
+        .current-humidity-text {
+			font-size: 18px; /* Größe für das Label "Aktuelle Feuchtigkeit", den Wert und das Prozentzeichen */
+		}
     </style>
 </head>
 <body>
@@ -65,7 +56,11 @@
             <option value="60000">Jede Minute</option>
         </select>
     </div>
-    <div class="current-humidity">Aktuelle Feuchtigkeit: <span class="current-humidity-label" id="currentHumidity">{{ rows[-1][3] }}</span><span class="percent-sign">%</span></div>
+    <div class="current-humidity">
+		<span class="current-humidity-label" id="currentHumidity">Aktuelle Feuchtigkeit:</span>
+		<span class="current-humidity-value">{{ rows[-1][3] }}</span>
+		<span class="percent-sign">%</span>
+	</div>
     <div class="container">
         <div class="table-container">
             <table>
