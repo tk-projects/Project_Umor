@@ -57,7 +57,7 @@ def update_sensor_data():
 def sensor_data_updater():
     while True:
         update_sensor_data()
-        time.sleep(10)
+        time.sleep(60)
 
 # Route for the homepage
 @app.route('/')
