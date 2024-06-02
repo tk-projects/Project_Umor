@@ -11,14 +11,14 @@ def index():
 
     # Path to the database file
     db_path = os.path.join(current_dir, '..', 'SQL', 'sensor_data.db')
-    index_html_path = index_html_path = os.path.join(current_dir, '..', '..', 'bin', 'templates', 'index.html')
+
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM humidity_data')
     rows = cursor.fetchall()
     conn.close()
-    return render_template(index_html_path, rows=rows)
+    return render_template('/home/tk/Umor/Project_Umor/bin/templates/index.html', rows=rows)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
