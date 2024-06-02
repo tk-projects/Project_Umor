@@ -18,7 +18,7 @@ def index():
     cursor.execute('SELECT * FROM humidity_data')
     rows = cursor.fetchall()
     conn.close()
-    return render_template('/templates/index.html', rows=rows)
+    return render_template('/home/tk/Umor/Project_Umor/functions/templates/index.html', rows=rows)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
