@@ -67,7 +67,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in rows[:10] | reverse %}
+                    {% for row in rows[-20:][::-1] %}
                     <tr>
                         <td style="font-size: 14px;">{{ row[1] }}</td> <!-- Schriftgröße beibehalten -->
                         <td style="font-size: 14px;">{{ row[3] }}</td> <!-- Schriftgröße beibehalten -->
