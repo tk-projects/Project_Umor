@@ -78,59 +78,45 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        var refreshInterval = 10000; // Default update interval (10 seconds)
-        var intervalId;
+        // Function to set selected option
+        function setSelectedOption() {
+            var selectedInterval = localStorage.getItem('selectedInterval');
+            if (selectedInterval) {
+                document.getElementById('updateInterval').value = selectedInterval;
+            }
+        }
 
+        // Function to save selected option
+        function saveSelectedOption() {
+            var selectedInterval = document.getElementById('updateInterval').value;
+            localStorage.setItem('selectedInterval', selectedInterval);
+        }
+
+        // Function to fetch sensor data
         function fetchSensorData() {
+            saveSelectedOption();
             location.reload();
         }
 
+        // Function to start auto refresh
         function startAutoRefresh() {
             clearInterval(intervalId);
             intervalId = setInterval(fetchSensorData, refreshInterval);
         }
 
+        // Function to update interval
         function updateInterval() {
             var newInterval = document.getElementById('updateInterval').value;
             refreshInterval = parseInt(newInterval);
             startAutoRefresh();
         }
 
-        // Assuming rows is a list of dictionaries with timestamp and humidity
-        var timestamps = [];
-        var humidities = [];
-        {% for row in rows %}
-            timestamps.push("{{ row[1] }}");
-            humidities.push("{{ row[3] }}");
-        {% endfor %}
-
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: timestamps,
-                datasets: [{
-                    label: 'Humidity',
-                    data: humidities,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                animation: false,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
+        var refreshInterval = 10000; // Default update interval (10 seconds)
+        var intervalId;
 
         // Start auto-refresh with the default interval
         startAutoRefresh();
+        setSelectedOption();
     </script>
 </body>
 </html>
