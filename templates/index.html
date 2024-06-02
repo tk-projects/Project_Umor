@@ -40,13 +40,18 @@
             margin-top: 20px; /* Abstand nach oben */
             margin-bottom: 20px; /* Abstand nach unten */
         }
+
+        #resetButton {
+            margin-top: 20px; /* Abstand zum vorherigen Element */
+        }
+
     </style>
 </head>
 <body>
     <div class="update-interval-container"> <!-- Container für Dropdown-Liste und Abstand -->
         <label for="updateInterval">Update Interval: </label>
         <select id="updateInterval" onchange="updateInterval()">
-            <option value="2000" selected>Every 2 seconds</option> <!-- Standardmäßig ausgewählt -->
+            <option value="2000">Every 2 seconds</option>
             <option value="10000">Every 10 seconds</option>
             <option value="60000">Every minute</option>
         </select>
@@ -74,10 +79,11 @@
             <canvas id="myChart"></canvas>
         </div>
     </div>
+    <button id="resetButton" onclick="resetDatabase()">Reset Database</button>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        var refreshInterval = 2000; // Standardaktualisierungsintervall (2 Sekunden)
+        var refreshInterval = 2000; // Default update interval (2 seconds)
         var intervalId;
 
         function fetchSensorData() {
@@ -93,6 +99,11 @@
             var newInterval = document.getElementById('updateInterval').value;
             refreshInterval = parseInt(newInterval);
             startAutoRefresh();
+        }
+
+        function resetDatabase() {
+            // Implement the logic to reset the database here
+            alert('Database reset successfully!');
         }
 
         // Assuming rows is a list of dictionaries with timestamp and humidity
@@ -123,10 +134,15 @@
                         scaleLabel: {
                             display: true,
                             labelString: 'Feuchtigkeit (%)', // Y-Achsenbeschriftung
-                            fontColor: '#666666' // Hellerer Text für Achsenbeschriftung
+                            fontColor: '#999999' // Hellerer Text für Achsenbeschriftung
                         },
                         ticks: {
                             beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor: '#999999' // Hellerer Text für Achsenbeschriftung
                         }
                     }]
                 }
