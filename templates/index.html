@@ -5,10 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sensor Data</title>
     <style>
+        .container {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .table-container {
+            width: 30%;
+            margin-right: 20px;
+        }
+
+        .graph-container {
+            width: 65%;
+        }
+
         table {
             border-collapse: collapse;
-            width: 45%;
-            float: left;
+            width: 100%;
         }
         th, td {
             border: 1px solid #dddddd;
@@ -18,12 +31,8 @@
         th {
             background-color: #f2f2f2;
         }
-        #chart {
-            width: 50%;
-            height: 400px;
-            float: right;
-        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Function to reload the page every 10 seconds
         function reloadPage() {
@@ -31,28 +40,75 @@
                 window.location.reload();
             }, 10000); // 10 seconds
         }
+
         // Call the function when the page loads
         window.onload = reloadPage;
+
+        // Function to render the chart
+        function renderChart() {
+            var timestamps = [];
+            var humidities = [];
+            {% for row in rows %}
+                timestamps.push("{{ row[1] }}");
+                humidities.push("{{ row[3] }}");
+            {% endfor %}
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: timestamps,
+                    datasets: [{
+                        label: 'Humidity',
+                        data: humidities,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+        // Call the function to render the chart when the page loads
+        window.onload = function() {
+            reloadPage();
+            renderChart();
+        };
     </script>
 </head>
 <body>
     <h1>Sensor Data (Sensor 1)</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Timestamp</th>
-                <th>Humidity</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in rows %}
-            <tr>
-                <td>{{ row[1] }}</td> <!-- Assuming timestamp is the second column -->
-                <td>{{ row[3] }}</td> <!-- Assuming humidity is the fourth column -->
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div id="chart"></div>
+    <div class="container">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Humidity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                    <tr>
+                        <td>{{ row[1] }}</td> <!-- Assuming timestamp is the second column -->
+                        <td>{{ row[3] }}</td> <!-- Assuming humidity is the fourth column -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="graph-container">
+            <canvas id="myChart" width="800" height="400"></canvas>
+        </div>
+    </div>
 </body>
 </html>
