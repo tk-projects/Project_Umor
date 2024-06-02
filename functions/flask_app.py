@@ -11,7 +11,7 @@ def index():
 
     # Path to the database file
     db_path = os.path.join(current_dir, '..', 'SQL', 'sensor_data.db')
-    index_html_path = os.path.join(current_dir, '..', 'bin','templates','index.html')
+    index_html_path = index_html_path = os.path.join(current_dir, '..', '..', 'bin', 'templates', 'index.html')
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
