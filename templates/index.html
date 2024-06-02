@@ -15,12 +15,12 @@
         }
 
         .table-container {
-            width: 30%;
+            width: 25%; /* Anpassung der Tabellengröße */
             margin-right: 20px;
         }
 
         .graph-container {
-            width: 70%;
+            width: 75%; /* Anpassung der Tabellengröße */
         }
 
         table {
@@ -30,18 +30,20 @@
         th, td {
             border: 1px solid #dddddd;
             text-align: left;
-            padding: 4px;
-            font-family: Arial, sans-serif;
+            padding: 8px;
         }
         th {
             background-color: #f2f2f2;
-            font-family: Arial, sans-serif;
+        }
+
+        .update-interval-container {
+            margin-top: 20px; /* Abstand nach oben */
+            margin-bottom: 20px; /* Abstand nach unten */
         }
     </style>
 </head>
 <body>
-    <h1>Sensor Data (Sensor 1)</h1>
-    <div>
+    <div class="update-interval-container"> <!-- Container für Dropdown-Liste und Abstand -->
         <label for="updateInterval">Update Interval: </label>
         <select id="updateInterval" onchange="updateInterval()">
             <option value="2000">Every 2 seconds</option>
@@ -61,8 +63,8 @@
                 <tbody>
                     {% for row in rows %}
                     <tr>
-                        <td style="font-size: 12px;">{{ row[1] }}</td> <!-- Assuming timestamp is the second column -->
-                        <td style="font-size: 12px;">{{ row[3] }}</td> <!-- Assuming humidity is the fourth column -->
+                        <td style="font-size: 14px;">{{ row[1] }}</td> <!-- Schriftgröße beibehalten -->
+                        <td style="font-size: 14px;">{{ row[3] }}</td> <!-- Schriftgröße beibehalten -->
                     </tr>
                     {% endfor %}
                 </tbody>
