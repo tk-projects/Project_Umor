@@ -29,7 +29,7 @@ else:
 current_directory = os.path.dirname(__file__)
 
 # Specify the path to the JSON file relative to the current directory
-json_file_path = os.path.join(os.getcwd() + "/bin/sensor_channel_mapping.json")
+json_file_path = os.path.join(current_directory , "..", "/bin/sensor_channel_mapping.json")
 
 # Open and read the JSON file
 with open(json_file_path, "r") as file:
