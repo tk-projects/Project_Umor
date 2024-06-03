@@ -60,7 +60,7 @@ sensors_file_path = os.path.join(current_directory, "..", "bin", "sensor_groups.
 
 try:
     with open(sensors_file_path, "w") as file:
-        result = json.dump(sensor_dict, file, indent=4)
+        result = json.dump(group_dict, file, indent=4)
         print("\nResult of saving the json file: ",result)
         print("Group json succesfully written.")
 except Esxeption as e:
