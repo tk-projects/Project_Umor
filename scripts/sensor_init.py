@@ -12,8 +12,8 @@ from classes.sensor_cluster import sensor_cluster
 import json
 
 # Create sensor objects
-sensor_10 = humidity_sensor(10,0,'Sensor_1.0',1,1,'%', 20461, 9951)
-sensor_11 = humidity_sensor(11,0,'Sensor_1.1',1,1,'%',0,0);
+sensor_10 = humidity_sensor(10, 0,'Sensor_1.0', 1, 1,'%', 20461, 9951)
+sensor_11 = humidity_sensor(11, 1,'Sensor_1.1', 1, 1,'%', 0, 0);
 
 # Create a sensor group with the sensors
 sensor_group_1 = sensor_group(1, [sensor_10, sensor_11],'Prototype Salam','Michendorf','Salam')
@@ -38,17 +38,30 @@ for group in sensor_cluster_1.groups:
 
 print(sensor_dict)
 
+## Write data into json files
+
 # Get the current directory of the script
 current_directory = os.path.dirname(__file__)
 
-# Dateipfad für die JSON-Datei
+# Sensors
 sensors_file_path = os.path.join(current_directory, "..", "bin", "sensors2.json")
 
-# Schreiben der sensor_instances in die JSON-Datei
 try:
     with open(sensors_file_path, "w") as file:
         result = json.dump(sensor_dict, file, indent=4)
         print("\nResult of saving the json file: ",result)
-        print("JSON data written to file successfully.")
+        print("Sensor json succesfully written.")
+except Esxeption as e:
+    print("An error occurred while writing JSON data to file:", e)
+
+
+# Groups
+sensors_file_path = os.path.join(current_directory, "..", "bin", "sensor_groups.json")
+
+try:
+    with open(sensors_file_path, "w") as file:
+        result = json.dump(sensor_dict, file, indent=4)
+        print("\nResult of saving the json file: ",result)
+        print("Group json succesfully written.")
 except Esxeption as e:
     print("An error occurred while writing JSON data to file:", e)
