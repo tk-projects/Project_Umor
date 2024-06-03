@@ -51,7 +51,7 @@ try:
         result = json.dump(sensor_dict, file, indent=4)
         print("\nResult of saving the json file: ",result)
         print("Sensor json succesfully written.")
-except Esxeption as e:
+except Exception as e:
     print("An error occurred while writing JSON data to file:", e)
 
 
@@ -63,5 +63,5 @@ try:
         result = json.dump(group_dict, file, indent=4)
         print("\nResult of saving the json file: ",result)
         print("Group json succesfully written.")
-except Esxeption as e:
+except Exception as e:
     print("An error occurred while writing JSON data to file:", e)
