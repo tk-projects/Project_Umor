@@ -44,7 +44,7 @@ print(sensor_dict)
 current_directory = os.path.dirname(__file__)
 
 # Sensors
-sensors_file_path = os.path.join(current_directory, "..", "bin", "sensors2.json")
+sensors_file_path = os.path.join(current_directory, "..", "bin", "sensors.json")
 
 try:
     with open(sensors_file_path, "w") as file:
