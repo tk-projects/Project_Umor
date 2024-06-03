@@ -11,7 +11,6 @@ class sensor_group:
                 "group_id": self.group_id,
                 "name": self.name,
                 "location": self.location,
-                "unit": self.unit,
                 "owner": self.owner,
                 "sensors": self.sensors
             }
