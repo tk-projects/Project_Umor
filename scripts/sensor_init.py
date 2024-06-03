@@ -48,6 +48,5 @@ print(current_directory, "..", "/bin/sensors2.json")
 
 # Schreiben der sensor_instances in die JSON-Datei
 with open(sensors_file_path, "w") as file:
-    json.dump(sensor_dict, file, indent=4)
-    result = json.dump(sensors, file, indent=4)
+    result = json.dump(sensor_dict, file, indent=4)
     print("\nResult of saving the json file: ",result)
