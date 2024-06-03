@@ -44,9 +44,11 @@ current_directory = os.path.dirname(__file__)
 # Dateipfad für die JSON-Datei
 sensors_file_path = os.path.join(current_directory, "..", "/bin/sensors2.json")
 
-print(current_directory, "..", "/bin/sensors2.json")
-
 # Schreiben der sensor_instances in die JSON-Datei
-with open(sensors_file_path, "w") as file:
-    result = json.dump(sensor_dict, file, indent=4)
-    print("\nResult of saving the json file: ",result)
+try:
+    with open(sensors_file_path, "w") as file:
+        result = json.dump(sensor_dict, file, indent=4)
+        print("\nResult of saving the json file: ",result)
+        print("JSON data written to file successfully.")
+except Esxeption as e:
+    print("An error occurred while writing JSON data to file:", e)
