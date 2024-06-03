@@ -37,3 +37,10 @@ for group in sensor_cluster_1.groups:
         sensor_dict[sensor.name] = sensor.to_dict()
 
 print(sensor_dict)
+
+# Dateipfad für die JSON-Datei
+sensors_file_path = os.path.join(os.path.dirname(__file__), '..', "/bin/sensors2.json")
+
+# Schreiben der sensor_instances in die JSON-Datei
+with open(sensors_file_path, "w") as file:
+    json.dump(sensor_dict, file, indent=4)
