@@ -42,7 +42,7 @@ print(sensor_dict)
 current_directory = os.path.dirname(__file__)
 
 # Dateipfad für die JSON-Datei
-sensors_file_path = os.path.join(current_directory, "..", "/bin/sensors2.json")
+sensors_file_path = os.path.join(current_directory, "..", "bin", "sensors2.json")
 
 # Schreiben der sensor_instances in die JSON-Datei
 try:
