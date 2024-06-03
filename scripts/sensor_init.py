@@ -41,7 +41,10 @@ print(sensor_dict)
 # Dateipfad für die JSON-Datei
 sensors_file_path = os.path.join(os.path.dirname(__file__), '..', "/bin/sensors2.json")
 
-print(os.path.dirname(__file__), '..', "/bin/sensors2.json")
+# Get the current directory of the script
+current_directory = os.path.dirname(__file__)
+
+print(current_directory, "..", "/bin/sensors2.json")
 # Schreiben der sensor_instances in die JSON-Datei
 with open(sensors_file_path, "w") as file:
     json.dump(sensor_dict, file, indent=4)
