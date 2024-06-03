@@ -45,10 +45,18 @@ for i in range(1,number_of_sensors+1):
     print(sensor_name)
     sensor_channel = sensor_channel_mapping.get(sensor_name," Error: Sensor nicht gefunden. Prüfe die sensor_channel_mapping.json Datei im Ordner /bin/ !")
     sensor_object = humidity_sensor(sensor_idx, sensor_channel, sensor_name, "%")
-    sensor_object.calibrate();
 
-    if sensor_object.max_calibration_value ==0 or sensor_object.min_calibration_value ==0:
+    decide_if_calibrate = input("Shall the sensor be calibrated or intialized to zero instead? ( y = calibrate, n = dont calibrate, other keys = abort): ")
+
+    if decide_if_calibrate == 'y':
+        sensor_object.calibrate();
+    elif decide_if_calibrate == 'n':
+        sensor_object.max_calibration_value = 0;
+        sensor_object.min_calibration_value = 0;
+    else:
         sys.exit()
+
+
 
 
     print(sensor_object.to_dict())

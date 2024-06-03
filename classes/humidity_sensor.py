@@ -8,17 +8,15 @@ from adafruit_ads1x15.analog_in import AnalogIn
 i2c = busio.I2C(board.SCL, board.SDA)
 adc = ads.ADS1115(i2c)
 
-
 class humidity_sensor:
-    def __init__(self, sensor_id, adc_channel, name, unit = None, max_calibration_value = 0, min_calibration_value = 0):
+    def __init__(self, sensor_id, adc_channel, name, sensor_group_id, sensor_cluster_id, unit = None, max_calibration_value = 0, min_calibration_value = 0):
         self.sensor_id = sensor_id
         self.name = name
         self.unit = unit
-        #print('adc, ads.P' + str(adc_channel))
-        #self.adc_channel = AnalogIn(adc, ads.P0)
+        self.sensor_cluster = sensor_cluster_id;
         self.adc_channel_idx = adc_channel
         self.adc_channel = AnalogIn(adc, getattr(ads, 'P' + str(self.adc_channel_idx)))
-        #self.adc_channel = AnalogIn(eval('adc, ads.P' + str(adc_channel)))
+        self.sensor_group = sensor_group_id;
         self.sensor_data = [];
         self.max_calibration_value = max_calibration_value;
         self.min_calibration_value = min_calibration_value;
