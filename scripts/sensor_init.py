@@ -3,6 +3,8 @@ import sys
 import os
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# Add the parent directory to the sys.path
+sys.path.append(parent_dir)
 
 from  classes.humidity_sensor import humidity_sensor
 from  classes.sensor_group import sensor_group
