@@ -1,5 +1,5 @@
 class sensor_cluster:
-    def __init__(self, groups, cluster_id, name='', location = None, owner = ''):
+    def __init__(self, cluster_id, groups, name='', location = None, owner = ''):
         self.cluster_id = cluster_id;
         self.groups = groups;
         self.name = name;

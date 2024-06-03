@@ -17,7 +17,7 @@ sensor_12 = humidity_sensor(11,0,'Sensor_1.1',1,1,'%',0,0);
 
 sensor_group_1 = sensor_group(1, [10, 11],'Prototype Salam','Michendorf','Salam')
 
-sensor_cluster_1 = sensor_cluster(1, [1, 2],'Prototype Salam','Michendorf','Salam')
+sensor_cluster_1 = sensor_cluster(1, [1],'Prototype Salam','Michendorf','Salam')
 
 group_dict = {};
 sensor_dict= {};
