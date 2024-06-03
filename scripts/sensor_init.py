@@ -1,10 +1,13 @@
 # Sensor Init
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from  classes.humidity_sensor import humidity_sensor
 from  classes.sensor_group import sensor_group
 from classes.sensor_cluster import sensor_cluster
-import os
 import json
-import sys
+
 
 sensor_10 = humidity_sensor(10,0,'Sensor_1.0',1,1,'%', 20461, 9951)
 sensor_12 = humidity_sensor(11,0,'Sensor_1.1',1,1,'%',0,0);
