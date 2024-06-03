@@ -17,18 +17,18 @@ sensor_12 = humidity_sensor(11,0,'Sensor_1.1',1,1,'%',0,0);
 
 sensor_group_1 = sensor_group(1, [10, 11],'Prototype Salam','Michendorf','Salam')
 
-sensor_cluster_1 = sensor_cluster(1, [1],'Prototype Salam','Michendorf','Salam')
+sensor_cluster_1 = sensor_cluster(1, [sensor_group_1],'Prototype Salam','Michendorf','Salam')
 
 group_dict = {};
 sensor_dict= {};
 
 
 for i in range(0, len(sensor_cluster_1.groups)):
-    group_ob = sensor_cluster_1.groups[i];
-    group_dict[group_ob.name] = group_ob.to_dict();
+    group_obj = sensor_cluster_1.groups[i];
+    group_dict[group_obj.name] = group_obj.to_dict();
 
     for j in range(0,len(group_ob.sensors)):
-        sensor_obj = group_ob.sensors[j];
+        sensor_obj = group_obj.sensors[j];
         sensor_dict[sensor_obj.name] = sensor_obj.to_dict();
 
 print(sensor_dict)
