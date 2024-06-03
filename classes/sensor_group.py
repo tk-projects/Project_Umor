@@ -6,12 +6,12 @@ class sensor_group:
         self.owner = owner;
         self.sensors = sensors;
 
-def to_dict(self):
-        return {
-            "group_id": self.group_id,
-            "name": self.name,
-            "location": self.location,
-            "unit": self.unit,
-            "owner": self.owner,
-            "sensors": self.sensors
-        }
+    def to_dict(self):
+            return {
+                "group_id": self.group_id,
+                "name": self.name,
+                "location": self.location,
+                "unit": self.unit,
+                "owner": self.owner,
+                "sensors": self.sensors
+            }
