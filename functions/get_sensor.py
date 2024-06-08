@@ -9,7 +9,7 @@ sys.path.append(parent_dir)
 from classes.humidity_sensor import humidity_sensor
 
 def get_sensor(sensor_id):
-     # Get the current directory of the script
+    # Get the current directory of the script
     current_directory = os.path.dirname(__file__)
 
     # Specify the path to the sensors JSON file
@@ -24,7 +24,8 @@ def get_sensor(sensor_id):
             sensor_object = humidity_sensor(sensor_info['sensor_id'], sensor_info['adc_channel'], sensor_info['name'], sensor_info['unit'])
             sensor_object.min_calibration_value = sensor_info.get('min_calibration_value', 0)
             sensor_object.max_calibration_value = sensor_info.get('max_calibration_value', 0)
-            print(sensor_object," found")
-        else:
-            print("ID not found")
-    return sensor_object
+            print(sensor_object, " found")
+            return sensor_object
+
+    print("Sensor with ID", sensor_id, "not found")
+    return None
