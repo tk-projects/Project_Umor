@@ -8,22 +8,18 @@ import sys
 #print(sensor)
 
 
+def get_sensor_ids():
+    sensor_ids_input = input("Enter the sensor IDs separated by commas: ")
+    sensor_ids = sensor_ids_input.split(',')
+    return [sensor_id.strip() for sensor_id in sensor_ids]
 
 
-number_of_sensors = input("How many sensors do you want to calibrate?")
+sensor_ids = get_sensor_ids()
+number_of_sensors = len(sensor_ids)
 
-if number_of_sensors.isdigit() :
-    # Convert the input to an integer
-    number_of_sensors = int(number_of_sensors)
-    if number_of_sensors ==0:
-        print("Anzahl an sensoren nicht korrekt")
+if number_of_sensors == 0:
+        print("Anzahl an Sensoren nicht korrekt")
         sys.exit()
-
-
-else:
-    print("Anzahl an sensoren nicht korrekt")
-    sys.exit()
-
 
 # Get the current directory of the script
 current_directory = os.path.dirname(__file__)
@@ -37,24 +33,21 @@ with open(json_file_path, "r") as file:
 
 # Create a dictionary to store sensor instances
 sensors = {}
-print(sensor_channel_mapping)
+for i, sensor_id in enumerate(sensor_ids, start=1):
+    sensor_name = f"sensor_{sensor_id}"
+    sensor_channel = sensor_channel_mapping.get(sensor_name, "Error: Sensor nicht gefunden. Prüfe die sensor_channel_mapping.json Datei im Ordner /bin/ !")
+    sensor_object = humidity_sensor(i, sensor_channel, sensor_name, "%")
 
-for i in range(1,number_of_sensors+1):
-    sensor_idx = i;
-    sensor_name = f"sensor_{i}";
-    print(sensor_name)
-    sensor_channel = sensor_channel_mapping.get(sensor_name," Error: Sensor nicht gefunden. Prüfe die sensor_channel_mapping.json Datei im Ordner /bin/ !")
-    sensor_object = humidity_sensor(sensor_idx, sensor_channel, sensor_name, "%")
-
-    decide_if_calibrate = input("Shall the sensor be calibrated or intialized to zero instead? ( y = calibrate, n = dont calibrate, other keys = abort): ")
+    decide_if_calibrate = input(f"Shall sensor {sensor_name} be calibrated? (y = calibrate, other keys = no, pass this one): ")
 
     if decide_if_calibrate == 'y':
-        sensor_object.calibrate();
-    elif decide_if_calibrate == 'n':
-        sensor_object.max_calibration_value = 0;
-        sensor_object.min_calibration_value = 0;
+        sensor_object.calibrate()
     else:
-        sys.exit()
+        sensor_object.max_calibration_value = sensor_object.max_calibration_value
+        sensor_object.min_calibration_value = sensor_object.max_calibration_value
+
+
+    sensors[sensor_name] = sensor_object.to_dict()
 
 
 
@@ -69,4 +62,6 @@ sensors_file_path = os.path.join(os.getcwd() + "/bin/sensors.json")
 
 # Schreiben der sensor_instances in die JSON-Datei
 with open(sensors_file_path, "w") as file:
-    
+    json.dump(sensors, file, indent=4)
+
+print("Sensor data has been updated.")
