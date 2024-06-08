@@ -10,7 +10,7 @@ class sensor_group:
             sensors_to_dict = {};
             for i in range(1,len(self.sensors)):
                 sensors_to_dict[i] = self.sensors[i].sensor_id;
-                print(self.sensors[i].sensor_name, "was converted into dict with its ID:",self.sensors[i].sensor_id)
+                print(self.sensors[i].name, "was converted into dict with its ID:",self.sensors[i].sensor_id)
 
             return {
                 "group_id": self.group_id,
