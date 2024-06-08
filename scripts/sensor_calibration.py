@@ -35,7 +35,8 @@ with open(sensors_json_file_path, "r") as file:
 sensors = {}
 for sensor_id in sensor_ids:
     sensor_object = get_sensor(sensor_id)
-    print("Sensor isntance of",sensor_object.name, "was succesfully loaded")
+    print(sensor_object)
+    print("Sensor instance of",sensor_object.name, "was succesfully loaded")
 
     decide_if_calibrate = input(f"Shall sensor {sensor_object.name} be calibrated? (y = calibrate, other keys = no, pass this one): ")
 
