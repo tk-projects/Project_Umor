@@ -91,5 +91,7 @@ class humidity_sensor:
             "adc_channel": self.adc_channel_idx,
             "unit": self.unit,
             "min_calibration_value": self.min_calibration_value,
-            "max_calibration_value": self.max_calibration_value
+            "max_calibration_value": self.max_calibration_value,
+            "sensor_group_id":self.sensor_group_id,
+            "sensor_cluster_id":self.sensor_cluster_id,
         }  
