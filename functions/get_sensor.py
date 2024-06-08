@@ -23,7 +23,7 @@ def get_sensor(sensor_id):
         print("Checking sensor info:", sensor_info)
         if sensor_info.get('sensor_id') == sensor_id:
             # self, sensor_id, adc_channel, name, sensor_group_id, sensor_cluster_id, unit = None, max_calibration_value = 0, min_calibration_value = 0
-            sensor_object = humidity_sensor(sensor_info['sensor_id'], sensor_info['adc_channel'], sensor_info['name'], sensor_info['sensor_group_id'], sensor_info['sensor_cluster_id'], sensor_info['unit'])
+            sensor_object = humidity_sensor(sensor_info['sensor_id'], sensor_info['adc_channel'], sensor_info['name'], sensor_info['sensor_group'], sensor_info['sensor_cluster'], sensor_info['unit'])
             sensor_object.min_calibration_value = sensor_info.get('min_calibration_value', 0)
             sensor_object.max_calibration_value = sensor_info.get('max_calibration_value', 0)
             print(sensor_object, " found")
