@@ -92,6 +92,6 @@ class humidity_sensor:
             "unit": self.unit,
             "min_calibration_value": self.min_calibration_value,
             "max_calibration_value": self.max_calibration_value,
-            "sensor_group_id":self.sensor_group_id,
-            "sensor_cluster_id":self.sensor_cluster_id,
+            "sensor_group":self.sensor_group,
+            "sensor_cluster":self.sensor_cluster,
         }  
