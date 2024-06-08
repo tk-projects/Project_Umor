@@ -20,6 +20,7 @@ def get_sensor(sensor_id):
         sensors_data = json.load(file)
 
     for sensor_info in sensors_data.values():
+        print("Checking sensor info:", sensor_info)
         if sensor_info.get('sensor_id') == sensor_id:
             sensor_object = humidity_sensor(sensor_info['sensor_id'], sensor_info['adc_channel'], sensor_info['name'], sensor_info['unit'])
             sensor_object.min_calibration_value = sensor_info.get('min_calibration_value', 0)
