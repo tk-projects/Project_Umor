@@ -12,11 +12,12 @@ from classes.sensor_cluster import sensor_cluster
 import json
 
 # Create sensor objects
+#sensor_x = humidity_sensor(sensor_id, adc channel,name, sensor_group_id, sensor_cluster_id, unit, max value, min value)
 sensor_10 = humidity_sensor(10, 0,'Sensor_1.0', 1, 1,'%', 20461, 9951)
 sensor_11 = humidity_sensor(11, 1,'Sensor_1.1', 1, 1,'%', 0, 0);
 
 # Create a sensor group with the sensors
-sensor_group_1 = sensor_group(1, [sensor_10, sensor_11],'Prototype Salam','Michendorf','Salam')
+sensor_group_1 = sensor_group(1, [10, 11],'Prototype Salam','Michendorf','Salam')
 
 
 # Create a sensor cluster with the group
@@ -46,6 +47,7 @@ current_directory = os.path.dirname(__file__)
 # Sensors
 sensors_file_path = os.path.join(current_directory, "..", "bin", "sensors.json")
 
+# Write Sensors json file
 try:
     with open(sensors_file_path, "w") as file:
         result = json.dump(sensor_dict, file, indent=4)
@@ -58,6 +60,7 @@ except Exception as e:
 # Groups
 sensors_file_path = os.path.join(current_directory, "..", "bin", "sensor_groups.json")
 
+# Write Groups json file
 try:
     with open(sensors_file_path, "w") as file:
         result = json.dump(group_dict, file, indent=4)
