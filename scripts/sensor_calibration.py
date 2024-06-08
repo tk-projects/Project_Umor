@@ -12,7 +12,9 @@ from functions.get_sensor import get_sensor
 def get_sensor_ids():
     sensor_ids_input = input("Enter the sensor IDs separated by commas: ")
     sensor_ids = sensor_ids_input.split(',')
-    return [sensor_id.strip() for sensor_id in sensor_ids]
+    sensor_ids = [int(sensor_id.strip()) for sensor_id in sensor_ids]
+    print("Sensor IDs:", sensor_ids)
+    return sensor_ids
 
 sensor_ids = get_sensor_ids()
 number_of_sensors = len(sensor_ids)
