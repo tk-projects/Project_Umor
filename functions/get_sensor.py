@@ -26,4 +26,4 @@ def get_sensor(sensor_id):
             sensor_object.max_calibration_value = sensor_info.get('max_calibration_value', 0)
             return sensor_object
 
-    return sensor_object
+    return None
