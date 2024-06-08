@@ -9,7 +9,7 @@ sys.path.append(parent_dir)
 from classes.humidity_sensor import humidity_sensor
 
 def get_sensor(sensor_id):
-    # Get the current directory of the script
+     # Get the current directory of the script
     current_directory = os.path.dirname(__file__)
 
     # Specify the path to the sensors JSON file
@@ -19,15 +19,11 @@ def get_sensor(sensor_id):
     with open(sensors_json_file_path, "r") as file:
         sensors_data = json.load(file)
 
-    sensor_name = f"Sensor_{sensor_id}"
-
-    if sensor_name not in sensors_data:
-        print(f"Error: {sensor_name} not found in sensors.json. Please check the sensor ID.")
-        return None
-
-    sensor_info = sensors_data[sensor_name]
-    sensor_object = humidity_sensor(sensor_info['sensor_id'], sensor_info['adc_channel'], sensor_info['name'], sensor_info['unit'],sensor_info['max_calibration_value'],sensor_info['min_calibration_value'])
-    sensor_object.min_calibration_value = sensor_info.get('min_calibration_value', 0)
-    sensor_object.max_calibration_value = sensor_info.get('max_calibration_value', 0)
+    for sensor_info in sensors_data.values():
+        if sensor_info.get('sensor_id') == sensor_id:
+            sensor_object = humidity_sensor(sensor_info['sensor_id'], sensor_info['adc_channel'], sensor_info['name'], sensor_info['unit'])
+            sensor_object.min_calibration_value = sensor_info.get('min_calibration_value', 0)
+            sensor_object.max_calibration_value = sensor_info.get('max_calibration_value', 0)
+            return sensor_object
 
     return sensor_object
