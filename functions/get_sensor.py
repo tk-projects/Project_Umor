@@ -25,4 +25,6 @@ def get_sensor(sensor_id):
             sensor_object.min_calibration_value = sensor_info.get('min_calibration_value', 0)
             sensor_object.max_calibration_value = sensor_info.get('max_calibration_value', 0)
             print(sensor_object," found")
+        else:
+            print("ID not found")
     return sensor_object
