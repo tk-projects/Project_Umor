@@ -22,7 +22,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # Path to the database file in the SQL directory
 db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
 
-def insert_data(sensor_data, sensor_readings):
+def insert_data(sensors, sensor_readings):
     try:
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
@@ -31,14 +31,14 @@ def insert_data(sensor_data, sensor_readings):
         current_timestamp = datetime.now()
 
         # Prepare the list of column names based on sensor_data keys
-        column_names = sensor_data.keys()
+        column_names = [sensor["name"] for sensor in sensors]
 
         # Prepare the values list based on sensor_readings
-        values = [sensor_readings[key] if key in sensor_readings else 0.0 for key in sensor_data.keys()]
+        values = sensor_readings
 
         # Construct the INSERT query dynamically
         columns_str = ", ".join(['timestamp'] + column_names)
-        placeholders = ", ".join(["?"] * (len(sensor_data) + 1))
+        placeholders = ", ".join(["?"] * (len(column_names) + 1))
         insert_query = f"INSERT INTO humidity_data ({columns_str}) VALUES ({placeholders})"
 
         print("Insert Query:", insert_query)  # Debugging line
