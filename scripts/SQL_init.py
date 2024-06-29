@@ -25,7 +25,7 @@ def create_table(sensor_data):
         # Prepare the dynamic part of the SQL for columns
         columns = ', '.join([f"{key} REAL" for key in sensor_data.keys()])
 
-        print(columns)
+        print("columns are: ",columns)
 
         # Create the humidity_data table with separate columns for each sensor
         create_table_query = f'''
