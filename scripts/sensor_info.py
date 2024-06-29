@@ -2,6 +2,11 @@ import os
 import sys
 import json
 
+
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# Add the parent directory to the sys.path
+sys.path.append(parent_dir)
+
 from functions.get_sensor import get_sensor
 
 # Global variable to control the loop
