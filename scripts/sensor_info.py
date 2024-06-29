@@ -17,12 +17,10 @@ def sensor_info(sensor_id):
     sensor_data = get_sensor(sensor_id)
     
     sensor_name = sensor_data.name
-    adc_channel = sensor_data.adc_channel
     min_calibration_value = sensor_data.min_calibration_value
     max_calibration_value = sensor_data.max_calibration_value
 
     print(f"Sensor Name: {sensor_name}")
-    print(f"ADC Channel: {adc_channel}")
     print(f"Min Calibration Value: {min_calibration_value}")
     print(f"Max Calibration Value: {max_calibration_value}")
 
