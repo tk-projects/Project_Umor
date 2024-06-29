@@ -1,21 +1,32 @@
 import sqlite3
 import os
 
-# Get the absolute path to the current directory
-current_dir = os.path.dirname(os.path.abspath(__file__))
+# Define the path to your SQLite database file
+db_path = os.path.join(os.path.dirname(__file__), '..', 'SQL', 'sensor_data.db')
 
-# Path to the database file
-db_path = os.path.join(current_dir, '..','SQL', 'sensor_data.db')
+def reset_database():
 
-# Connect to the SQLite database
-conn = sqlite3.connect(db_path)
-c = conn.cursor()
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
 
-# Delete all records from the humidity_data table
-c.execute('DELETE FROM humidity_data')
+        # Execute SQL command to delete all rows from the humidity_data table
+        cursor.execute('DELETE FROM humidity_data')
+        
+        # Commit the transaction
+        conn.commit()
+        
+        print("Database reset successful.")
 
-# Commit changes and close the connection
-conn.commit()
-conn.close()
+    except sqlite3.Error as e:
+        print(f"SQLite error: {e}")
 
-print("Database reset successfully.")
+    finally:
+        # Close the database connection
+        if conn:
+            conn.close()
+
+if __name__ == "__main__":
+    # Call the function to reset the database
+    reset_database()
