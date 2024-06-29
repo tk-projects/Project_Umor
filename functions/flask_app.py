@@ -7,7 +7,7 @@ app = Flask(__name__, template_folder='templates')
 # Function to fetch data from the database for all sensors
 def fetch_all_sensor_data():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
+    db_path = os.path.join(current_dir,'..', 'SQL', 'sensor_data.db')
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
