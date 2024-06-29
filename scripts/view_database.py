@@ -6,7 +6,6 @@ db_path = os.path.join(os.path.dirname(__file__), '..', 'SQL', 'sensor_data.db')
 
 def print_database():
 
-    print("testtestasd")
     try:
         # Connect to the SQLite database
         conn = sqlite3.connect(db_path)
@@ -14,9 +13,15 @@ def print_database():
 
         # Execute a query to fetch all rows from the humidity_data table
         cursor.execute('SELECT * FROM humidity_data')
-        rows = cursor.fetchall()
-
+        
+        # Fetch column names
+        columns = [description[0] for description in cursor.description]
+        
+        # Print column headers
+        print(columns)
+        
         # Print fetched data
+        rows = cursor.fetchall()
         for row in rows:
             print(row)
 
