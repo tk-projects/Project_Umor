@@ -67,9 +67,9 @@ def sensor_data_updater():
             current_timestamp = datetime.datetime.now()
             time_difference = (current_timestamp - last_timestamp).total_seconds()
             if time_difference >= sampling_rate-1:
-                update_sensor_data()
+                update_sensor_data(sensor_id)
         else:
-            update_sensor_data()  # No data in the database, insert the first datapoint
+            update_sensor_data(sensor_id)  # No data in the database, insert the first datapoint
         time.sleep(sampling_rate)
 
 def get_last_datapoint():
