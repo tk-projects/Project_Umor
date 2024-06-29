@@ -61,7 +61,7 @@ def sensor_data_updater(sensors):
 
             # Fetch sensor readings
             sensor_readings = {}
-            for sensor in sensors.items():
+            for sensor in sensors:
                 try:
                     sensor_readings[sensor.name] = sensor.read()
                 except Exception as e:
