@@ -13,7 +13,7 @@ from functions.get_sensor import get_sensor
 # Global variable to control the loop
 running = True
 
-def read_sensor(sensor_id=None, sensor_name=None):
+def read_sensor(sensor_id=None, cycle_time =1):
     global running
     print(f"Reading sensor with ID: {sensor_id}")
     sensor = get_sensor(sensor_id)
@@ -21,8 +21,7 @@ def read_sensor(sensor_id=None, sensor_name=None):
         try:
             while running:
                 data = sensor.read()  # Assuming read() is the method to get sensor data
-                print(data)
-                time.sleep(1)
+                time.sleep(cycle_time)
         except KeyboardInterrupt:
             print("Aborted by user using KeyboardInterrupt.")
     else:
