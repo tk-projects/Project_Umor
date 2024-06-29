@@ -14,7 +14,7 @@ def sanitize_column_name(name):
 # Function to create the database table if it doesn't exist
 def create_table(sensor_data):
     try:
-        db_path = os.path.join(os.path.dirname(__file__), '..', 'SQL', 'sensor_data.db')
+        db_path = os.path.join(os.path.dirname(__file__), 'SQL', 'sensor_data.db')
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
