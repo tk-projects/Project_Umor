@@ -4,7 +4,7 @@ import os
 # Define the path to your SQLite database file
 db_path = os.path.join(os.path.dirname(__file__), '..', 'SQL', 'sensor_data.db')
 
-def view_database():
+def print_database():
     try:
         # Connect to the SQLite database
         conn = sqlite3.connect(db_path)
@@ -26,5 +26,6 @@ def view_database():
         if conn:
             conn.close()
 
-# Call the function to print the database content
-view_database()
+if __name__ == "__main__":
+    # Call the function to print the database content
+    print_database()
