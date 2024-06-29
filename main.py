@@ -52,6 +52,7 @@ def create_table(sensor_data):
 def insert_data(sensor_data, sensor_readings):
     try:
         db_path = os.path.join(os.path.dirname(__file__), 'SQL', 'sensor_data.db')
+        print("db_path:",db_path)
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
