@@ -32,6 +32,7 @@ for sensor_name, sensor_data in sensor_json.items():
         sensor_data["name"], sensor_data["unit"],
         sensor_data["max_calibration_value"], sensor_data["min_calibration_value"]
     )
+    print(sensors)
     print(f"  • Sensor {sensor_data['sensor_id']} | Channel: {sensor_data['adc_channel']} | "
           f"max value: {sensor_data['max_calibration_value']} | min value: {sensor_data['min_calibration_value']}")
 
