@@ -45,6 +45,10 @@ for sensor_id in sensor_ids:
     if decide_if_calibrate == 'y':
         sensor_object.calibrate()
 
+    else:
+        print(sensor_object.name, "was skipped")
+
+
     # Update the sensor data in the JSON structure
     sensors_data[sensor_object.name]['min_calibration_value'] = sensor_object.min_calibration_value
     sensors_data[sensor_object.name]['max_calibration_value'] = sensor_object.max_calibration_value
@@ -53,4 +57,3 @@ for sensor_id in sensor_ids:
 with open(sensors_json_file_path, "w") as file:
     json.dump(sensors_data, file, indent=4)
 
-print("Sensor data has been updated.")
