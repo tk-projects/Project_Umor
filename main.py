@@ -92,10 +92,10 @@ def main():
         # Create table if not exists
         create_table(sensor_data)
 
-        # Initialize sensors (this assumes you have a class that manages sensor readings)
+        # Initialize sensors (assuming sensor_data is a dictionary with sensor information)
         sensors = {}
         for sensor_name, sensor_info in sensor_data.items():
-            sensor_id = sensor_info["sensor_id"]
+            sensor_id = str(sensor_info["sensor_id"])  # Convert sensor_id to string if necessary
             sensors[sensor_id] = humidity_sensor(
                 sensor_info["sensor_id"], sensor_info["adc_channel"],
                 sensor_info["name"], sensor_info["sensor_group"], sensor_info["sensor_cluster"], sensor_info["unit"],
@@ -116,6 +116,7 @@ def main():
 
     except Exception as e:
         print(f"Unexpected error: {e}")
+
 
 if __name__ == '__main__':
     main()
