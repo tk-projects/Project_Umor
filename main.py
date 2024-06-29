@@ -1,99 +1,114 @@
 import os
 import sqlite3
 import sys
-import json
-import time
-import threading
-import datetime
-from flask import Flask, render_template
-
+from datetime import datetime
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 # Add the parent directory to the sys.path
 sys.path.append(parent_dir)
 
+from functions.load_sensor_json import load_sensor_json
 from classes.humidity_sensor import humidity_sensor
 
-# Initialize Flask application
-app = Flask(__name__, template_folder='templates')
+# Create the SQL directory if it doesn't exist
+os.makedirs('SQL', exist_ok=True)
 
-# Load sensor configuration from JSON file
-sensors_file_path = os.path.join(os.getcwd(), 'bin', 'sensors.json')
-
-try:
-    with open(sensors_file_path, "r") as json_file:
-        sensor_json = json.load(json_file)
-except Exception as e:
-    print(f"Error loading sensor configuration: {e}")
-    exit(1)
-
-# Initialize sensors dictionary
-sensors = {}
-for sensor_name, sensor_data in sensor_json.items():
-    sensor_id = sensor_data["sensor_id"]
-
-    # Create and store instances of humidity_sensor
-    sensors[sensor_id] = humidity_sensor(
-        sensor_data["sensor_id"], sensor_data["adc_channel"],
-        sensor_data["name"], sensor_data["sensor_group"], sensor_data["sensor_cluster"], sensor_data["unit"],
-        sensor_data["max_calibration_value"], sensor_data["min_calibration_value"]
-    )
-
-# Define path to SQLite database file
+# Get the absolute path to the current directory
 current_dir = os.path.dirname(os.path.abspath(__file__))
-db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
+# Path to the database file in the SQL directory
+db_path = os.path.join(current_dir, '..', 'SQL', 'sensor_data.db')
 
-# Function to fetch all data from the database
-def fetch_data_from_db():
+def sanitize_column_name(name):
+    """Replace invalid characters in column names with underscores."""
+    return name.replace('.', '_')
+
+def create_table(sensor_data):
     try:
-        with sqlite3.connect(db_path) as conn:
-            cursor = conn.cursor()
-            cursor.execute('SELECT * FROM humidity_data')
-            rows = cursor.fetchall()
-        return rows
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+
+        # Prepare the dynamic part of the SQL for columns, sanitizing the names
+        columns = ', '.join([f"{sanitize_column_name(key)} REAL" for key in sensor_data.keys()])
+
+        # Create the humidity_data table with separate columns for each sensor
+        create_table_query = f'''
+        CREATE TABLE IF NOT EXISTS humidity_data (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            {columns}
+        )
+        '''
+
+        print("Create Table Query:", create_table_query)  # Debugging line
+
+        c.execute(create_table_query)
+        conn.commit()
+        conn.close()
+        print("Table created successfully.")
+
     except sqlite3.Error as e:
-        print(f"Database error: {e}")
-        return []
+        print(f"SQLite error: {e}")
 
-# Function to update sensor data for all sensors
-def update_sensor_data():
+def insert_data(sensor_data, sensor_readings):
     try:
-        # Get current timestamp
-        current_timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
 
-        # Prepare data for insertion
-        data_to_insert = [(current_timestamp, sensors[sensor_id].name, sensors[sensor_id].read()) for sensor_id in sensors.keys()]
+        # Get the current timestamp
+        current_timestamp = datetime.now()
 
-        # Connect to the database and insert data
-        with sqlite3.connect(db_path) as conn:
-            cursor = conn.cursor()
-            cursor.executemany("INSERT INTO humidity_data (timestamp, sensor_name, humidity_value) VALUES (?, ?, ?)", data_to_insert)
-            conn.commit()
+        # Prepare the list of column names based on sensor_data keys
+        column_names = [sanitize_column_name(key) for key in sensor_data.keys()]
 
+        # Use the actual sensor readings as values
+        values = [sensor_readings.get(key, 0.0) for key in sensor_data.keys()]
+
+        # Construct the INSERT query dynamically
+        columns_str = ", ".join(column_names)
+        placeholders = ", ".join(["?"] * len(column_names))
+        insert_query = f"INSERT INTO humidity_data (timestamp, {columns_str}) VALUES (?, {placeholders})"
+
+        print("Insert Query:", insert_query)  # Debugging line
+        print("Values:", (current_timestamp,) + tuple(values))  # Debugging line
+
+        # Execute the query to insert data
+        c.execute(insert_query, (current_timestamp,) + tuple(values))
+
+        conn.commit()
+        conn.close()
         print("Data inserted successfully.")
 
     except sqlite3.Error as e:
         print(f"SQLite error: {e}")
 
-# Background thread to update sensor data every n seconds
-def sensor_data_updater():
-    sampling_rate = 60
-    while True:
-        update_sensor_data()
-        time.sleep(sampling_rate)
+def main():
+    # Get sensor data
+    sensor_data = load_sensor_json()
 
-# Route for the homepage
-@app.route('/')
-def index():
-    rows = fetch_data_from_db()
-    return render_template('index.html', rows=rows)
+    # Create table if not exists
+    create_table(sensor_data)
 
-# Main function to start the application
+    # Initialize sensors
+    sensors = {}
+    for sensor_name, sensor_info in sensor_data.items():
+        sensor_id = sensor_info["sensor_id"]
+        sensors[sensor_id] = humidity_sensor(
+            sensor_info["sensor_id"], sensor_info["adc_channel"],
+            sensor_info["name"], sensor_info["sensor_group"], sensor_info["sensor_cluster"], sensor_info["unit"],
+            sensor_info["max_calibration_value"], sensor_info["min_calibration_value"]
+        )
+
+    # Fetch sensor readings
+    sensor_readings = {}
+    for sensor_id, sensor in sensors.items():
+        try:
+            sensor_readings[sensor_id] = sensor.read()
+        except Exception as e:
+            print(f"Error reading sensor {sensor_id}: {e}")
+            sensor_readings[sensor_id] = 0.0
+
+    # Insert data into the table
+    insert_data(sensor_data, sensor_readings)
+
 if __name__ == '__main__':
-    # Start the background thread for data updating
-    updater_thread = threading.Thread(target=sensor_data_updater)
-    updater_thread.daemon = True
-    updater_thread.start()
-
-    # Run the Flask application
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    main()
