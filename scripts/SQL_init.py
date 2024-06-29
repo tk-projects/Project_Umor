@@ -25,8 +25,6 @@ def create_table(sensor_data):
         # Prepare the dynamic part of the SQL for columns
         columns = ', '.join([f"{key} REAL" for key in sensor_data.keys()])
 
-        print("columns are: ",columns)
-
         # Create the humidity_data table with separate columns for each sensor
         create_table_query = f'''
         CREATE TABLE IF NOT EXISTS humidity_data (
@@ -56,11 +54,9 @@ def insert_data(sensor_data):
 
         # Prepare the list of column names based on sensor_data keys
         column_names = [key for key in sensor_data.keys()]
-        print("column_names:",column_names)
 
-        # Prepare the list of values in the same order as column_names
-        values = [sensor_data[key] for key in column_names]
-        print("values",values)
+        # Use 0 as the value for each sensor
+        values = [0.0] * len(column_names)
 
         # Construct the INSERT query dynamically
         columns_str = ", ".join(column_names)
@@ -69,6 +65,7 @@ def insert_data(sensor_data):
 
         print("Insert Query:", insert_query)  # Debugging line
         print("Values:", (current_timestamp,) + tuple(values))  # Debugging line
+        print("insert_query:", insert_query)  # Debugging line
 
         # Execute the query to insert data
         c.execute(insert_query, (current_timestamp,) + tuple(values))
