@@ -23,18 +23,22 @@ username = 'user'
 password = 'password'
 database = 'sensor_data'
 
-def create_table():
+def create_table(sensor_data):
     try:
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
-        # Create the humidity_data table with separate columns for each sensor
-        c.execute('''CREATE TABLE IF NOT EXISTS humidity_data (
-                         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                         sensor_1 REAL,
-                         sensor_2 REAL
-                     )''')
+        # Construct the SQL query to create table with dynamic columns
+        columns = ['id INTEGER PRIMARY KEY AUTOINCREMENT', 'timestamp DATETIME DEFAULT CURRENT_TIMESTAMP']
+        for sensor_name in sensor_data:
+            columns.append(f"{sensor_name} REAL")
+
+        # Join the columns into the CREATE TABLE statement
+        columns_str = ", ".join(columns)
+        create_table_query = f"CREATE TABLE IF NOT EXISTS humidity_data ({columns_str})"
+
+        # Execute the query to create the table
+        c.execute(create_table_query)
 
         conn.commit()
         conn.close()
@@ -51,11 +55,19 @@ def insert_data(sensor_data):
         # Get the current timestamp
         current_timestamp = datetime.now()
 
-        # Insert data for both sensors with the same timestamp
-        sensor_1_value = sensor_data.get('Sensor_1', 0.0)
-        sensor_2_value = sensor_data.get('Sensor_2', 0.0)
-        
-        c.execute("INSERT INTO humidity_data (timestamp, sensor_1, sensor_2) VALUES (?, ?, ?)", (current_timestamp, sensor_1_value, sensor_2_value))
+        # Prepare the list of column names based on sensor_data keys
+        column_names = [key for key in sensor_data.keys()]
+
+        # Prepare the list of values in the same order as column_names
+        values = [sensor_data[key] for key in column_names]
+
+        # Construct the INSERT query dynamically
+        columns_str = ", ".join(column_names)
+        placeholders = ", ".join(["?"] * len(column_names))
+        insert_query = f"INSERT INTO humidity_data (timestamp, {columns_str}) VALUES (?, {placeholders})"
+
+        # Execute the query to insert data
+        c.execute(insert_query, (current_timestamp,) + tuple(values))
 
         conn.commit()
         conn.close()
@@ -64,13 +76,12 @@ def insert_data(sensor_data):
     except sqlite3.Error as e:
         print(f"SQLite error: {e}")
 
-
 def main():
-    # Create table if not exists
-    create_table()
-
     # Get sensor data
     sensor_data = load_sensor_json()
+
+    # Create table if not exists with dynamic columns based on sensor_data
+    create_table(sensor_data)
 
     # Insert data into the table
     insert_data(sensor_data)
