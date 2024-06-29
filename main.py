@@ -75,6 +75,13 @@ def sensor_data_updater(sensors):
         sleep(sampling_rate)
 
 def fetch_all_sensor_data():
+    parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    # Add the parent directory to the sys.path
+    sys.path.append(parent_dir)
+
+    # Path to the database file in the SQL directory
+    db_path = os.path.join(parent_dir, 'SQL', 'sensor_data.db')
+
     try:
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
