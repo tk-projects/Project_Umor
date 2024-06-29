@@ -48,13 +48,14 @@ def insert_data(sensor_data):
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
-        #Create the humidity_data table with separate columns for each sensor
-        c.execute('''CREATE TABLE IF NOT EXISTS humidity_data (
-                         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                         timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                         sensor_1 REAL,
-                         sensor_2 REAL
-                     )''')
+        # Get the current timestamp
+        current_timestamp = datetime.now()
+
+        # Insert data for both sensors with the same timestamp
+        sensor_1_value = sensor_data.get('Sensor_1', 0.0)
+        sensor_2_value = sensor_data.get('Sensor_2', 0.0)
+        
+        c.execute("INSERT INTO humidity_data (timestamp, sensor_1, sensor_2) VALUES (?, ?, ?)", (current_timestamp, sensor_1_value, sensor_2_value))
 
         conn.commit()
         conn.close()
