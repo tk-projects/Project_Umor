@@ -1,18 +1,14 @@
 import sqlite3
-import sys
 import os
 
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-# Add the parent directory to the sys.path
-sys.path.append(parent_dir)
-
+# Get the current directory of the script
 current_directory = os.path.dirname(__file__)
 
 # Path to your SQLite database file
 db_path = os.path.join(current_directory, "..", "SQL", "sensor_data.db")
 
-
 def view_database():
+    conn = None
     try:
         # Connect to the SQLite database
         conn = sqlite3.connect(db_path)
