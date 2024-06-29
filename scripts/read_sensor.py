@@ -16,15 +16,18 @@ def read_sensor(sensor_id=None, cycle_time =0.5):
     global running
     print(f"Reading sensor with ID: {sensor_id}")
     sensor = get_sensor(sensor_id)
-    if sensor:
+
+    if sensor is None:
+        running = False
+
+    elif sensor:
         try:
             while running:
                 data = sensor.read()  # Assuming read() is the method to get sensor data
                 time.sleep(cycle_time)
         except KeyboardInterrupt:
             print("Aborted by user using KeyboardInterrupt.")
-    else:
-        running = False
+    
 
 
 def listen_for_abort():
