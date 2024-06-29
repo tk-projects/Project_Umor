@@ -24,7 +24,7 @@ def read_sensor(sensor_id=None, cycle_time =0.5):
         except KeyboardInterrupt:
             print("Aborted by user using KeyboardInterrupt.")
     else:
-        running = false
+        running = False
 
 
 def listen_for_abort():
