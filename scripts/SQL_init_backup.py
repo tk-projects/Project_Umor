@@ -21,7 +21,7 @@ from functions.load_sensor_json import load_sensor_json
 hostname = 'localhost'
 username = 'user'
 password = 'password'
-database = 'sensor_data'
+database = load_sensor_json
 
 # Connect to SQLite database (credentials not used)
 conn = sqlite3.connect(db_path)
@@ -35,15 +35,13 @@ c.execute('''CREATE TABLE IF NOT EXISTS humidity_data (
                  humidity_value REAL
              )''')
 
-# Example data to insert
-sensor_name = 'sensor_1'
-humidity_value = 0
-
 # Get sensor data
 sensor_data = load_sensor_json()
 
-for sensor_name in sensor_data:
+print(sensor_data)
 
+for sensor_name in sensor_data:
+    print(sensor_name)
     # Insert data into the table
     c.execute("INSERT INTO humidity_data (sensor_name, humidity_value) VALUES (?, ?)", (sensor_name, humidity_value))
 

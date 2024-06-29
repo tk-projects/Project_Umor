@@ -1,11 +1,6 @@
 import os
 import sqlite3
 import sys
-
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-# Add the parent directory to the sys.path
-sys.path.append(parent_dir)
-
 from functions.load_sensor_json import load_sensor_json
 
 # Create the SQL directory if it doesn't exist
@@ -48,12 +43,12 @@ def insert_data(sensor_data):
         c = conn.cursor()
 
         # Example data to insert
-        for sensor_name, humidity_value in sensor_data.items():
+        for sensor_name in sensor_data.items():
             # Assuming sensor names are 'Sensor_1' and 'Sensor_2'
             if sensor_name == 'Sensor_1':
-                c.execute("INSERT INTO humidity_data (sensor_1) VALUES (?)", (humidity_value,))
+                c.execute("INSERT INTO humidity_data (sensor_1) VALUES (?)", (0,))
             elif sensor_name == 'Sensor_2':
-                c.execute("INSERT INTO humidity_data (sensor_2) VALUES (?)", (humidity_value,))
+                c.execute("INSERT INTO humidity_data (sensor_2) VALUES (?)", (0,))
 
         conn.commit()
         conn.close()
