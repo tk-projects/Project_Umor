@@ -4,7 +4,7 @@ import sqlite3
 # Create the SQL directory if it doesn't exist
 os.makedirs('SQL', exist_ok=True)
 
-from functions.get_sensor_group import load_sensor_json
+from functions.load_sensor_json import load_sensor_json
 
 # Get the absolute path to the current directory
 current_dir = os.path.dirname(os.path.abspath(__file__))
