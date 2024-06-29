@@ -13,5 +13,6 @@ from functions.get_sensor import get_sensor
 
 
 def read_sensor(sensor_id=None,sensor_name=None):
+    print(sensor_id)
     sensor =  get_sensor(sensor_id)
     print(sensor)
