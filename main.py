@@ -19,7 +19,7 @@ os.makedirs('SQL', exist_ok=True)
 # Get the absolute path to the current directory
 current_dir = os.path.dirname(os.path.abspath(__file__))
 # Path to the database file in the SQL directory
-db_path = os.path.join(current_dir, '..', 'SQL', 'sensor_data.db')
+db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
 
 def create_table(sensor_data):
     try:
