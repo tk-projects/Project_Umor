@@ -65,7 +65,7 @@ def sensor_data_updater(sensors):
                 except Exception as e:
                     print(f"Error reading sensor {sensor.name}: {e}")
                     sensor_readings[sensor.name] = 0.0
-
+            print(sensor_readings)
             # Insert data into the table
             insert_data(sensors, sensor_readings)
 
