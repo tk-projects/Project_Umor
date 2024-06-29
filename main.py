@@ -17,6 +17,9 @@ sys.path.append(parent_dir)
 # Path to the database file in the SQL directory
 db_path = os.path.join(parent_dir, 'SQL', 'sensor_data.db')
 
+print("Parent Directory:", parent_dir)
+print("Database Path:", db_path)
+
 def insert_data(sensor_readings):
     try:
         conn = sqlite3.connect(db_path)
