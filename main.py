@@ -52,7 +52,7 @@ def fetch_data_from_db():
 # Function to update sensor data
 def update_sensor_data(sensor_id):
     try:
-        humidity = sensors["sensor_1"].read()
+        humidity = sensors[sensor_id].read()
         save_sensor_data(sensors["sensor_1"].name, humidity)  # Update DB
     except Exception as e:
         print(f"Error updating sensor data: {e}")
