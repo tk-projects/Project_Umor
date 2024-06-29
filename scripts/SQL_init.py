@@ -1,10 +1,11 @@
 import os
 import sqlite3
 from datetime import datetime
+import sys
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 # Add the parent directory to the sys.path (if necessary)
-# sys.path.append(parent_dir)
+sys.path.append(parent_dir)
 
 from functions.load_sensor_json import load_sensor_json
 
