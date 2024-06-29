@@ -12,17 +12,30 @@
         .container {
             display: flex;
             flex-direction: row;
-            flex-wrap: wrap; /* Allow graphs to wrap to new line if needed */
+        }
+
+        .table-container {
+            width: 25%;
+            margin-right: 20px;
+            margin-bottom: 20px;
+            margin-top: 40px; /* Oberer Abstand zur Tabelle */
         }
 
         .graph-container {
-            width: 50%; /* Each graph takes half the width */
-            margin-bottom: 20px;
+            width: 75%;
         }
 
-        canvas {
-            width: 100% !important;
-            height: auto !important;
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
         }
 
         .update-interval-container {
@@ -53,16 +66,31 @@
     </div>
     <div class="current-humidity">
         <span class="current-humidity-label" id="currentHumidity">Aktuelle Feuchtigkeit: </span>
-        <span class="current-humidity-value">{{ sensor_data['Sensor1.0']['humidities'][-1] }}</span>
+        <span class="current-humidity-value">{{ rows[-1][3] }}</span>
         <span class="percent-sign">%</span>
     </div>
     <div class="container">
-        {% for sensor_name, data in sensor_data.items() %}
-        <div class="graph-container">
-            <h2>{{ sensor_name }}</h2>
-            <canvas id="myChart{{ loop.index }}"></canvas>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">Zeitstempel</th>
+                        <th style="width: 40px;">Feuchtigkeit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows[-18:][::-1] %}
+                    <tr>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        {% endfor %}
+        <div class="graph-container">
+            <canvas id="myChart"></canvas>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -95,19 +123,22 @@
             }
         }
 
-        // Assuming sensor_data is structured as {'Sensor1.0': {'timestamps': [...], 'humidities': [...]}, 'Sensor1.1': {'timestamps': [...], 'humidities': [...]}}
-        {% for sensor_name, data in sensor_data.items() %}
-        var timestamps{{ loop.index }} = {{ data['timestamps'] | tojson }};
-        var humidities{{ loop.index }} = {{ data['humidities'] | tojson }};
+        // Assuming rows is a list of dictionaries with timestamp and humidity
+        var timestamps = [];
+        var humidities = [];
+        {% for row in rows %}
+            timestamps.push("{{ row[1] }}");
+            humidities.push("{{ row[3] }}");
+        {% endfor %}
 
-        var ctx{{ loop.index }} = document.getElementById('myChart{{ loop.index }}').getContext('2d');
-        var myChart{{ loop.index }} = new Chart(ctx{{ loop.index }}, {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: timestamps{{ loop.index }},
+                labels: timestamps,
                 datasets: [{
                     label: 'Feuchtigkeit',
-                    data: humidities{{ loop.index }},
+                    data: humidities,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1
@@ -136,7 +167,6 @@
                 }
             }
         });
-        {% endfor %}
 
         setInitialInterval();
         startAutoRefresh();

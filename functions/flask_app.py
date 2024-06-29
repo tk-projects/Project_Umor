@@ -4,35 +4,23 @@ import os
 
 app = Flask(__name__, template_folder='templates')
 
-# Function to fetch data from the database for all sensors
-def fetch_all_sensor_data():
+@app.route('/')
+def index():
+    # Get the absolute path to the current directory
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
+
+    # Path to the database file
+    db_path = os.path.join(current_dir, '..', 'SQL', 'sensor_data.db')
+
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute('SELECT sensor_name, timestamp, humidity_value FROM humidity_data ORDER BY timestamp DESC')
+    cursor.execute('SELECT * FROM humidity_data')
     rows = cursor.fetchall()
     conn.close()
+    #return render_template('/home/tk/Umor/Project_Umor/functions/templates/index.html', rows=rows)
+    return render_template('index.html', rows=rows)
 
-    # Organize data by sensor_name
-    sensor_data = {}
-    for row in rows:
-        sensor_name = row[0]
-        if sensor_name not in sensor_data:
-            sensor_data[sensor_name] = {
-                'timestamps': [],
-                'humidities': []
-            }
-        sensor_data[sensor_name]['timestamps'].append(row[1])
-        sensor_data[sensor_name]['humidities'].append(row[2])
-
-    return sensor_data
-
-@app.route('/')
-def index():
-    sensor_data = fetch_all_sensor_data()
-    return render_template('index.html', sensor_data=sensor_data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
