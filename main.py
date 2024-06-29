@@ -74,12 +74,12 @@ def sensor_data_updater():
                 update_sensor_data(sensor_id)  # No data in the database, insert the first datapoint
         time.sleep(sampling_rate)
 
-def get_last_datapoint():
+def get_last_datapoint(sensor_id):
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute('SELECT timestamp FROM humidity_data ORDER BY timestamp DESC LIMIT 1')
+    cursor.execute('SELECT timestamp FROM humidity_data WHERE sensor_name = ? ORDER BY timestamp DESC LIMIT 1', (sensors[sensor_id].name,))
     row = cursor.fetchone()
     conn.close()
     if row:
