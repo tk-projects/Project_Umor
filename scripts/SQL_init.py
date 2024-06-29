@@ -59,11 +59,12 @@ def insert_data(sensor_data):
         column_names = [key for key in sensor_data.keys()]
 
         # Prepare the list of values in the same order as column_names
-        values = [sensor_data[key] for key in column_names]
+        values = [float(sensor_data[key]) for key in column_names]  # Cast values to float
 
         # Construct the INSERT query dynamically
         columns_str = ", ".join(column_names)
         placeholders = ", ".join(["?"] * len(column_names))
+        print(placeholders)
         insert_query = f"INSERT INTO humidity_data (timestamp, {columns_str}) VALUES (?, {placeholders})"
 
         # Execute the query to insert data
