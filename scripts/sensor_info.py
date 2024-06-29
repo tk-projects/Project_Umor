@@ -22,10 +22,11 @@ def sensor_info(sensor_id):
     min_calibration_value = sensor_data.min_calibration_value
     max_calibration_value = sensor_data.max_calibration_value
     sensor_group_id = sensor_data.sensor_group_id
+    print("sensor grouzp id is :",sensor_group_id)
 
     # get sensor group data:
     group_data= get_sensor_group(sensor_group_id)
-    print(group_data)
+    print("groud data is:",group_data)
 
     print(f"Sensor Name: {sensor_name}")
     print(f"Min Calibration Value: {min_calibration_value}")
