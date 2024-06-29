@@ -56,12 +56,12 @@ def insert_data(sensor_data):
 
         # Prepare the list of column names based on sensor_data keys
         column_names = [key for key in sensor_data.keys()]
-        print(column_names)
+        print("column_names:",column_names)
 
         # Prepare the list of values in the same order as column_names
         values = [sensor_data[key] for key in column_names]
-        print(values)
-        
+        print("values",values)
+
         # Construct the INSERT query dynamically
         columns_str = ", ".join(column_names)
         placeholders = ", ".join(["?"] * len(column_names))
