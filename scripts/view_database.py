@@ -5,6 +5,8 @@ import os
 db_path = os.path.join(os.path.dirname(__file__), '..', 'SQL', 'sensor_data.db')
 
 def print_database():
+
+    print("testtestasd")
     try:
         # Connect to the SQLite database
         conn = sqlite3.connect(db_path)
