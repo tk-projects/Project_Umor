@@ -53,10 +53,6 @@
             font-size: 40px;
             margin-bottom: 15px;
         }
-
-        .checkbox-container {
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
@@ -97,39 +93,10 @@
         </div>
     </div>
 
-    <div class="checkbox-container">
-        <h3>Sensoren auswählen:</h3>
-        {% for sensor_id, sensor_data in sensors.items() %}
-            <label>
-                <input type="checkbox" id="sensor{{ sensor_id }}" checked onchange="toggleSensorVisibility({{ sensor_id }})">
-                {{ sensor_data.name }} (ID: {{ sensor_id }})
-            </label><br>
-        {% endfor %}
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         var refreshInterval = 60000;
         var intervalId;
-
-        // Assuming rows is a list of dictionaries with timestamp and humidity
-        var timestamps = [];
-        var humidities = [];
-        var sensorDatasets = {};
-
-        {% for sensor_id, sensor_data in sensors.items() %}
-            var {{ sensor_id }}_timestamps = [];
-            var {{ sensor_id }}_humidities = [];
-            sensorDatasets[{{ sensor_id }}] = {
-                timestamps: {{ sensor_id }}_timestamps,
-                humidities: {{ sensor_id }}_humidities,
-                label: '{{ sensor_data.name }}',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                hidden: false
-            };
-        {% endfor %}
 
         function fetchSensorData() {
             location.reload();
@@ -156,18 +123,26 @@
             }
         }
 
-        function toggleSensorVisibility(sensorId) {
-            var dataset = sensorDatasets[sensorId];
-            dataset.hidden = !dataset.hidden;
-            myChart.update();
-        }
+        // Assuming rows is a list of dictionaries with timestamp and humidity
+        var timestamps = [];
+        var humidities = [];
+        {% for row in rows %}
+            timestamps.push("{{ row[1] }}");
+            humidities.push("{{ row[3] }}");
+        {% endfor %}
 
         var ctx = document.getElementById('myChart').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: timestamps,
-                datasets: Object.values(sensorDatasets)
+                datasets: [{
+                    label: 'Feuchtigkeit',
+                    data: humidities,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
             },
             options: {
                 animation: false,
