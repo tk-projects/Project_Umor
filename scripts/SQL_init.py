@@ -1,6 +1,7 @@
 import os
 import sqlite3
 import sys
+from datetime import datetime
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 # Add the parent directory to the sys.path
@@ -47,11 +48,16 @@ def insert_data(sensor_data):
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
-        # Insert example data for Sensor_1
-        c.execute("INSERT INTO humidity_data (sensor_1) VALUES (?)", (0,))
+        # Get the current timestamp
+        current_timestamp = datetime.now()
+
+        # Insert data for Sensor_1
+        sensor_1_value = sensor_data.get('Sensor_1', 0.0)
+        c.execute("INSERT INTO humidity_data (timestamp, sensor_1) VALUES (?, ?)", (current_timestamp, sensor_1_value))
         
-        # Insert example data for Sensor_2
-        c.execute("INSERT INTO humidity_data (sensor_2) VALUES (?)", (0,))
+        # Insert data for Sensor_2
+        sensor_2_value = sensor_data.get('Sensor_2', 0.0)
+        c.execute("INSERT INTO humidity_data (timestamp, sensor_2) VALUES (?, ?)", (current_timestamp, sensor_2_value))
 
         conn.commit()
         conn.close()
