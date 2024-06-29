@@ -24,8 +24,7 @@ def read_sensor(sensor_id=None, cycle_time =0.5):
                 time.sleep(cycle_time)
         except KeyboardInterrupt:
             print("Aborted by user using KeyboardInterrupt.")
-    else:
-        print(f"Sensor with ID {sensor_id} not found.")
+
 
 def listen_for_abort():
     global running
