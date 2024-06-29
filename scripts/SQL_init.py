@@ -15,6 +15,9 @@ os.makedirs(os.path.join(parent_dir, 'SQL'), exist_ok=True)
 # Path to the database file in the SQL directory
 db_path = os.path.join(parent_dir, 'SQL', 'sensor_data.db')
 
+print("Parent Directory:", parent_dir)
+print("Database Path:", db_path)
+
 def create_table(sensor_data):
     try:
         conn = sqlite3.connect(db_path)
