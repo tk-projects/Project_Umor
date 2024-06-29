@@ -5,56 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sensordaten</title>
     <style>
-        /* Your CSS styles remain the same */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap; /* Added to wrap graphs */
+        }
+
+        .graph-container {
+            width: 50%; /* Adjust as needed for layout */
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        .update-interval-container {
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .current-humidity-value {
+            font-size: 40px;
+        }
+        .current-humidity-label {
+            font-size: 40px;
+        }
+        .percent-sign {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="update-interval-container">
-        <!-- Your update interval dropdown remains the same -->
+        <label for="updateInterval">Aktualisierungsintervall: </label>
+        <select id="updateInterval" onchange="updateInterval()">
+            <option value="2000">Jede 2 Sekunden</option>
+            <option value="10000">Jede 10 Sekunden</option>
+            <option value="60000">Jede Minute</option>
+        </select>
     </div>
-
+    <div class="current-humidity">
+        <span class="current-humidity-label" id="currentHumidity">Aktuelle Feuchtigkeit: </span>
+        <span class="current-humidity-value">{{ rows[-1][3] }}</span>
+        <span class="percent-sign">%</span>
+    </div>
     <div class="container">
-        <!-- Sensor table container -->
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 60px;">Zeitstempel</th>
-                        <th style="width: 40px;">Feuchtigkeit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in rows[-18:][::-1] %}
-                    <tr>
-                        <td>{{ row[1] }}</td>
-                        <td>{{ row[3] }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Sensor graph container -->
+        {% for sensor_name, data in sensor_data.items() %}
         <div class="graph-container">
-            <canvas id="myChart"></canvas>
+            <h2>{{ sensor_name }}</h2>
+            <canvas id="myChart_{{ loop.index }}"></canvas>
         </div>
+        {% endfor %}
     </div>
 
-    <!-- Sensor checkboxes -->
-    <div class="sensor-checkboxes">
-        <h2>Sensoren</h2>
-        <form id="sensorForm">
-            {% for sensor_id, sensor_data in sensors.items() %}
-                <input type="checkbox" id="sensor_{{ sensor_id }}" name="sensors" value="{{ sensor_id }}" checked>
-                <label for="sensor_{{ sensor_id }}">{{ sensor_data.name }}</label><br>
-            {% endfor %}
-        </form>
-    </div>
-
-    <!-- Your existing script for chart rendering and auto-refresh -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Your existing JavaScript code remains the same, with updates for multiple sensors
-    </script>
-</body>
-</html>
+        var refreshInterval = 60000;
+        var intervalId;
+
+        function fetchSensorData() {
+            location.reload();
+        }
+
+        function startAutoRefresh() {
+            clearInterval(intervalId);
+            intervalId = setInterval(fetchSensorData, refreshInterval);
+        }
+
+        function updateInterval() {
+            var newInterval = document.getElementById('updateInterval').value;
+            refreshInterval = parseInt(newInterval);
+            startAutoRefresh();
+        }
+
+        function setInitialInterval() {
+            var intervalOptions = document.getElementById('updateInterval').options;
+            for (var i = 0; i < intervalOptions.length; i++) {
+                if (intervalOptions[i].value == refreshInterval) {
+                    intervalOptions[i].selected = true;
+                    break;
+                }
+       
