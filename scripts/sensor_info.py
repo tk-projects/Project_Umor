@@ -29,6 +29,8 @@ def sensor_info(sensor_id):
     print("groud data is:",group_data)
 
     print(f"Sensor Name: {sensor_name}")
+    print(f"Sensor group is: {group_data.name}")
+    print(f"Sensor is located at: {group_data.location}")
     print(f"Min Calibration Value: {min_calibration_value}")
     print(f"Max Calibration Value: {max_calibration_value}")
 
