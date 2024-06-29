@@ -24,7 +24,10 @@ except Exception as e:
 # Initialize sensors
 sensors = {}
 for sensor_name, sensor_data in sensor_json.items():
-    sensors[sensor_name] = humidity_sensor(
+    sensor_id = sensor_data["sensor_id"]
+    print("sensor id is: ",sensor_id)
+
+    sensors[sensor_id] = humidity_sensor(
         sensor_data["sensor_id"], sensor_data["adc_channel"],
         sensor_data["name"], sensor_data["unit"],
         sensor_data["max_calibration_value"], sensor_data["min_calibration_value"]
@@ -47,7 +50,7 @@ def fetch_data_from_db():
         return []
 
 # Function to update sensor data
-def update_sensor_data():
+def update_sensor_data(sensor_id):
     try:
         humidity = sensors["sensor_1"].read()
         save_sensor_data(sensors["sensor_1"].name, humidity)  # Update DB
