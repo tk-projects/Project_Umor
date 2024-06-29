@@ -1,15 +1,21 @@
 import os
 import sqlite3
+import sys
+
 
 # Create the SQL directory if it doesn't exist
 os.makedirs('SQL', exist_ok=True)
 
-from functions.load_sensor_json import load_sensor_json
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# Add the parent directory to the sys.path
+sys.path.append(parent_dir)
 
 # Get the absolute path to the current directory
 current_dir = os.path.dirname(os.path.abspath(__file__))
 # Path to the database file in the SQL directory
 db_path = os.path.join(current_dir, '..', 'SQL', 'sensor_data.db')
+
+from functions.load_sensor_json import load_sensor_json
 
 # Database credentials (for consistency, but not used in SQLite)
 hostname = 'localhost'

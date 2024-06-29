@@ -1,7 +1,5 @@
 import os
 import sys
-import json
-
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 # Add the parent directory to the sys.path
