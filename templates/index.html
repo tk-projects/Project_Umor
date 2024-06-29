@@ -12,11 +12,11 @@
         .container {
             display: flex;
             flex-direction: row;
-            flex-wrap: wrap; /* Added to wrap graphs */
+            flex-wrap: wrap; /* Allow graphs to wrap to new line if needed */
         }
 
         .graph-container {
-            width: 50%; /* Adjust as needed for layout */
+            width: 50%; /* Each graph takes half the width */
             margin-bottom: 20px;
         }
 
@@ -53,6 +53,93 @@
     </div>
     <div class="current-humidity">
         <span class="current-humidity-label" id="currentHumidity">Aktuelle Feuchtigkeit: </span>
-        <span class="current-humidity-value">{{ sensor_data|dictsort(reverse=true) | first}} % </span>
+        <span class="current-humidity-value">{{ sensor_data['Sensor1.0']['humidities'][-1] }}</span>
+        <span class="percent-sign">%</span>
     </div>
-    < they but have even th so did understood JavaScript explained who ? Did even understood
+    <div class="container">
+        {% for sensor_name, data in sensor_data.items() %}
+        <div class="graph-container">
+            <h2>{{ sensor_name }}</h2>
+            <canvas id="myChart{{ loop.index }}"></canvas>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var refreshInterval = 60000;
+        var intervalId;
+
+        function fetchSensorData() {
+            location.reload();
+        }
+
+        function startAutoRefresh() {
+            clearInterval(intervalId);
+            intervalId = setInterval(fetchSensorData, refreshInterval);
+        }
+
+        function updateInterval() {
+            var newInterval = document.getElementById('updateInterval').value;
+            refreshInterval = parseInt(newInterval);
+            startAutoRefresh();
+        }
+
+        function setInitialInterval() {
+            var intervalOptions = document.getElementById('updateInterval').options;
+            for (var i = 0; i < intervalOptions.length; i++) {
+                if (intervalOptions[i].value == refreshInterval) {
+                    intervalOptions[i].selected = true;
+                    break;
+                }
+            }
+        }
+
+        // Assuming sensor_data is structured as {'Sensor1.0': {'timestamps': [...], 'humidities': [...]}, 'Sensor1.1': {'timestamps': [...], 'humidities': [...]}}
+        {% for sensor_name, data in sensor_data.items() %}
+        var timestamps{{ loop.index }} = {{ data['timestamps'] | tojson }};
+        var humidities{{ loop.index }} = {{ data['humidities'] | tojson }};
+
+        var ctx{{ loop.index }} = document.getElementById('myChart{{ loop.index }}').getContext('2d');
+        var myChart{{ loop.index }} = new Chart(ctx{{ loop.index }}, {
+            type: 'line',
+            data: {
+                labels: timestamps{{ loop.index }},
+                datasets: [{
+                    label: 'Feuchtigkeit',
+                    data: humidities{{ loop.index }},
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                animation: false,
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Feuchtigkeit (%)',
+                            fontColor: '#666666',
+                            fontSize: 16
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            fontSize: 14
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            fontColor: '#666666'
+                        }
+                    }]
+                }
+            }
+        });
+        {% endfor %}
+
+        setInitialInterval();
+        startAutoRefresh();
+    </script>
+</body>
+</html>
