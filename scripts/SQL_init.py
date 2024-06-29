@@ -1,6 +1,11 @@
 import os
 import sqlite3
 import sys
+
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# Add the parent directory to the sys.path
+sys.path.append(parent_dir)
+
 from functions.load_sensor_json import load_sensor_json
 
 # Create the SQL directory if it doesn't exist
