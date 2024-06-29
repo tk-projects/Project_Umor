@@ -8,7 +8,8 @@ app = Flask(__name__, template_folder='templates')
 def fetch_all_sensor_data():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(current_dir, "..", "SQL", "sensor_data.db")
-    print("db_path:",db_path)
+    print("Flask app is connecting now")
+
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute('SELECT sensor_name, timestamp, humidity_value FROM humidity_data ORDER BY timestamp DESC')
