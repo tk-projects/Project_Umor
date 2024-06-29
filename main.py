@@ -62,15 +62,16 @@ def update_sensor_data(sensor_id):
 def sensor_data_updater():
     sampling_rate = 60
     while True:
-        last_datapoint = get_last_datapoint()
-        if last_datapoint:
-            last_timestamp = datetime.datetime.strptime(last_datapoint, '%Y-%m-%d %H:%M:%S')
-            current_timestamp = datetime.datetime.now()
-            time_difference = (current_timestamp - last_timestamp).total_seconds()
-            if time_difference >= sampling_rate-1:
-                update_sensor_data(sensor_id)
-        else:
-            update_sensor_data(sensor_id)  # No data in the database, insert the first datapoint
+        for sensor_id in sensors.keys():
+            last_datapoint = get_last_datapoint(sensor_id)
+            if last_datapoint:
+                last_timestamp = datetime.datetime.strptime(last_datapoint, '%Y-%m-%d %H:%M:%S')
+                current_timestamp = datetime.datetime.now()
+                time_difference = (current_timestamp - last_timestamp).total_seconds()
+                if time_difference >= sampling_rate - 1:
+                    update_sensor_data(sensor_id)
+            else:
+                update_sensor_data(sensor_id)  # No data in the database, insert the first datapoint
         time.sleep(sampling_rate)
 
 def get_last_datapoint():
