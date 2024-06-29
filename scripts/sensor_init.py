@@ -13,8 +13,8 @@ import json
 
 # Create sensor objects
 #sensor_x = humidity_sensor(sensor_id, adc channel,name, sensor_group_id, sensor_cluster_id, unit, max value, min value)
-sensor_10 = humidity_sensor(10, 0,'Sensor_1.0', 1, 1,'%', 20461, 9951)
-sensor_11 = humidity_sensor(11, 1,'Sensor_1.1', 1, 1,'%', 0, 0);
+sensor_10 = humidity_sensor(10, 0,'Sensor_1_0', 1, 1,'%', 20461, 9951)
+sensor_11 = humidity_sensor(11, 1,'Sensor_1_1', 1, 1,'%', 0, 0);
 
 # Create a sensor group with the sensors
 sensor_group_1 = sensor_group(1, [sensor_10, sensor_11],'Prototype Salam','Michendorf','Salam')
