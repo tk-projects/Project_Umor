@@ -10,8 +10,6 @@ parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(parent_dir)
 
 from functions.load_sensor_json import load_sensor_json
-from classes.humidity_sensor import humidity_sensor
-from functions.save_sensor_data import save_sensor_data
 from functions.get_sensor import get_sensor
 
 # Create the SQL directory if it doesn't exist
@@ -97,7 +95,7 @@ def main():
         
 
         # Start the sensor data updater thread
-        updater_thread = threading.Thread(target=sensor_data_updater(sensors))
+        updater_thread = threading.Thread(target=sensor_data_updater, args=(sensors,))
         updater_thread.daemon = True
         updater_thread.start()
 
