@@ -22,8 +22,9 @@ def insert_data(sensor_readings):
     print("Parent Directory:", parent_dir)
     print("Database Path:", db_path)
     try:
-
+        print("starting connection")
         conn = sqlite3.connect(db_path)
+        print("connection done")
         c = conn.cursor()
 
         # Get the current timestamp
