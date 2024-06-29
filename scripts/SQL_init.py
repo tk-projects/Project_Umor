@@ -17,13 +17,17 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # Path to the database file in the SQL directory
 db_path = os.path.join(current_dir, '..', 'SQL', 'sensor_data.db')
 
+def sanitize_column_name(name):
+    """Replace invalid characters in column names with underscores."""
+    return name.replace('.', '_')
+
 def create_table(sensor_data):
     try:
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
-        # Prepare the dynamic part of the SQL for columns using sensor_id
-        columns = ', '.join([f"{sensor['sensor_id']} REAL" for sensor in sensor_data.values()])
+        # Prepare the dynamic part of the SQL for columns, sanitizing the names
+        columns = ', '.join([f"{sanitize_column_name(key)} REAL" for key in sensor_data.keys()])
 
         # Create the humidity_data table with separate columns for each sensor
         create_table_query = f'''
@@ -52,8 +56,8 @@ def insert_data(sensor_data):
         # Get the current timestamp
         current_timestamp = datetime.now()
 
-        # Prepare the list of column names based on sensor_id
-        column_names = [sensor['sensor_id'] for sensor in sensor_data.values()]
+        # Prepare the list of column names based on sensor_data keys
+        column_names = [sanitize_column_name(key) for key in sensor_data.keys()]
 
         # Use 0 as the value for each sensor
         values = [0.0] * len(column_names)
