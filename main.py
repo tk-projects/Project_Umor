@@ -10,18 +10,19 @@ from functions.get_sensor import get_sensor
 
 app = Flask(__name__, template_folder='templates')
 
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-# Add the parent directory to the sys.path
-sys.path.append(parent_dir)
-
-# Path to the database file in the SQL directory
-db_path = os.path.join(parent_dir, 'SQL', 'sensor_data.db')
-
-print("Parent Directory:", parent_dir)
-print("Database Path:", db_path)
 
 def insert_data(sensor_readings):
+    parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    # Add the parent directory to the sys.path
+    sys.path.append(parent_dir)
+
+    # Path to the database file in the SQL directory
+    db_path = os.path.join(parent_dir, 'SQL', 'sensor_data.db')
+
+    print("Parent Directory:", parent_dir)
+    print("Database Path:", db_path)
     try:
+
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
