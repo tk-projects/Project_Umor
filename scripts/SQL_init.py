@@ -65,7 +65,6 @@ def insert_data(sensor_data):
 
         print("Insert Query:", insert_query)  # Debugging line
         print("Values:", (current_timestamp,) + tuple(values))  # Debugging line
-        print("insert_query:", insert_query)  # Debugging line
 
         # Execute the query to insert data
         c.execute(insert_query, (current_timestamp,) + tuple(values))
