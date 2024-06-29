@@ -8,6 +8,8 @@ parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(parent_dir)
 
 from functions.get_sensor import get_sensor
+from functions.get_sensor_group import get_sensor_group
+
 
 # Global variable to control the loop
 running = True
@@ -19,6 +21,11 @@ def sensor_info(sensor_id):
     sensor_name = sensor_data.name
     min_calibration_value = sensor_data.min_calibration_value
     max_calibration_value = sensor_data.max_calibration_value
+    sensor_group_id = sensor_data.sensor_group_id
+
+    # get sensor group data:
+    group_data= get_sensor_group(sensor_group_id)
+    print(group_data)
 
     print(f"Sensor Name: {sensor_name}")
     print(f"Min Calibration Value: {min_calibration_value}")
