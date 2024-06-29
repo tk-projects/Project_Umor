@@ -1,17 +1,16 @@
 import os
 import sys
-import time
-import threading
 import json
+
+from functions.get_sensor import get_sensor
 
 # Global variable to control the loop
 running = True
 
-def read_sensor_from_json(file_path, cycle_time=0.5):
+def sensor_info(sensor_id):
     global running
     try:
-        with open(file_path, 'r') as file:
-            sensor_data = json.load(file)
+        sensor_data = get_sensor(sensor_id)
         
         sensor_name = sensor_data.get("name")
         adc_channel = sensor_data.get("adc_channel")
@@ -30,13 +29,11 @@ def read_sensor_from_json(file_path, cycle_time=0.5):
         print(f"Error decoding JSON file {file_path}.")
 
 
-
 if __name__ == "__main__":
     # Check if arguments are passed
     if len(sys.argv) > 1:
         # Parse sensor_id from command line arguments
         sensor_id = int(sys.argv[1])  # Convert the argument to an integer
-        # Start the sensor reading in a separate thread
-        
+        sensor_info(sensor_id)
     else:
         print("Please provide a sensor_id as an argument.")
