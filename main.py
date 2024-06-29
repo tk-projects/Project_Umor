@@ -39,9 +39,10 @@ def insert_data(sensor_readings):
         placeholders = ", ".join(["?"] * (len(column_names) + 1))
         insert_query = f"INSERT INTO humidity_data ({columns_str}) VALUES ({placeholders})"
 
+        print("insert_query",insert_query)
         # Execute the query to insert data
         c.execute(insert_query, (current_timestamp,) + tuple(values))
-
+        print("executed")
         conn.commit()
         conn.close()
         print("Data inserted successfully.")
