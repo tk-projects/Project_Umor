@@ -13,7 +13,7 @@ from functions.get_sensor import get_sensor
 # Global variable to control the loop
 running = True
 
-def read_sensor(sensor_id=None, cycle_time =1):
+def read_sensor(sensor_id=None, cycle_time =0.5):
     global running
     print(f"Reading sensor with ID: {sensor_id}")
     sensor = get_sensor(sensor_id)
