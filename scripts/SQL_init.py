@@ -32,8 +32,13 @@ c.execute('''CREATE TABLE IF NOT EXISTS humidity_data (
 sensor_name = 'sensor_1'
 humidity_value = 0
 
-# Insert data into the table
-c.execute("INSERT INTO humidity_data (sensor_name, humidity_value) VALUES (?, ?)", (sensor_name, humidity_value))
+# Get sensor data
+sensor_data = load_sensor_json()
+
+for sensor_name in sensor_data:
+
+    # Insert data into the table
+    c.execute("INSERT INTO humidity_data (sensor_name, humidity_value) VALUES (?, ?)", (sensor_name, humidity_value))
 
 # Commit changes and close the connection
 conn.commit()
