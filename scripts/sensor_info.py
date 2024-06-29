@@ -27,8 +27,10 @@ def sensor_info(sensor_id):
     group_data= get_sensor_group(sensor_group_id)
 
     print(f"\nSensor Name: {sensor_name}")
-    print(f"Sensor is owned by: {group_data.owner}")
-    print(f"Sensor is located at: {group_data.location}")
+          
+    print(f"\nSensor is owned by {group_data.owner} and located at {group_data.location}")
+    #print(f"Sensor is owned by {group_data.owner}")
+    #print(f"Sensor is located at {group_data.location}")
     print(f"Min Calibration Value: {min_calibration_value}")
     print(f"Max Calibration Value: {max_calibration_value}")
 
