@@ -29,7 +29,7 @@ for sensor_name, sensor_data in sensor_json.items():
 
     sensors[sensor_id] = humidity_sensor(
         sensor_data["sensor_id"], sensor_data["adc_channel"],
-        sensor_data["name"], sensor_data["unit"],
+        sensor_data["name"], sensor_data["sensor_group"], sensor_data["sensor_cluster"], sensor_data["unit"],
         sensor_data["max_calibration_value"], sensor_data["min_calibration_value"]
     )
     print(sensors)
