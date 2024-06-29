@@ -7,6 +7,13 @@ import threading
 import datetime
 from flask import Flask, render_template
 
+
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# Add the parent directory to the sys.path
+sys.path.append(parent_dir)
+
+from classes.humidity_sensor import humidity_sensor
+
 # Initialize Flask application
 app = Flask(__name__, template_folder='templates')
 
