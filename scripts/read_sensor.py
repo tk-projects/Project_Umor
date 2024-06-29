@@ -7,7 +7,6 @@ parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 # Add the parent directory to the sys.path
 sys.path.append(parent_dir)
 
-from classes.humidity_sensor import humidity_sensor
 from functions.get_sensor import get_sensor
 
 # Global variable to control the loop
@@ -24,6 +23,8 @@ def read_sensor(sensor_id=None, cycle_time =0.5):
                 time.sleep(cycle_time)
         except KeyboardInterrupt:
             print("Aborted by user using KeyboardInterrupt.")
+    else:
+        running = false
 
 
 def listen_for_abort():
