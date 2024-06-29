@@ -12,6 +12,7 @@ sys.path.append(parent_dir)
 from functions.load_sensor_json import load_sensor_json
 from classes.humidity_sensor import humidity_sensor
 from functions.save_sensor_data import save_sensor_data
+from functions.get_sensor import get_sensor
 
 # Create the SQL directory if it doesn't exist
 os.makedirs('SQL', exist_ok=True)
@@ -20,33 +21,6 @@ os.makedirs('SQL', exist_ok=True)
 current_dir = os.path.dirname(os.path.abspath(__file__))
 # Path to the database file in the SQL directory
 db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
-
-def create_table(sensor_data):
-    try:
-        conn = sqlite3.connect(db_path)
-        c = conn.cursor()
-
-        # Prepare the dynamic part of the SQL for columns
-        columns = ', '.join([f"{key} REAL" for key in sensor_data.keys()])
-
-        # Create the humidity_data table with separate columns for each sensor
-        create_table_query = f'''
-        CREATE TABLE IF NOT EXISTS humidity_data (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-            {columns}
-        )
-        '''
-
-        print("Create Table Query:", create_table_query)  # Debugging line
-
-        c.execute(create_table_query)
-        conn.commit()
-        conn.close()
-        print("Table created successfully.")
-
-    except sqlite3.Error as e:
-        print(f"SQLite error: {e}")
 
 def insert_data(sensor_data, sensor_readings):
     try:
@@ -80,34 +54,22 @@ def insert_data(sensor_data, sensor_readings):
     except sqlite3.Error as e:
         print(f"SQLite error: {e}")
 
-def sensor_data_updater():
+def sensor_data_updater(sensors):
     sampling_rate = 10  # Update every 10 seconds
     while True:
         try:
-            # Get sensor data
-            sensor_data = load_sensor_json()
-
-            # Initialize sensors (assuming sensor_data is a dictionary with sensor information)
-            sensors = {}
-            for sensor_name, sensor_info in sensor_data.items():
-                sensor_id = str(sensor_info["sensor_id"])  # Convert sensor_id to string if necessary
-                sensors[sensor_id] = humidity_sensor(
-                    sensor_info["sensor_id"], sensor_info["adc_channel"],
-                    sensor_info["name"], sensor_info["sensor_group"], sensor_info["sensor_cluster"], sensor_info["unit"],
-                    sensor_info["max_calibration_value"], sensor_info["min_calibration_value"]
-                )
 
             # Fetch sensor readings
             sensor_readings = {}
-            for sensor_id, sensor in sensors.items():
+            for sensor in sensors.items():
                 try:
-                    sensor_readings[sensor_id] = sensor.read()
+                    sensor_readings[sensor.name] = sensor.read()
                 except Exception as e:
-                    print(f"Error reading sensor {sensor_id}: {e}")
-                    sensor_readings[sensor_id] = 0.0
+                    print(f"Error reading sensor {sensor.name}: {e}")
+                    sensor_readings[sensor.name] = 0.0
 
             # Insert data into the table
-            insert_data(sensor_data, sensor_readings)
+            insert_data(sensors, sensor_readings)
 
         except Exception as e:
             print(f"Unexpected error: {e}")
@@ -120,17 +82,28 @@ def main():
         # Get sensor data
         sensor_data = load_sensor_json()
 
-        # Create table if not exists
-        create_table(sensor_data)
+        # Get sensor IDs
+        sensor_ids = [sensor_info["sensor_id"] for sensor_info in sensor_data.values()]
+        print(sensor_ids)
+
+        sensors = []
+        for sensor_id in sensor_ids:
+            sensor = get_sensor(sensor_id)
+            if sensor:
+                sensors.append(sensor)
+
+        print(sensors)
+        
+        
 
         # Start the sensor data updater thread
-        updater_thread = threading.Thread(target=sensor_data_updater)
+        updater_thread = threading.Thread(target=sensor_data_updater(sensors))
         updater_thread.daemon = True
         updater_thread.start()
 
         # Keep the main thread alive
         while True:
-            sleep(1)  # Sleep to keep the main thread running
+            sleep(1)  # Keep the main thread running
 
     except Exception as e:
         print(f"Unexpected error in main thread: {e}")
