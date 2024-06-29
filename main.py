@@ -20,7 +20,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # Path to the database file in the SQL directory
 db_path = os.path.join(current_dir, 'SQL', 'sensor_data.db')
 
-def insert_data(sensors, sensor_readings):
+def insert_data(sensor_readings):
     try:
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
@@ -29,10 +29,13 @@ def insert_data(sensors, sensor_readings):
         current_timestamp = datetime.now()
 
         # Prepare the list of column names based on sensor_data keys
-        column_names = [sensor["name"] for sensor in sensors]
+        column_names = list(sensor_readings.keys())
 
         # Prepare the values list based on sensor_readings
-        values = sensor_readings
+        values = [sensor_readings[sensor_name] for sensor_name in column_names]
+
+        print("column_names:", column_names)
+        print("values:", values)
 
         # Construct the INSERT query dynamically
         columns_str = ", ".join(['timestamp'] + column_names)
@@ -67,7 +70,7 @@ def sensor_data_updater(sensors):
                     sensor_readings[sensor.name] = 0.0
             print(sensor_readings)
             # Insert data into the table
-            insert_data(sensors, sensor_readings)
+            insert_data(sensor_readings)
 
         except Exception as e:
             print(f"Unexpected error: {e}")
