@@ -47,13 +47,11 @@ def insert_data(sensor_data):
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
 
-        # Example data to insert
-        for sensor_name in sensor_data.items():
-            # Assuming sensor names are 'Sensor_1' and 'Sensor_2'
-            if sensor_name == 'Sensor_1':
-                c.execute("INSERT INTO humidity_data (sensor_1) VALUES (?)", (0,))
-            elif sensor_name == 'Sensor_2':
-                c.execute("INSERT INTO humidity_data (sensor_2) VALUES (?)", (0,))
+        # Insert example data for Sensor_1
+        c.execute("INSERT INTO humidity_data (sensor_1) VALUES (?)", (0,))
+        
+        # Insert example data for Sensor_2
+        c.execute("INSERT INTO humidity_data (sensor_2) VALUES (?)", (0,))
 
         conn.commit()
         conn.close()
@@ -61,6 +59,7 @@ def insert_data(sensor_data):
 
     except sqlite3.Error as e:
         print(f"SQLite error: {e}")
+
 
 def main():
     # Create table if not exists
