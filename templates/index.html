@@ -21,11 +21,35 @@
         .graph-container {
             width: 80%;
         }
+
+        .checkbox-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-container label {
+            margin: 0 10px;
+            font-size: 16px;
+            color: #ffffff; /* White color for checkbox label */
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Sensordaten</h1>
+        <div class="checkbox-container">
+            <!-- Checkbox for Sensor 1 -->
+            <label>
+                <input type="checkbox" id="sensor1Checkbox" checked>
+                Sensor 1
+            </label>
+            <!-- Checkbox for Sensor 2 -->
+            <label>
+                <input type="checkbox" id="sensor2Checkbox" checked>
+                Sensor 2
+            </label>
+        </div>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
@@ -35,6 +59,7 @@
     <script>
         var timestamps = {{ timestamps | tojson }};
         var sensorData = {{ sensor_data | tojson }};
+        var chart; // Variable to hold the Chart.js instance
         
         // Function to generate colors with adjusted gradients
         function generateColors(numColors) {
@@ -70,13 +95,14 @@
                 borderColor: color.border,
                 borderWidth: 2, // Increased line width
                 pointRadius: 3, // Reduced marker size
-                pointHoverRadius: 5 // Hover size for markers
+                pointHoverRadius: 5, // Hover size for markers
+                hidden: false // Initially show all datasets
             });
             colorIndex++;
         }
 
         var ctx = document.getElementById('sensorChart').getContext('2d');
-        var sensorChart = new Chart(ctx, {
+        chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: timestamps,
@@ -91,16 +117,16 @@
                             display: true,
                             text: 'Feuchtigkeit (%)',
                             font: {
-                                size: 24, // Increased Y axis title font size
-                                weight: 'bold' // Bold font weight
+                                size: 20, // Reduced Y axis title font size
+                                weight: 'normal' // Normal font weight
                             },
-                            color: '#ffffff' // White color for axis title
+                            color: '#dddddd' // Dimmed color for axis title
                         },
                         grid: {
                             color: '#666666' // Color of the grid lines
                         },
                         ticks: {
-                            color: '#cccccc' // Color of the tick marks
+                            color: '#aaaaaa' // Color of the tick marks
                         }
                     },
                     x: {
@@ -108,10 +134,10 @@
                             display: true,
                             text: 'Zeitstempel',
                             font: {
-                                size: 24, // Increased X axis title font size
-                                weight: 'bold' // Bold font weight
+                                size: 20, // Reduced X axis title font size
+                                weight: 'normal' // Normal font weight
                             },
-                            color: '#ffffff' // White color for axis title
+                            color: '#dddddd' // Dimmed color for axis title
                         },
                         ticks: {
                             color: '#aaaaaa' // Dimmed color for X axis tick marks
@@ -127,6 +153,19 @@
                 }
             }
         });
+
+        // Function to update dataset visibility based on checkboxes
+        function updateDatasetVisibility() {
+            chart.data.datasets.forEach((dataset, index) => {
+                var checkboxId = `sensor${index + 1}Checkbox`;
+                dataset.hidden = !document.getElementById(checkboxId).checked;
+            });
+            chart.update();
+        }
+
+        // Event listeners for checkboxes
+        document.getElementById('sensor1Checkbox').addEventListener('change', updateDatasetVisibility);
+        document.getElementById('sensor2Checkbox').addEventListener('change', updateDatasetVisibility);
 
         // Function to reload the page every minute
         function reloadPage() {
