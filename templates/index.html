@@ -57,23 +57,6 @@
             background-color: #2a2a2a; /* Dark background for the panel */
         }
 
-        .humidity-header {
-            margin-bottom: 10px; /* Space below the header */
-        }
-
-        .sensor-value {
-            margin-top: 5px; /* Space between sensor values */
-        }
-
-        .sensor-name {
-            display: inline-block;
-            width: 150px; /* Fixed width for sensor names */
-        }
-
-        .sensor-humidity {
-            display: inline-block;
-        }
-
         .graph-container {
             width: 80%;
             margin-top: 80px; /* Space above the graph */
@@ -91,12 +74,9 @@
             Sensor Board Temperatur: {{ cpu_temperature }} °C <!-- Updated label -->
         </div>
         <div class="current-humidity">
-            <div class="humidity-header">Momentane Feuchtigkeit:</div>
+            Momentane Feuchtigkeit:<br>
             {% for sensor, data in sensor_data.items() %}
-                <div class="sensor-value">
-                    <span class="sensor-name">{{ sensor }}:</span>
-                    <span class="sensor-humidity">{{ data[-1] }}%</span>
-                </div>
+                {{ sensor }}: {{ data[-1] }}%<br>
             {% endfor %}
         </div>
         <div class="graph-container">
