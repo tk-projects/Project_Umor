@@ -15,7 +15,10 @@ db_path = os.path.join(parent_dir, 'SQL', 'sensor_data.db')
 
 def insert_data(sensor_readings):
     try:
+        print("connecting to sql db, with path:",db_path)
         conn = sqlite3.connect(db_path)
+
+
         c = conn.cursor()
 
         # Get the current timestamp
