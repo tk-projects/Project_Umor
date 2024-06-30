@@ -7,14 +7,23 @@ from time import sleep
 from functions.load_sensor_json import load_sensor_json
 from functions.get_sensor import get_sensor
 
-parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 sys.path.append(parent_dir)
+
 
 # Path to the database file in the SQL directory
 db_path = os.path.join(parent_dir, 'SQL', 'sensor_data.db')
 
 def insert_data(sensor_readings):
+    parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+
+    sys.path.append(parent_dir)
+
+
+    # Path to the database file in the SQL directory
+    db_path = os.path.join(parent_dir, 'SQL', 'sensor_data.db')
     try:
+
         print("connecting to sql db, with path:",db_path)
         conn = sqlite3.connect(db_path)
 
