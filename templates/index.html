@@ -11,168 +11,65 @@
 
         .container {
             display: flex;
-            flex-direction: row;
-        }
-
-        .table-container {
-            width: 25%;
-            margin-right: 20px;
-            margin-bottom: 20px;
-            margin-top: 40px; /* Oberer Abstand zur Tabelle */
+            flex-direction: column;
+            align-items: center;
         }
 
         .graph-container {
-            width: 75%;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .update-interval-container {
-            margin-top: 20px;
-            margin-bottom: 25px;
-        }
-
-        .current-humidity-value {
-            font-size: 40px;
-        }
-        .current-humidity-label {
-            font-size: 40px;
-        }
-        .percent-sign {
-            font-size: 40px;
-            margin-bottom: 15px;
+            width: 80%;
         }
     </style>
 </head>
 <body>
-    <div class="update-interval-container">
-        <label for="updateInterval">Aktualisierungsintervall: </label>
-        <select id="updateInterval" onchange="updateInterval()">
-            <option value="2000">Jede 2 Sekunden</option>
-            <option value="10000">Jede 10 Sekunden</option>
-            <option value="60000">Jede Minute</option>
-        </select>
-    </div>
-    <div class="current-humidity">
-        <span class="current-humidity-label" id="currentHumidity">Aktuelle Feuchtigkeit: </span>
-        <span class="current-humidity-value">{{ sensor_data|length > 0 and sensor_data.values()|list|last[0]['humidity_value'] }}</span>
-        <span class="percent-sign">%</span>
-    </div>
     <div class="container">
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 60px;">Zeitstempel</th>
-                        <th style="width: 40px;">Feuchtigkeit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for sensor, readings in sensor_data.items() %}
-                        {% for reading in readings %}
-                        <tr>
-                            <td>{{ reading.timestamp }}</td>
-                            <td>{{ reading.humidity_value }}</td>
-                        </tr>
-                        {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <h1>Sensordaten</h1>
         <div class="graph-container">
-            <canvas id="myChart"></canvas>
+            <canvas id="sensorChart"></canvas>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        var refreshInterval = 60000;
-        var intervalId;
+        var timestamps = {{ timestamps | tojson }};
+        var sensorData = {{ sensor_data | tojson }};
 
-        function fetchSensorData() {
-            location.reload();
+        var datasets = [];
+        for (var sensor in sensorData) {
+            datasets.push({
+                label: sensor,
+                data: sensorData[sensor],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            });
         }
 
-        function startAutoRefresh() {
-            clearInterval(intervalId);
-            intervalId = setInterval(fetchSensorData, refreshInterval);
-        }
-
-        function updateInterval() {
-            var newInterval = document.getElementById('updateInterval').value;
-            refreshInterval = parseInt(newInterval);
-            startAutoRefresh();
-        }
-
-        function setInitialInterval() {
-            var intervalOptions = document.getElementById('updateInterval').options;
-            for (var i = 0; i < intervalOptions.length; i++) {
-                if (intervalOptions[i].value == refreshInterval) {
-                    intervalOptions[i].selected = true;
-                    break;
-                }
-            }
-        }
-
-        var timestamps = [];
-        var humidities = [];
-        {% for sensor, readings in sensor_data.items() %}
-            {% for reading in readings %}
-                timestamps.push("{{ reading.timestamp }}");
-                humidities.push("{{ reading.humidity_value }}");
-            {% endfor %}
-        {% endfor %}
-
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
+        var ctx = document.getElementById('sensorChart').getContext('2d');
+        var sensorChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: timestamps,
-                datasets: [{
-                    label: 'Feuchtigkeit',
-                    data: humidities,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
+                datasets: datasets
             },
             options: {
                 animation: false,
                 scales: {
-                    yAxes: [{
-                        scaleLabel: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
                             display: true,
-                            labelString: 'Feuchtigkeit (%)',
-                            fontColor: '#666666',
-                            fontSize: 16
-                        },
-                        ticks: {
-                            beginAtZero: true,
-                            fontSize: 14
+                            text: 'Feuchtigkeit (%)'
                         }
-                    }],
-                    xAxes: [{
-                        ticks: {
-                            fontColor: '#666666'
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Zeitstempel'
                         }
-                    }]
+                    }
                 }
             }
         });
-
-        setInitialInterval();
-        startAutoRefresh();
     </script>
 </body>
 </html>

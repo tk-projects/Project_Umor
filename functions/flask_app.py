@@ -21,29 +21,25 @@ def fetch_all_sensor_data():
     # Prepare the query to fetch data for all sensors
     columns = ['timestamp'] + sensor_names
     columns_str = ', '.join(columns)
-    cursor.execute(f'SELECT {columns_str} FROM humidity_data ORDER BY timestamp DESC')
+    cursor.execute(f'SELECT {columns_str} FROM humidity_data ORDER BY timestamp ASC')
     rows = cursor.fetchall()
     conn.close()
 
-    # Reverse the order of rows to have the most recent first
-    rows = rows[::-1]
-
     # Organize data by sensor_name
     data_by_sensor = {sensor_name: [] for sensor_name in sensor_names}
+    timestamps = []
     for row in rows:
         timestamp = row[0]
+        timestamps.append(timestamp)
         for i, sensor_name in enumerate(sensor_names):
-            data_by_sensor[sensor_name].append({
-                'timestamp': timestamp,
-                'humidity_value': row[i + 1]
-            })
+            data_by_sensor[sensor_name].append(row[i + 1])
 
-    return data_by_sensor
+    return timestamps, data_by_sensor
 
 @app.route('/')
 def index():
-    sensor_data = fetch_all_sensor_data()
-    return render_template('index.html', sensor_data=sensor_data)
+    timestamps, sensor_data = fetch_all_sensor_data()
+    return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
