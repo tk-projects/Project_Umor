@@ -63,18 +63,15 @@
 
         .sensor-value {
             margin-top: 5px; /* Space between sensor values */
-            display: flex;
-            align-items: center; /* Center align items vertically */
         }
 
         .sensor-name {
+            display: inline-block;
             width: 150px; /* Fixed width for sensor names */
-            color: #aaaaaa; /* Dimmed color for sensor names */
         }
 
         .sensor-humidity {
-            margin-left: 10px; /* Reduced margin for sensor humidity */
-            color: #ffffff; /* White color for humidity values */
+            display: inline-block;
         }
 
         .graph-container {
@@ -157,7 +154,7 @@
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: timestamps.map(ts => ts.slice(0, -3)), // Remove seconds from timestamps
+                labels: timestamps,
                 datasets: datasets
             },
             options: {
