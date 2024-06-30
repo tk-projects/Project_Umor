@@ -18,17 +18,25 @@
             margin-top: 20px;
         }
 
-        .status-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end; /* Align content to the right */
-            margin-bottom: 10px;
-            font-size: 16px;
-            color: #dddddd;
-            text-align: right; /* Align text to the right */
+        .graph-container {
+            width: 80%;
         }
 
-        .status-indicator {
+        .cpu-temperature {
+            margin-top: 10px; /* Space between sensor status and CPU temperature */
+            font-size: 16px;
+            color: #dddddd;
+            text-align: right;
+        }
+
+        .sensor-status {
+            margin-bottom: 10px; /* Space between legend and sensor status */
+            font-size: 16px;
+            color: #dddddd;
+            text-align: right;
+        }
+
+        .sensor-status .status-indicator {
             display: inline-block;
             width: 10px;
             height: 10px;
@@ -36,29 +44,16 @@
             background-color: #00ff00; /* Green */
             border-radius: 50%;
         }
-
-        .cpu-temperature {
-            margin-top: 10px; /* Space between sensor status and CPU temperature */
-            font-size: 16px;
-            color: #dddddd;
-            text-align: right; /* Align text to the right */
-        }
-
-        .graph-container {
-            width: 80%;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="status-container">
-            <div>
-                <span class="status-indicator"></span>
-                Sensor Online
-            </div>
-            <div class="cpu-temperature">
-                Sensor Board Temperatur: {{ cpu_temperature }} °C
-            </div>
+        <div class="sensor-status">
+            <span class="status-indicator"></span>
+            Sensor Online
+        </div>
+        <div class="cpu-temperature">
+            Sensor Board Temperatur: {{ cpu_temperature }} °C
         </div>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
@@ -156,7 +151,6 @@
                 },
                 plugins: {
                     legend: {
-                        position: 'right', // Position legend to the right
                         labels: {
                             color: '#ffffff', // Color of the legend text
                             font: {
