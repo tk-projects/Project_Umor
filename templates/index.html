@@ -33,11 +33,11 @@
         var timestamps = {{ timestamps | tojson }};
         var sensorData = {{ sensor_data | tojson }};
         
-        // Function to generate colors with gradients from green to blue
+        // Function to generate colors with gradients from light blue to turquoise
         function generateColors(numColors) {
             var colors = [];
-            var startColor = [0, 255, 128]; // Start color (green)
-            var endColor = [0, 0, 255];    // End color (blue)
+            var startColor = [173, 216, 230]; // Light blue (AliceBlue)
+            var endColor = [64, 224, 208];   // Turquoise
 
             for (var i = 0; i < numColors; i++) {
                 var ratio = i / (numColors - 1);
