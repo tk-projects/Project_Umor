@@ -16,10 +16,13 @@
             flex-direction: column;
             align-items: center;
             margin-top: 20px;
+            position: relative; /* Position container relative for absolute positioning */
         }
 
         .sensor-status {
-            margin-bottom: 10px; /* Added space below sensor status */
+            position: absolute;
+            top: 20px; /* Adjust as needed */
+            right: 20px; /* Align to the right */
             font-size: 16px;
             color: #dddddd;
             text-align: right; /* Align text to the right */
@@ -35,7 +38,9 @@
         }
 
         .cpu-temperature {
-            margin-top: 10px; /* Space between sensor status and CPU temperature */
+            position: absolute;
+            top: 40px; /* Adjust to give space below sensor status */
+            right: 20px; /* Align to the right */
             font-size: 16px;
             color: #dddddd;
             text-align: right; /* Align text to the right */
@@ -43,6 +48,7 @@
 
         .graph-container {
             width: 80%;
+            margin-top: 20px; /* Space above the graph */
         }
     </style>
 </head>
