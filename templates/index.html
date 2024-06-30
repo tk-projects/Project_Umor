@@ -25,6 +25,7 @@
             margin-bottom: 10px;
             font-size: 16px;
             color: #dddddd;
+            text-align: right; /* Align text to the right */
         }
 
         .status-indicator {
@@ -40,7 +41,7 @@
             margin-top: 10px; /* Space between sensor status and CPU temperature */
             font-size: 16px;
             color: #dddddd;
-            text-align: right;
+            text-align: right; /* Align text to the right */
         }
 
         .graph-container {
@@ -55,7 +56,7 @@
                 <span class="status-indicator"></span>
                 Sensor Online
             </div>
-            <div>
+            <div class="cpu-temperature">
                 Sensor Board Temperatur: {{ cpu_temperature }} °C
             </div>
         </div>
@@ -155,6 +156,7 @@
                 },
                 plugins: {
                     legend: {
+                        position: 'right', // Position legend to the right
                         labels: {
                             color: '#ffffff', // Color of the legend text
                             font: {
