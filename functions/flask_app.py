@@ -2,6 +2,7 @@ import os
 import sqlite3
 from flask import Flask, render_template
 from functions.load_sensor_json import load_sensor_json
+from functions.get_cpu_temperature import get_cpu_temperature
 
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'))
 
@@ -39,7 +40,8 @@ def fetch_all_sensor_data():
 @app.route('/')
 def index():
     timestamps, sensor_data = fetch_all_sensor_data()
-    return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data)
+    cpu_temperature = get_cpu_temperature()  # Get CPU temperature
+    return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data, cpu_temperature=cpu_temperature)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

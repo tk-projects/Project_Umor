@@ -21,10 +21,21 @@
         .graph-container {
             width: 80%;
         }
+
+        .cpu-temperature {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 16px;
+            color: #dddddd;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="cpu-temperature">
+            CPU Temperature: {{ cpu_temperature }} °C
+        </div>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
@@ -130,7 +141,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Legende',
+                            text: 'Legende (tief/nähe Oberfläche)',
                             color: '#ffffff',
                             font: {
                                 size: 18, // Legend title font size
