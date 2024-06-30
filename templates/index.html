@@ -47,10 +47,14 @@
 
         .current-humidity {
             position: absolute;
-            top: 40px; /* Below the sensor status */
+            top: 50px; /* Increased space below the sensor status */
             left: 20px; /* Align to the left */
             font-size: 16px;
             color: #dddddd;
+            padding: 10px;
+            border: 1px solid #444444; /* Border for the panel */
+            border-radius: 5px; /* Rounded corners */
+            background-color: #2a2a2a; /* Dark background for the panel */
         }
 
         .graph-container {
@@ -70,7 +74,7 @@
             Sensor Board Temperatur: {{ cpu_temperature }} °C <!-- Updated label -->
         </div>
         <div class="current-humidity">
-            <strong>Momentane Feuchtigkeit:</strong><br>
+            Momentane Feuchtigkeit:<br>
             {% for sensor, data in sensor_data.items() %}
                 {{ sensor }}: {{ data[-1] }}%<br>
             {% endfor %}
