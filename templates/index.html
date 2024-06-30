@@ -21,35 +21,11 @@
         .graph-container {
             width: 80%;
         }
-
-        .checkbox-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .checkbox-container label {
-            margin: 0 10px;
-            font-size: 16px;
-            color: #ffffff; /* White color for checkbox label */
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Sensordaten</h1>
-        <div class="checkbox-container">
-            <!-- Checkbox for Sensor 1 -->
-            <label>
-                <input type="checkbox" id="sensor1Checkbox" checked>
-                Sensor 1
-            </label>
-            <!-- Checkbox for Sensor 2 -->
-            <label>
-                <input type="checkbox" id="sensor2Checkbox" checked>
-                Sensor 2
-            </label>
-        </div>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
@@ -60,7 +36,7 @@
         var timestamps = {{ timestamps | tojson }};
         var sensorData = {{ sensor_data | tojson }};
         var chart; // Variable to hold the Chart.js instance
-        
+
         // Function to generate colors with adjusted gradients
         function generateColors(numColors) {
             var colors = [];
@@ -117,7 +93,7 @@
                             display: true,
                             text: 'Feuchtigkeit (%)',
                             font: {
-                                size: 20, // Reduced Y axis title font size
+                                size: 24, // Increased Y axis title font size
                                 weight: 'normal' // Normal font weight
                             },
                             color: '#dddddd' // Dimmed color for axis title
@@ -134,7 +110,7 @@
                             display: true,
                             text: 'Zeitstempel',
                             font: {
-                                size: 20, // Reduced X axis title font size
+                                size: 24, // Increased X axis title font size
                                 weight: 'normal' // Normal font weight
                             },
                             color: '#dddddd' // Dimmed color for axis title
@@ -147,33 +123,23 @@
                 plugins: {
                     legend: {
                         labels: {
-                            color: '#ffffff' // Color of the legend text
+                            color: '#ffffff', // Color of the legend text
+                            font: {
+                                size: 16, // Legend label font size
+                                weight: 'normal' // Normal font weight
+                            }
                         }
                     }
                 }
             }
         });
 
-        // Function to update dataset visibility based on checkboxes
-        function updateDatasetVisibility() {
-            chart.data.datasets.forEach((dataset, index) => {
-                var checkboxId = `sensor${index + 1}Checkbox`;
-                dataset.hidden = !document.getElementById(checkboxId).checked;
-            });
-            chart.update();
-        }
-
-        // Event listeners for checkboxes
-        document.getElementById('sensor1Checkbox').addEventListener('change', updateDatasetVisibility);
-        document.getElementById('sensor2Checkbox').addEventListener('change', updateDatasetVisibility);
-
-        // Function to reload the page every minute
+        // Automatically refresh the page every minute
         function reloadPage() {
             location.reload();
         }
 
-        // Automatically refresh the page every minute
-        setTimeout(reloadPage, 60000);
+        setTimeout(reloadPage, 60000); // Refresh every minute
     </script>
 </body>
 </html>
