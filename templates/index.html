@@ -36,8 +36,8 @@
         // Function to generate colors with gradients from light blue to turquoise
         function generateColors(numColors) {
             var colors = [];
-            var startColor = [173, 216, 230]; // Light blue (AliceBlue)
-            var endColor = [64, 224, 208];   // Turquoise
+            var startColor = [135, 206, 250]; // Light Sky Blue
+            var endColor = [70, 130, 180];   // Steel Blue
 
             for (var i = 0; i < numColors; i++) {
                 var ratio = i / (numColors - 1);
@@ -65,7 +65,7 @@
                 data: sensorData[sensor],
                 backgroundColor: color.background,
                 borderColor: color.border,
-                borderWidth: 1
+                borderWidth: 2 // Increased line width
             });
             colorIndex++;
         }
