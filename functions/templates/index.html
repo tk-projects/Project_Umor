@@ -11,23 +11,18 @@
 
         .container {
             display: flex;
-            flex-wrap: wrap;
-        }
-
-        .sensor-container {
-            width: 100%;
-            margin-bottom: 20px;
+            flex-direction: row;
         }
 
         .table-container {
-            width: 45%;
+            width: 25%;
             margin-right: 20px;
             margin-bottom: 20px;
             margin-top: 40px; /* Oberer Abstand zur Tabelle */
         }
 
         .graph-container {
-            width: 45%;
+            width: 75%;
         }
 
         table {
@@ -69,33 +64,35 @@
             <option value="60000">Jede Minute</option>
         </select>
     </div>
+    <div class="current-humidity">
+        <span class="current-humidity-label" id="currentHumidity">Aktuelle Feuchtigkeit: </span>
+        <span class="current-humidity-value">{{ sensor_data|length > 0 and sensor_data.values()|list|last[0]['humidity_value'] }}</span>
+        <span class="percent-sign">%</span>
+    </div>
     <div class="container">
-        {% for sensor_name, data in sensor_data.items() %}
-        <div class="sensor-container">
-            <h2>{{ sensor_name }}</h2>
-            <div class="table-container">
-                <table>
-                    <thead>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">Zeitstempel</th>
+                        <th style="width: 40px;">Feuchtigkeit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sensor, readings in sensor_data.items() %}
+                        {% for reading in readings %}
                         <tr>
-                            <th>Zeitstempel</th>
-                            <th>Feuchtigkeit</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for row in data[-18:][::-1] %}
-                        <tr>
-                            <td>{{ row.timestamp }}</td>
-                            <td>{{ row.humidity_value }}</td>
+                            <td>{{ reading.timestamp }}</td>
+                            <td>{{ reading.humidity_value }}</td>
                         </tr>
                         {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="graph-container">
-                <canvas id="chart-{{ sensor_name }}"></canvas>
-            </div>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        {% endfor %}
+        <div class="graph-container">
+            <canvas id="myChart"></canvas>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -128,57 +125,9 @@
             }
         }
 
-        function renderChart(sensorName, timestamps, humidities) {
-            var ctx = document.getElementById('chart-' + sensorName).getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: timestamps,
-                    datasets: [{
-                        label: 'Feuchtigkeit',
-                        data: humidities,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    animation: false,
-                    scales: {
-                        yAxes: [{
-                            scaleLabel: {
-                                display: true,
-                                labelString: 'Feuchtigkeit (%)',
-                                fontColor: '#666666',
-                                fontSize: 16
-                            },
-                            ticks: {
-                                beginAtZero: true,
-                                fontSize: 14
-                            }
-                        }],
-                        xAxes: [{
-                            ticks: {
-                                fontColor: '#666666'
-                            }
-                        }]
-                    }
-                }
-            });
-        }
-
-        {% for sensor_name, data in sensor_data.items() %}
-            var timestamps = [];
-            var humidities = [];
-            {% for row in data %}
-                timestamps.push("{{ row.timestamp }}");
-                humidities.push("{{ row.humidity_value }}");
-            {% endfor %}
-            renderChart("{{ sensor_name }}", timestamps, humidities);
-        {% endfor %}
-
-        setInitialInterval();
-        startAutoRefresh();
-    </script>
-</body>
-</html>
+        var timestamps = [];
+        var humidities = [];
+        {% for sensor, readings in sensor_data.items() %}
+            {% for reading in readings %}
+                timestamps.push("{{ reading.timestamp }}");
+                humidities

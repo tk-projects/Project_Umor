@@ -3,7 +3,7 @@ import sqlite3
 from flask import Flask, render_template
 from functions.load_sensor_json import load_sensor_json
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'))
 
 # Function to fetch data from the database for all sensors
 def fetch_all_sensor_data():
@@ -17,7 +17,6 @@ def fetch_all_sensor_data():
     # Load sensor data from JSON to get the sensor names
     sensor_data = load_sensor_json()
     sensor_names = list(sensor_data.keys())
-    print("sensor_names:",sensor_names)
 
     # Prepare the query to fetch data for all sensors
     columns = ['timestamp'] + sensor_names
@@ -25,6 +24,9 @@ def fetch_all_sensor_data():
     cursor.execute(f'SELECT {columns_str} FROM humidity_data ORDER BY timestamp DESC')
     rows = cursor.fetchall()
     conn.close()
+
+    # Reverse the order of rows to have the most recent first
+    rows = rows[::-1]
 
     # Organize data by sensor_name
     data_by_sensor = {sensor_name: [] for sensor_name in sensor_names}
