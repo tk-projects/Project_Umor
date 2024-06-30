@@ -18,8 +18,22 @@
             margin-top: 20px;
         }
 
-        .graph-container {
-            width: 80%;
+        .status-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* Align content to the right */
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #dddddd;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 5px;
+            background-color: #00ff00; /* Green */
+            border-radius: 50%;
         }
 
         .cpu-temperature {
@@ -29,31 +43,21 @@
             text-align: right;
         }
 
-        .sensor-status {
-            margin-bottom: 10px; /* Space between legend and sensor status */
-            font-size: 16px;
-            color: #dddddd;
-            text-align: right;
-        }
-
-        .sensor-status .status-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            margin-right: 5px;
-            background-color: #00ff00; /* Green */
-            border-radius: 50%;
+        .graph-container {
+            width: 80%;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="sensor-status">
-            <span class="status-indicator"></span>
-            Sensor Online
-        </div>
-        <div class="cpu-temperature">
-            Sensor Board Temperatur: {{ cpu_temperature }} °C
+        <div class="status-container">
+            <div>
+                <span class="status-indicator"></span>
+                Sensor Online
+            </div>
+            <div>
+                Sensor Board Temperatur: {{ cpu_temperature }} °C
+            </div>
         </div>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
