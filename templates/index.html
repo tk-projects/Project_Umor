@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sensordaten</title>
+    <title>Sensor Data Visualization</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,7 +25,6 @@
 </head>
 <body>
     <div class="container">
-        <h1>Sensordaten</h1>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
@@ -128,6 +127,16 @@
                                 size: 16, // Legend label font size
                                 weight: 'normal' // Normal font weight
                             }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Legende',
+                            color: '#ffffff',
+                            font: {
+                                size: 18, // Legend title font size
+                                weight: 'normal' // Normal font weight
+                            },
+                            padding: 20 // Padding around legend title
                         }
                     }
                 }
