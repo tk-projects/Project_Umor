@@ -23,19 +23,17 @@
         }
 
         .cpu-temperature {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+            margin-top: 10px; /* Space between sensor status and CPU temperature */
             font-size: 16px;
             color: #dddddd;
+            text-align: right;
         }
 
         .sensor-status {
-            position: absolute;
-            top: 20px;
-            right: 180px;
+            margin-bottom: 10px; /* Space between legend and sensor status */
             font-size: 16px;
             color: #dddddd;
+            text-align: right;
         }
 
         .sensor-status .status-indicator {
@@ -162,7 +160,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Legende (tief/nähe Oberfläche)',
+                            text: 'Legende (Sensor_1_0: Oberfläche / Sensor_1_1: tief)',
                             color: '#ffffff',
                             font: {
                                 size: 18, // Legend title font size
