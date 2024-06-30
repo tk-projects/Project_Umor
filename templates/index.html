@@ -48,7 +48,7 @@
 
         .graph-container {
             width: 80%;
-            margin-top: 40px; /* Space above the graph */
+            margin-top: 60px; /* Increased space above the graph */
             margin-bottom: 20px; /* Space below the graph */
         }
     </style>
@@ -94,15 +94,28 @@
             return colors;
         }
 
-        var colors = generateColors(Object.keys(sensorData).length);
+        // Filter data to show every second sensor value
+        function filterSensorData(sensorData) {
+            var filteredData = {};
+            Object.keys(sensorData).forEach(function(key, index) {
+                if (index % 2 === 0) { // Show every second sensor value
+                    filteredData[key] = sensorData[key];
+                }
+            });
+            return filteredData;
+        }
+
+        var filteredSensorData = filterSensorData(sensorData);
+
+        var colors = generateColors(Object.keys(filteredSensorData).length);
         var datasets = [];
         var colorIndex = 0;
 
-        for (var sensor in sensorData) {
+        for (var sensor in filteredSensorData) {
             var color = colors[colorIndex];
             datasets.push({
                 label: sensor,
-                data: sensorData[sensor],
+                data: filteredSensorData[sensor],
                 backgroundColor: color.background,
                 borderColor: color.border,
                 borderWidth: 2, // Increased line width
