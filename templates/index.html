@@ -96,6 +96,14 @@
                 }
             }
         });
+
+        // Function to reload the page every minute
+        function reloadPage() {
+            location.reload();
+        }
+
+        // Automatically refresh the page every minute
+        setTimeout(reloadPage, 60000);
     </script>
 </body>
 </html>
