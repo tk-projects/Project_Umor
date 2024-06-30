@@ -33,23 +33,38 @@
         var timestamps = {{ timestamps | tojson }};
         var sensorData = {{ sensor_data | tojson }};
         
-        // Function to generate colors with gradients from light blue to turquoise
+        // Function to generate colors with gradients from light blue to turquoise and dark blue
         function generateColors(numColors) {
             var colors = [];
-            var startColor = [135, 206, 250]; // Light Sky Blue
-            var endColor = [70, 130, 180];   // Steel Blue
+            var startColor1 = [173, 216, 230]; // Light Blue (similar to Turquoise)
+            var endColor1 = [0, 0, 139];      // Dark Blue
+            var startColor2 = [135, 206, 250]; // Light Sky Blue
+            var endColor2 = [70, 130, 180];   // Steel Blue
 
             for (var i = 0; i < numColors; i++) {
-                var ratio = i / (numColors - 1);
-                var color = [
-                    Math.round(startColor[0] * (1 - ratio) + endColor[0] * ratio),
-                    Math.round(startColor[1] * (1 - ratio) + endColor[1] * ratio),
-                    Math.round(startColor[2] * (1 - ratio) + endColor[2] * ratio)
-                ];
-                colors.push({
-                    border: `rgba(${color.join(',')}, 1)`,
-                    background: `rgba(${color.join(',')}, 0.2)`
-                });
+                if (i === 0) {
+                    var ratio1 = i / (numColors - 1);
+                    var color1 = [
+                        Math.round(startColor1[0] * (1 - ratio1) + endColor1[0] * ratio1),
+                        Math.round(startColor1[1] * (1 - ratio1) + endColor1[1] * ratio1),
+                        Math.round(startColor1[2] * (1 - ratio1) + endColor1[2] * ratio1)
+                    ];
+                    colors.push({
+                        border: `rgba(${color1.join(',')}, 1)`,
+                        background: `rgba(${color1.join(',')}, 0.2)`
+                    });
+                } else {
+                    var ratio2 = (i - 1) / (numColors - 1);
+                    var color2 = [
+                        Math.round(startColor2[0] * (1 - ratio2) + endColor2[0] * ratio2),
+                        Math.round(startColor2[1] * (1 - ratio2) + endColor2[1] * ratio2),
+                        Math.round(startColor2[2] * (1 - ratio2) + endColor2[2] * ratio2)
+                    ];
+                    colors.push({
+                        border: `rgba(${color2.join(',')}, 1)`,
+                        background: `rgba(${color2.join(',')}, 0.2)`
+                    });
+                }
             }
             return colors;
         }
