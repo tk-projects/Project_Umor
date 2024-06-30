@@ -36,14 +36,6 @@
             border-radius: 50%;
         }
 
-        .current-humidity {
-            position: absolute;
-            top: 40px; /* Adjusted for spacing */
-            left: 20px; /* Align to the left */
-            font-size: 16px;
-            color: #dddddd;
-        }
-
         .cpu-temperature {
             position: absolute;
             top: 10px; /* Adjusted upward */
@@ -53,9 +45,17 @@
             text-align: right; /* Align text to the right */
         }
 
+        .current-humidity {
+            position: absolute;
+            top: 40px; /* Below the sensor status */
+            left: 20px; /* Align to the left */
+            font-size: 16px;
+            color: #dddddd;
+        }
+
         .graph-container {
             width: 80%;
-            margin-top: 60px; /* Space above the graph */
+            margin-top: 80px; /* Space above the graph */
             margin-bottom: 20px; /* Space below the graph */
         }
     </style>
@@ -66,14 +66,14 @@
             <span class="status-indicator"></span>
             Sensor Online
         </div>
-        <div class="current-humidity">
-            <div>Momentane Feuchtigkeit:</div>
-            {% for sensor, value in current_humidity.items() %}
-                <div>{{ sensor }}: {{ value }}%</div>
-            {% endfor %}
-        </div>
         <div class="cpu-temperature">
             Sensor Board Temperatur: {{ cpu_temperature }} °C <!-- Updated label -->
+        </div>
+        <div class="current-humidity">
+            <strong>Momentane Feuchtigkeit:</strong><br>
+            {% for sensor, data in sensor_data.items() %}
+                {{ sensor }}: {{ data[-1] }}%<br>
+            {% endfor %}
         </div>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
