@@ -8,6 +8,7 @@ def print_database():
 
     try:
         # Connect to the SQLite database
+        print("connecting to sql db, with path:",db_path)
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
