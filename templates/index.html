@@ -1,172 +1,54 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sensor Data Visualization</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1a1a1a; /* Dark background */
-            color: #ffffff; /* Light text color */
-            display: flex;
-            justify-content: center; /* Center content horizontally */
-            align-items: center; /* Center content vertically */
-            height: 100vh; /* Full viewport height */
-            margin: 0;
-        }
+import os
+import sqlite3
+from flask import Flask, render_template
+from functions.load_sensor_json import load_sensor_json
+from functions.get_cpu_temperature import get_cpu_temperature
 
-        .container {
-            width: 80%;
-            text-align: center; /* Center align content */
-        }
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'))
 
-        .status-container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end; /* Align content to the right */
-            margin-bottom: 10px;
-            font-size: 16px;
-            color: #dddddd;
-            text-align: right; /* Align text to the right */
-        }
+# Function to check if sensor is online (example implementation)
+def is_sensor_online():
+    # Replace with your logic to check sensor status
+    return True  # For example, always returning True here
 
-        .status-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            margin-right: 5px;
-            background-color: #00ff00; /* Green */
-            border-radius: 50%;
-        }
+# Function to fetch data from the database for all sensors
+def fetch_all_sensor_data():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(current_dir, "..", "SQL", "sensor_data.db")
+    print("Flask app is connecting now")
 
-        .cpu-temperature {
-            margin-top: 10px; /* Space between sensor status and CPU temperature */
-            font-size: 16px;
-            color: #dddddd;
-            text-align: right; /* Align text to the right */
-        }
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
 
-        .graph-container {
-            width: 100%; /* Full width */
-            height: 400px; /* Fixed height for the graph */
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="status-container">
-            <div>
-                <span class="status-indicator"></span>
-                Sensor Online
-            </div>
-            <div class="cpu-temperature">
-                Sensor Board Temperatur: {{ cpu_temperature }} °C
-            </div>
-        </div>
-        <div class="graph-container">
-            <canvas id="sensorChart"></canvas>
-        </div>
-    </div>
+    # Load sensor data from JSON to get the sensor names
+    sensor_data = load_sensor_json()
+    sensor_names = list(sensor_data.keys())
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        var timestamps = {{ timestamps | tojson }};
-        var sensorData = {{ sensor_data | tojson }};
-        var chart; // Variable to hold the Chart.js instance
+    # Prepare the query to fetch data for all sensors
+    columns = ['timestamp'] + sensor_names
+    columns_str = ', '.join(columns)
+    cursor.execute(f'SELECT {columns_str} FROM humidity_data ORDER BY timestamp ASC')
+    rows = cursor.fetchall()
+    conn.close()
 
-        // Function to generate colors with adjusted gradients
-        function generateColors(numColors) {
-            var colors = [];
-            var startColor = [135, 206, 250]; // Light Blue (more blueish)
-            var endColor = [72, 209, 204];   // Turquoise (less greenish, more blueish)
+    # Organize data by sensor_name
+    data_by_sensor = {sensor_name: [] for sensor_name in sensor_names}
+    timestamps = []
+    for row in rows:
+        timestamp = row[0]
+        timestamps.append(timestamp)
+        for i, sensor_name in enumerate(sensor_names):
+            data_by_sensor[sensor_name].append(row[i + 1])
 
-            for (var i = 0; i < numColors; i++) {
-                var ratio = i / (numColors - 1);
-                var color = [
-                    Math.round(startColor[0] * (1 - ratio) + endColor[0] * ratio),
-                    Math.round(startColor[1] * (1 - ratio) + endColor[1] * ratio),
-                    Math.round(startColor[2] * (1 - ratio) + endColor[2] * ratio)
-                ];
-                colors.push({
-                    border: `rgba(${color.join(',')}, 1)`,
-                    background: `rgba(${color.join(',')}, 0.2)`
-                });
-            }
-            return colors;
-        }
+    return timestamps, data_by_sensor
 
-        var colors = generateColors(Object.keys(sensorData).length);
-        var datasets = [];
-        var colorIndex = 0;
+@app.route('/')
+def index():
+    timestamps, sensor_data = fetch_all_sensor_data()
+    cpu_temperature = get_cpu_temperature()  # Get CPU temperature
+    sensor_online = is_sensor_online()  # Check if sensor is online
+    return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data,
+                           cpu_temperature=cpu_temperature, sensor_online=sensor_online)
 
-        for (var sensor in sensorData) {
-            var color = colors[colorIndex];
-            datasets.push({
-                label: sensor,
-                data: sensorData[sensor],
-                backgroundColor: color.background,
-                borderColor: color.border,
-                borderWidth: 2, // Increased line width
-                pointRadius: 3, // Reduced marker size
-                pointHoverRadius: 5, // Hover size for markers
-                hidden: false // Initially show all datasets
-            });
-            colorIndex++;
-        }
-
-        var ctx = document.getElementById('sensorChart').getContext('2d');
-        chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: timestamps,
-                datasets: datasets
-            },
-            options: {
-                animation: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Feuchtigkeit (%)',
-                            font: {
-                                size: 24, // Increased Y axis title font size
-                                weight: 'normal' // Normal font weight
-                            },
-                            color: '#dddddd' // Dimmed color for axis title
-                        },
-                        grid: {
-                            color: '#666666' // Color of the grid lines
-                        },
-                        ticks: {
-                            color: '#aaaaaa' // Color of the tick marks
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Zeitstempel',
-                            font: {
-                                size: 24, // Increased X axis title font size
-                                weight: 'normal' // Normal font weight
-                            },
-                            color: '#dddddd' // Dimmed color for axis title
-                        },
-                        ticks: {
-                            color: '#aaaaaa' // Dimmed color for X axis tick marks
-                        }
-                    }
-                }
-            }
-        });
-
-        // Automatically refresh the page every minute
-        function reloadPage() {
-            location.reload();
-        }
-
-        setTimeout(reloadPage, 60000); // Refresh every minute
-    </script>
-</body>
-</html>
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080, debug=True)
