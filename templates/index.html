@@ -40,7 +40,7 @@
         function generateColors(numColors) {
             var colors = [];
             var startColor = [135, 206, 250]; // Light Blue (more blueish)
-            var endColor = [64, 224, 208];   // Turquoise (slightly more greenish)
+            var endColor = [72, 209, 204];   // Turquoise (less greenish, more blueish)
 
             for (var i = 0; i < numColors; i++) {
                 var ratio = i / (numColors - 1);
@@ -87,7 +87,10 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Feuchtigkeit (%)'
+                            text: 'Feuchtigkeit (%)',
+                            font: {
+                                size: 20 // Increased Y axis title font size
+                            }
                         },
                         grid: {
                             color: '#666666' // Color of the grid lines
@@ -99,10 +102,13 @@
                     x: {
                         title: {
                             display: true,
-                            text: 'Zeitstempel'
+                            text: 'Zeitstempel',
+                            font: {
+                                size: 20 // Increased X axis title font size
+                            }
                         },
                         ticks: {
-                            color: '#cccccc' // Color of the tick marks
+                            color: '#aaaaaa' // Dimmed color for X axis tick marks
                         }
                     }
                 },
