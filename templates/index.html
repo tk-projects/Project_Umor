@@ -14,7 +14,7 @@
         .container {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-end; /* Align content to the right */
             margin-top: 20px;
         }
 
@@ -53,7 +53,7 @@
             Sensor Online
         </div>
         <div class="cpu-temperature">
-            CPU Temperature: {{ cpu_temperature }} °C
+            Sensor Board Temperatur: {{ cpu_temperature }} °C
         </div>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
