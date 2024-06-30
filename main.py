@@ -53,7 +53,7 @@ def insert_data(sensor_readings):
         print(f"SQLite error: {e}")
 
 def sensor_data_updater(sensors):
-    sampling_rate = 60  # Update every 10 seconds
+    sampling_rate = 600  # Update every 10 seconds
     while True:
         try:
             # Fetch sensor readings

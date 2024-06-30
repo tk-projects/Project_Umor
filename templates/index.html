@@ -18,24 +18,11 @@
             margin-top: 20px;
         }
 
-        .graph-container {
-            width: 80%;
-        }
-
-        .cpu-temperature {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 16px;
-            color: #dddddd;
-        }
-
         .sensor-status {
-            position: absolute;
-            top: 20px;
-            right: 180px;
+            margin-bottom: 10px; /* Added space below sensor status */
             font-size: 16px;
             color: #dddddd;
+            text-align: right; /* Align text to the right */
         }
 
         .sensor-status .status-indicator {
@@ -46,6 +33,17 @@
             background-color: #00ff00; /* Green */
             border-radius: 50%;
         }
+
+        .cpu-temperature {
+            margin-top: 10px; /* Space between sensor status and CPU temperature */
+            font-size: 16px;
+            color: #dddddd;
+            text-align: right; /* Align text to the right */
+        }
+
+        .graph-container {
+            width: 80%;
+        }
     </style>
 </head>
 <body>
@@ -55,7 +53,7 @@
             Sensor Online
         </div>
         <div class="cpu-temperature">
-            CPU Temperature: {{ cpu_temperature }} °C
+            Sensor Board Temperatur: {{ cpu_temperature }} °C <!-- Updated label -->
         </div>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
@@ -148,27 +146,6 @@
                         },
                         ticks: {
                             color: '#aaaaaa' // Dimmed color for X axis tick marks
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#ffffff', // Color of the legend text
-                            font: {
-                                size: 16, // Legend label font size
-                                weight: 'normal' // Normal font weight
-                            }
-                        },
-                        title: {
-                            display: true,
-                            text: 'Legende (tief/nähe Oberfläche)',
-                            color: '#ffffff',
-                            font: {
-                                size: 18, // Legend title font size
-                                weight: 'normal' // Normal font weight
-                            },
-                            padding: 20 // Padding around legend title
                         }
                     }
                 }
