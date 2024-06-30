@@ -72,7 +72,7 @@
 
         .sensor-humidity {
             display: inline-block;
-            margin-left: 5px; /* Reduced margin for sensor humidity */
+            margin-left: 10px; /* Reduced margin for sensor humidity */
         }
 
         .graph-container {
@@ -155,7 +155,7 @@
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: timestamps,
+                labels: timestamps.map(ts => ts.slice(0, -3)), // Remove seconds from timestamps
                 datasets: datasets
             },
             options: {
