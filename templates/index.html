@@ -33,24 +33,28 @@
         var timestamps = {{ timestamps | tojson }};
         var sensorData = {{ sensor_data | tojson }};
         
-        // Base color for all sensors
-        var baseColor = 'rgba(75, 192, 192, 1)';
-        
-        // Function to generate colors with different opacities
-        function generateColors(baseColor, numColors) {
+        // Function to generate colors with gradients from green to blue
+        function generateColors(numColors) {
             var colors = [];
+            var startColor = [0, 255, 128]; // Start color (green)
+            var endColor = [0, 0, 255];    // End color (blue)
+
             for (var i = 0; i < numColors; i++) {
-                var opacity = 1 - (i / numColors);
-                var color = {
-                    border: `rgba(${baseColor}, ${opacity})`,
-                    background: `rgba(${baseColor}, ${opacity * 0.2})`
-                };
-                colors.push(color);
+                var ratio = i / (numColors - 1);
+                var color = [
+                    Math.round(startColor[0] * (1 - ratio) + endColor[0] * ratio),
+                    Math.round(startColor[1] * (1 - ratio) + endColor[1] * ratio),
+                    Math.round(startColor[2] * (1 - ratio) + endColor[2] * ratio)
+                ];
+                colors.push({
+                    border: `rgba(${color.join(',')}, 1)`,
+                    background: `rgba(${color.join(',')}, 0.2)`
+                });
             }
             return colors;
         }
 
-        var colors = generateColors('75, 192, 192', Object.keys(sensorData).length);
+        var colors = generateColors(Object.keys(sensorData).length);
         var datasets = [];
         var colorIndex = 0;
 
