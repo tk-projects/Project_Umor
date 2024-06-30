@@ -1,6 +1,7 @@
-from flask import Flask, render_template
-import sqlite3
 import os
+import sqlite3
+from flask import Flask, render_template
+from functions.load_sensor_json import load_sensor_json
 
 app = Flask(__name__, template_folder='templates')
 
@@ -12,23 +13,30 @@ def fetch_all_sensor_data():
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute('SELECT sensor_name, timestamp, humidity_value FROM humidity_data ORDER BY timestamp DESC')
+
+    # Load sensor data from JSON to get the sensor names
+    sensor_data = load_sensor_json()
+    sensor_names = list(sensor_data.keys())
+    print("sensor_names:",sensor_names)
+
+    # Prepare the query to fetch data for all sensors
+    columns = ['timestamp'] + sensor_names
+    columns_str = ', '.join(columns)
+    cursor.execute(f'SELECT {columns_str} FROM humidity_data ORDER BY timestamp DESC')
     rows = cursor.fetchall()
     conn.close()
 
     # Organize data by sensor_name
-    sensor_data = {}
+    data_by_sensor = {sensor_name: [] for sensor_name in sensor_names}
     for row in rows:
-        sensor_name = row[0]
-        if sensor_name not in sensor_data:
-            sensor_data[sensor_name] = {
-                'timestamps': [],
-                'humidities': []
-            }
-        sensor_data[sensor_name]['timestamps'].append(row[1])
-        sensor_data[sensor_name]['humidities'].append(row[2])
+        timestamp = row[0]
+        for i, sensor_name in enumerate(sensor_names):
+            data_by_sensor[sensor_name].append({
+                'timestamp': timestamp,
+                'humidity_value': row[i + 1]
+            })
 
-    return sensor_data
+    return data_by_sensor
 
 @app.route('/')
 def index():
