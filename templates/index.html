@@ -68,7 +68,9 @@
                 data: sensorData[sensor],
                 backgroundColor: color.background,
                 borderColor: color.border,
-                borderWidth: 2 // Increased line width
+                borderWidth: 2, // Increased line width
+                pointRadius: 3, // Reduced marker size
+                pointHoverRadius: 5 // Hover size for markers
             });
             colorIndex++;
         }
@@ -89,8 +91,10 @@
                             display: true,
                             text: 'Feuchtigkeit (%)',
                             font: {
-                                size: 20 // Increased Y axis title font size
-                            }
+                                size: 24, // Increased Y axis title font size
+                                weight: 'bold' // Bold font weight
+                            },
+                            color: '#ffffff' // White color for axis title
                         },
                         grid: {
                             color: '#666666' // Color of the grid lines
@@ -104,8 +108,10 @@
                             display: true,
                             text: 'Zeitstempel',
                             font: {
-                                size: 20 // Increased X axis title font size
-                            }
+                                size: 24, // Increased X axis title font size
+                                weight: 'bold' // Bold font weight
+                            },
+                            color: '#ffffff' // White color for axis title
                         },
                         ticks: {
                             color: '#aaaaaa' // Dimmed color for X axis tick marks
