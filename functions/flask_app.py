@@ -6,6 +6,11 @@ from functions.get_cpu_temperature import get_cpu_temperature
 
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'))
 
+# Function to check if sensor is online (example implementation)
+def is_sensor_online():
+    # Replace with your logic to check sensor status
+    return True  # For example, always returning True here
+
 # Function to fetch data from the database for all sensors
 def fetch_all_sensor_data():
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -41,7 +46,9 @@ def fetch_all_sensor_data():
 def index():
     timestamps, sensor_data = fetch_all_sensor_data()
     cpu_temperature = get_cpu_temperature()  # Get CPU temperature
-    return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data, cpu_temperature=cpu_temperature)
+    sensor_online = is_sensor_online()  # Check if sensor is online
+    return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data,
+                           cpu_temperature=cpu_temperature, sensor_online=sensor_online)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

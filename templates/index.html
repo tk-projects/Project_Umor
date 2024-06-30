@@ -29,10 +29,31 @@
             font-size: 16px;
             color: #dddddd;
         }
+
+        .sensor-status {
+            position: absolute;
+            top: 20px;
+            right: 180px;
+            font-size: 16px;
+            color: #dddddd;
+        }
+
+        .sensor-status .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 5px;
+            background-color: #00ff00; /* Green */
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="sensor-status">
+            <span class="status-indicator"></span>
+            Sensor Online
+        </div>
         <div class="cpu-temperature">
             CPU Temperature: {{ cpu_temperature }} °C
         </div>
