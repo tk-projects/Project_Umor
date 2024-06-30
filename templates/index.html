@@ -65,6 +65,15 @@
             margin-top: 5px; /* Space between sensor values */
         }
 
+        .sensor-name {
+            display: inline-block;
+            width: 150px; /* Fixed width for sensor names */
+        }
+
+        .sensor-humidity {
+            display: inline-block;
+        }
+
         .graph-container {
             width: 80%;
             margin-top: 80px; /* Space above the graph */
@@ -84,7 +93,10 @@
         <div class="current-humidity">
             <div class="humidity-header">Momentane Feuchtigkeit:</div>
             {% for sensor, data in sensor_data.items() %}
-                <div class="sensor-value">{{ sensor }}: {{ data[-1] }}%</div>
+                <div class="sensor-value">
+                    <span class="sensor-name">{{ sensor }}:</span>
+                    <span class="sensor-humidity">{{ data[-1] }}%</span>
+                </div>
             {% endfor %}
         </div>
         <div class="graph-container">
