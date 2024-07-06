@@ -125,7 +125,7 @@
         <div class="filter-buttons">
             <button class="filter-button" onclick="filterData('6hours')">Last 6 Hours</button>
             <button class="filter-button" onclick="filterData('12hours')">Last 12 Hours</button>
-            <button class="filter-button" onclick="filterData('day')">Last Day</button>
+            <button class="filter-button active" onclick="filterData('day')">Last Day</button>
             <button class="filter-button" onclick="filterData('week')">Last Week</button>
             <button class="filter-button" onclick="filterData('all')">All Data</button>
         </div>
@@ -274,6 +274,8 @@
             chart.update(); // Update the chart with new data
         }
 
+        // Automatically select 'Last Day' filter when page loads
+        filterData('day');
 
         // Automatically refresh the page every minute
         function reloadPage() {
