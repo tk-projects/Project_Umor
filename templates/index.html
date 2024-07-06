@@ -84,6 +84,24 @@
             margin-top: 80px; /* Space above the graph */
             margin-bottom: 20px; /* Space below the graph */
         }
+
+        .filter-buttons {
+            margin-bottom: 20px; /* Space below the filter buttons */
+        }
+
+        .filter-button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #444444; /* Dark background for buttons */
+            color: #ffffff; /* Light text color */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .filter-button:hover {
+            background-color: #666666; /* Lighter background on hover */
+        }
     </style>
 </head>
 <body>
@@ -104,6 +122,11 @@
                 </div>
             {% endfor %}
         </div>
+        <div class="filter-buttons">
+            <button class="filter-button" onclick="filterData('day')">Last Day</button>
+            <button class="filter-button" onclick="filterData('week')">Last Week</button>
+            <button class="filter-button" onclick="filterData('all')">All Data</button>
+        </div>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
@@ -113,6 +136,8 @@
     <script>
         var timestamps = {{ timestamps | tojson }};
         var sensorData = {{ sensor_data | tojson }};
+        var originalTimestamps = [...timestamps]; // Save the original timestamps
+        var originalSensorData = JSON.parse(JSON.stringify(sensorData)); // Save the original sensor data
         var chart; // Variable to hold the Chart.js instance
 
         // Function to generate colors with adjusted gradients
@@ -200,6 +225,36 @@
                 }
             }
         });
+
+        // Function to filter data based on the selected time range
+        function filterData(range) {
+            var filteredTimestamps = [];
+            var filteredSensorData = {};
+            var now = new Date();
+
+            if (range === 'day') {
+                var oneDayAgo = new Date(now - 24 * 60 * 60 * 1000);
+                filteredTimestamps = originalTimestamps.filter(ts => new Date(ts) >= oneDayAgo);
+            } else if (range === 'week') {
+                var oneWeekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
+                filteredTimestamps = originalTimestamps.filter(ts => new Date(ts) >= oneWeekAgo);
+            } else {
+                filteredTimestamps = originalTimestamps;
+            }
+
+            for (var sensor in originalSensorData) {
+                filteredSensorData[sensor] = originalSensorData[sensor].slice(
+                    originalTimestamps.length - filteredTimestamps.length
+                );
+            }
+
+            chart.data.labels = filteredTimestamps.map(ts => ts.slice(0, -3)); // Remove seconds from timestamps
+            chart.data.datasets.forEach((dataset, index) => {
+                dataset.data = filteredSensorData[Object.keys(originalSensorData)[index]];
+            });
+
+            chart.update(); // Update the chart with new data
+        }
 
         // Automatically refresh the page every minute
         function reloadPage() {
