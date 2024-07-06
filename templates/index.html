@@ -123,6 +123,7 @@
             {% endfor %}
         </div>
         <div class="filter-buttons">
+            <button class="filter-button" onclick="filterData('6hours')">Last 6 Hours</button>
             <button class="filter-button" onclick="filterData('12hours')">Last 12 Hours</button>
             <button class="filter-button" onclick="filterData('day')">Last Day</button>
             <button class="filter-button" onclick="filterData('week')">Last Week</button>
@@ -252,6 +253,9 @@
             } else if (range === '12hours') {
                 var twelveHoursAgo = new Date(now - 12 * 60 * 60 * 1000);
                 filteredTimestamps = originalTimestamps.filter(ts => new Date(ts) >= twelveHoursAgo);
+            } else if (range === '6hours') {
+                var sixHoursAgo = new Date(now - 6 * 60 * 60 * 1000);
+                filteredTimestamps = originalTimestamps.filter(ts => new Date(ts) >= sixHoursAgo);
             } else {
                 filteredTimestamps = originalTimestamps;
             }
@@ -269,6 +273,7 @@
 
             chart.update(); // Update the chart with new data
         }
+
 
         // Automatically refresh the page every minute
         function reloadPage() {
