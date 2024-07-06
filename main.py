@@ -1,11 +1,11 @@
 import os
 import sqlite3
 import sys
+import threading
 from datetime import datetime
 from time import sleep
 from functions.load_sensor_json import load_sensor_json
 from functions.get_sensor import get_sensor
-from functions.flask_app import app
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 sys.path.append(parent_dir)
@@ -47,6 +47,7 @@ def insert_data(sensor_readings):
         print(f"SQLite error: {e}")
 
 def sensor_data_updater(sensors):
+    sampling_rate = 600  # Update every 600 seconds
     while True:
         try:
             # Fetch sensor readings
@@ -65,7 +66,7 @@ def sensor_data_updater(sensors):
             print(f"Unexpected error: {e}")
 
         # Sleep for sampling_rate seconds before next update
-        #sleep(sampling_rate)
+        sleep(sampling_rate)
 
 def main():
     try:
@@ -84,14 +85,18 @@ def main():
 
         print(sensors)
 
-        # Run the sensor data updater function periodically
-        sampling_rate = 600  # Update every 10 minutes
-        while True:
-            sensor_data_updater(sensors)
+        # Ensure the sensor data updater thread runs only once
+        if not threading.current_thread().name == "MainThread":
+            return
 
-            # To ensure the Flask app runs concurrently, start it in a non-blocking way
-            app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False)
-            sleep(sampling_rate)
+        # Start the sensor data updater thread
+        updater_thread = threading.Thread(target=sensor_data_updater, args=(sensors,))
+        updater_thread.daemon = True
+        updater_thread.start()
+
+        # Import and run the Flask app
+        from functions.flask_app import app
+        app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False)
 
     except Exception as e:
         print(f"Unexpected error in main thread: {e}")
