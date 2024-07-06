@@ -102,6 +102,10 @@
         .filter-button:hover {
             background-color: #666666; /* Lighter background on hover */
         }
+
+        .filter-button.active {
+            border-width: 3px; /* Increase border width for active button */
+        }
     </style>
 </head>
 <body>
@@ -272,6 +276,14 @@
             });
 
             chart.update(); // Update the chart with new data
+
+            // Remove 'active' class from all filter buttons
+            document.querySelectorAll('.filter-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Add 'active' class to the clicked filter button
+            document.querySelector(`.filter-button[data-range="${range}"]`).classList.add('active');
         }
 
         // Automatically select 'Last Day' filter when page loads
