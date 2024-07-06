@@ -1,33 +1,27 @@
 import os
 import sqlite3
 import sys
-import threading
 from datetime import datetime
 from time import sleep
 from functions.load_sensor_json import load_sensor_json
 from functions.get_sensor import get_sensor
+from functions.flask_app import app
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 sys.path.append(parent_dir)
-
 
 # Path to the database file in the SQL directory
 db_path = os.path.join(parent_dir, 'SQL', 'sensor_data.db')
 
 def insert_data(sensor_readings):
     parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-
     sys.path.append(parent_dir)
-
 
     # Path to the database file in the SQL directory
     db_path = os.path.join(parent_dir, 'SQL', 'sensor_data.db')
     try:
-
-        print("connecting to sql db, with path:",db_path)
+        print("connecting to sql db, with path:", db_path)
         conn = sqlite3.connect(db_path)
-
-
         c = conn.cursor()
 
         # Get the current timestamp
@@ -52,8 +46,7 @@ def insert_data(sensor_readings):
     except sqlite3.Error as e:
         print(f"SQLite error: {e}")
 
-def sensor_data_updater(sensors):
-    sampling_rate = 600  # Update every 10 seconds
+def sensor_data_updater(sensors, sampling_rate=600):
     while True:
         try:
             # Fetch sensor readings
@@ -91,14 +84,13 @@ def main():
 
         print(sensors)
 
-        # Start the sensor data updater thread
-        updater_thread = threading.Thread(target=sensor_data_updater, args=(sensors,))
-        updater_thread.daemon = True
-        updater_thread.start()
+        # Run the sensor data updater function periodically
+        sampling_rate = 600  # Update every 10 minutes
+        while True:
+            sensor_data_updater(sensors, sampling_rate)
 
-        # Import and run the Flask app
-        from functions.flask_app import app
-        app.run(host='0.0.0.0', port=8080, debug=True)
+            # To ensure the Flask app runs concurrently, start it in a non-blocking way
+            app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False)
 
     except Exception as e:
         print(f"Unexpected error in main thread: {e}")
