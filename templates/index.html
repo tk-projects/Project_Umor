@@ -125,6 +125,7 @@
         <div class="filter-buttons">
             <button class="filter-button" onclick="filterData('day')">Last Day</button>
             <button class="filter-button" onclick="filterData('week')">Last Week</button>
+            <button class="filter-button" onclick="filterData('12hours')">Last 12 Hours</button>
             <button class="filter-button" onclick="filterData('all')">All Data</button>
         </div>
         <div class="graph-container">
@@ -248,6 +249,9 @@
             } else if (range === 'week') {
                 var oneWeekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
                 filteredTimestamps = originalTimestamps.filter(ts => new Date(ts) >= oneWeekAgo);
+            } else if (range === '12hours') {
+                var twelveHoursAgo = new Date(now - 12 * 60 * 60 * 1000);
+                filteredTimestamps = originalTimestamps.filter(ts => new Date(ts) >= twelveHoursAgo);
             } else {
                 filteredTimestamps = originalTimestamps;
             }
