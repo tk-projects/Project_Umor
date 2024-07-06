@@ -46,7 +46,7 @@ def insert_data(sensor_readings):
     except sqlite3.Error as e:
         print(f"SQLite error: {e}")
 
-def sensor_data_updater(sensors, sampling_rate=600):
+def sensor_data_updater(sensors):
     while True:
         try:
             # Fetch sensor readings
@@ -65,7 +65,7 @@ def sensor_data_updater(sensors, sampling_rate=600):
             print(f"Unexpected error: {e}")
 
         # Sleep for sampling_rate seconds before next update
-        sleep(sampling_rate)
+        #sleep(sampling_rate)
 
 def main():
     try:
@@ -87,10 +87,11 @@ def main():
         # Run the sensor data updater function periodically
         sampling_rate = 600  # Update every 10 minutes
         while True:
-            sensor_data_updater(sensors, sampling_rate)
+            sensor_data_updater(sensors)
 
             # To ensure the Flask app runs concurrently, start it in a non-blocking way
             app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False)
+            sleep(sampling_rate)
 
     except Exception as e:
         print(f"Unexpected error in main thread: {e}")
