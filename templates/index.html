@@ -184,7 +184,7 @@
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: timestamps.map(ts => ts.slice(0, -3)), // Remove seconds from timestamps
+                labels: timestamps.map(ts => ts.slice(11, 16)), // Display only hours and minutes
                 datasets: datasets
             },
             options: {
@@ -248,7 +248,7 @@
                 );
             }
 
-            chart.data.labels = filteredTimestamps.map(ts => ts.slice(0, -3)); // Remove seconds from timestamps
+            chart.data.labels = filteredTimestamps.map(ts => ts.slice(11, 16)); // Display only hours and minutes
             chart.data.datasets.forEach((dataset, index) => {
                 dataset.data = filteredSensorData[Object.keys(originalSensorData)[index]];
             });
