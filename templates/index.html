@@ -15,96 +15,115 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 20px;
+            margin-top: 5%;
             position: relative; /* Position container relative for absolute positioning */
+        }
+
+        .sensor-status, .cpu-temperature, .current-humidity {
+            width: auto;
+            font-size: 16px;
+            color: #dddddd;
+            padding: 10px;
         }
 
         .sensor-status {
             position: absolute;
-            top: 10px; /* Adjusted upward */
-            left: 20px; /* Align to the left */
-            font-size: 16px;
-            color: #dddddd;
-        }
-
-        .sensor-status .status-indicator {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            margin-right: 5px;
-            background-color: #00ff00; /* Green */
-            border-radius: 50%;
+            top: 10px;
+            left: 20px;
         }
 
         .cpu-temperature {
             position: absolute;
-            top: 10px; /* Adjusted upward */
-            right: 20px; /* Align to the right */
-            font-size: 16px;
-            color: #dddddd;
-            text-align: right; /* Align text to the right */
+            top: 10px;
+            right: 20px;
+            text-align: right;
         }
 
         .current-humidity {
             position: absolute;
-            top: 50px; /* Increased space below the sensor status */
-            left: 20px; /* Align to the left */
-            width: 180px; /* Reduced width by 10% */
-            font-size: 16px;
-            color: #dddddd;
-            padding: 10px;
-            border: 1px solid #444444; /* Border for the panel */
-            border-radius: 5px; /* Rounded corners */
-            background-color: #2a2a2a; /* Dark background for the panel */
+            top: 50px;
+            left: 20px;
+            border: 1px solid #444444;
+            border-radius: 5px;
+            background-color: #2a2a2a;
         }
 
         .humidity-header {
-            margin-bottom: 10px; /* Space below the header */
+            margin-bottom: 10px;
         }
 
         .sensor-value {
-            margin-top: 5px; /* Space between sensor values */
+            margin-top: 5px;
             display: flex;
-            align-items: center; /* Center align items vertically */
+            align-items: center;
         }
 
         .sensor-name {
-            width: 100px; /* Fixed width for sensor names */
-            color: #aaaaaa; /* Dimmed color for sensor names */
-            margin-bottom: 5px; /* Additional margin bottom */
+            width: 100px;
+            color: #aaaaaa;
+            margin-bottom: 5px;
         }
 
         .sensor-humidity {
-            margin-left: 10px; /* Reduced margin for sensor humidity */
-            color: #ffffff; /* White color for humidity values */
+            margin-left: 10px;
+            color: #ffffff;
         }
 
         .graph-container {
-            width: 70%; /* Reduced graph container width */
-            margin-top: 80px; /* Space above the graph */
-            margin-bottom: 20px; /* Space below the graph */
+            width: 70%;
+            margin-top: 80px;
+            margin-bottom: 20px;
         }
 
         .filter-buttons {
-            margin-bottom: 20px; /* Space below the filter buttons */
+            margin-bottom: 20px;
         }
 
         .filter-button {
             padding: 10px 20px;
             margin: 5px;
-            background-color: #444444; /* Dark background for buttons */
-            color: #ffffff; /* Light text color */
+            background-color: #444444;
+            color: #ffffff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
 
         .filter-button:hover {
-            background-color: #666666; /* Lighter background on hover */
+            background-color: #666666;
         }
 
         .filter-button.active {
-            background-color: #555555; /* Slightly lighter background for active button */
+            background-color: #555555;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+                align-items: stretch;
+                margin-top: 10px;
+            }
+
+            .sensor-status, .cpu-temperature, .current-humidity {
+                position: static;
+                width: auto;
+                margin: 10px;
+                padding: 5px;
+            }
+
+            .graph-container {
+                width: 100%;
+            }
+
+            .filter-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-button {
+                width: 100%;
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
@@ -127,11 +146,11 @@
             {% endfor %}
         </div>
         <div class="filter-buttons">
-            <button class="filter-button" onclick="filterData('6hours')">Last 6 Hours</button>
-            <button class="filter-button" onclick="filterData('12hours')">Last 12 Hours</button>
-            <button class="filter-button active" onclick="filterData('day')">Last Day</button>
-            <button class="filter-button" onclick="filterData('week')">Last Week</button>
-            <button class="filter-button" onclick="filterData('all')">All Data</button>
+            <button class="filter-button" data-range="6hours" onclick="filterData('6hours')">Last 6 Hours</button>
+            <button class="filter-button" data-range="12hours" onclick="filterData('12hours')">Last 12 Hours</button>
+            <button class="filter-button active" data-range="day" onclick="filterData('day')">Last Day</button>
+            <button class="filter-button" data-range="week" onclick="filterData('week')">Last Week</button>
+            <button class="filter-button" data-range="all" onclick="filterData('all')">All Data</button>
         </div>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
@@ -265,36 +284,21 @@
             }
 
             for (var sensor in originalSensorData) {
-                filteredSensorData[sensor] = originalSensorData[sensor].slice(
-                    originalTimestamps.length - filteredTimestamps.length
-                );
+                filteredSensorData[sensor] = originalSensorData[sensor].slice(originalTimestamps.length - filteredTimestamps.length);
             }
 
-            chart.data.labels = filteredTimestamps.map(ts => formatTimestamp(ts)); // Format filtered timestamps
-            chart.data.datasets.forEach((dataset, index) => {
-                dataset.data = filteredSensorData[Object.keys(originalSensorData)[index]];
+            chart.data.labels = filteredTimestamps.map(ts => formatTimestamp(ts));
+            chart.data.datasets.forEach(dataset => {
+                dataset.data = filteredSensorData[dataset.label];
             });
+            chart.update();
 
-            chart.update(); // Update the chart with new data
-
-            // Remove 'active' class from all filter buttons
-            document.querySelectorAll('.filter-button').forEach(btn => {
-                btn.classList.remove('active');
+            // Update button active state
+            document.querySelectorAll('.filter-button').forEach(button => {
+                button.classList.remove('active');
             });
-
-            // Add 'active' class to the clicked filter button
             document.querySelector(`.filter-button[data-range="${range}"]`).classList.add('active');
         }
-
-        // Automatically select 'Last Day' filter when page loads
-        filterData('day');
-
-        // Automatically refresh the page every minute
-        function reloadPage() {
-            location.reload();
-        }
-
-        setTimeout(reloadPage, 60000); // Refresh every minute
     </script>
 </body>
 </html>
