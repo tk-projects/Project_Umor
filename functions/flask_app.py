@@ -54,10 +54,11 @@ def index():
 # Route to handle restart action
 @app.route('/restart', methods=['POST'])
 def restart_pi():
-    # Execute the restart command
-    print("rebooting now ...")
-    subprocess.run(['sudo', 'reboot'])
-    return 'Restarting Raspberry Pi...'
+    try:
+        os.system('sudo reboot')  # Command to restart Raspberry Pi
+        return 'Raspberry Pi is restarting...', 200
+    except Exception as e:
+        return f'Error restarting Raspberry Pi: {str(e)}', 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
