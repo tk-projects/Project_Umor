@@ -55,6 +55,7 @@ def index():
 @app.route('/restart', methods=['POST'])
 def restart_pi():
     # Execute the restart command
+    print("rebooting now ...")
     subprocess.run(['sudo', 'reboot'])
     return 'Restarting Raspberry Pi...'
 
