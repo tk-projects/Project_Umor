@@ -99,12 +99,12 @@
 
         .restart-button {
             margin-top: 20px;
-            padding: 15px 30px;
+            padding: 10px 20px; /* Adjusted smaller padding */
             background-color: #ff4500; /* Orange-red */
             color: #ffffff;
             border: none;
             border-radius: 5px;
-            font-size: 18px;
+            font-size: 16px; /* Smaller font size */
             cursor: pointer;
         }
 
@@ -144,6 +144,10 @@
                 order: 2; /* Change order on mobile */
                 margin-top: 0; /* Reset margin-top for better fit */
             }
+
+            .restart-button {
+                margin-top: auto; /* Push to the bottom */
+            }
         }
     </style>
 </head>
@@ -177,7 +181,7 @@
         </div>
 
         <!-- Restart Button -->
-        <button class="restart-button" onclick="restartPi()">Restart Raspberry Pi</button>
+        <button class="restart-button" onclick="restartPi()">Sensor Neustart</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
