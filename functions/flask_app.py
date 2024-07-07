@@ -1,6 +1,7 @@
 import os
 import sqlite3
-from flask import Flask, render_template
+import subprocess
+from flask import Flask, render_template, request
 from functions.load_sensor_json import load_sensor_json
 from functions.get_cpu_temperature import get_cpu_temperature
 
@@ -49,6 +50,13 @@ def index():
     sensor_online = is_sensor_online()  # Check if sensor is online
     return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data,
                            cpu_temperature=cpu_temperature, sensor_online=sensor_online)
+
+# Route to handle restart action
+@app.route('/restart', methods=['POST'])
+def restart_pi():
+    # Execute the restart command
+    subprocess.run(['sudo', 'reboot'])
+    return 'Restarting Raspberry Pi...'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
