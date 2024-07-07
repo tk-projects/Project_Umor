@@ -113,11 +113,14 @@
 
             .graph-container {
                 width: 100%;
+                order: 1; /* Change order on mobile */
             }
 
             .filter-buttons {
                 flex-direction: column;
                 align-items: stretch;
+                order: 0; /* Change order on mobile */
+                margin-bottom: 20px; /* Ensure margin below */
             }
 
             .filter-button {
@@ -299,6 +302,16 @@
             });
             document.querySelector(`.filter-button[data-range="${range}"]`).classList.add('active');
         }
+
+        // Automatically select 'Last Day' filter when page loads
+        filterData('day');
+
+        // Automatically refresh the page every minute
+        function reloadPage() {
+            location.reload();
+        }
+
+        setTimeout(reloadPage, 60000); // Refresh every minute
     </script>
 </body>
 </html>
