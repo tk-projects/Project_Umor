@@ -34,6 +34,5 @@ def print_database():
         if conn:
             conn.close()
 
-if __name__ == "__main__":
-    # Call the function to print the database content
-    print_database()
+
+print_database()
