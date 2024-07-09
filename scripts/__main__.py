@@ -1,4 +1,4 @@
-from view_database import view_database
+from view_database import print_database
 
 if __name__ == "__main__":
-    view_database()
+    print_database()
