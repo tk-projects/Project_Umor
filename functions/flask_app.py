@@ -1,10 +1,16 @@
 import os
 import sqlite3
 import subprocess
-from flask import Flask, render_template, request
+from flask import Flask, render_template, jsonify
 from functions.load_sensor_json import load_sensor_json
 from functions.get_cpu_temperature import get_cpu_temperature
 from main import insert_data
+
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+app.logger.setLevel(logging.DEBUG)
+
 
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'))
 
@@ -65,17 +71,18 @@ def restart_pi():
 @app.route('/update_sensors', methods=['POST'])
 def update_sensors():
     try:
-        # Fetch sensor readings and insert them into the database
-        print("trying to update sensor data now.")
+        # Simulate fetching and inserting sensor data
         sensor_data = load_sensor_json()
         sensor_ids = [sensor_info["sensor_id"] for sensor_info in sensor_data.values()]
         sensors = [get_sensor(sensor_id) for sensor_id in sensor_ids if get_sensor(sensor_id)]
         sensor_readings = {sensor.name: sensor.read() for sensor in sensors}
 
         insert_data(sensor_readings)
-        return 'Sensors updated and data inserted successfully.', 200
+        return jsonify({'message': 'Sensors updated and data inserted successfully.'}), 200
     except Exception as e:
-        return f'Error updating sensors: {str(e)}', 500
+        # Log the error and return an error message
+        app.logger.error(f'Error updating sensors: {e}')
+        return jsonify({'error': f'Error updating sensors: {str(e)}'}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

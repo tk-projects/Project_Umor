@@ -366,16 +366,17 @@
 
         function updateSensors() {
             fetch('/update_sensors', { method: 'POST' })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to update sensors');
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
                     }
-                    alert('Sensors updated successfully.');
+                    alert(data.message);
                     reloadPage(); // Refresh the page to update the graphs
                 })
                 .catch(error => {
                     console.error('Error updating sensors:', error);
-                    alert('Failed to update sensors');
+                    alert('Failed to update sensors: ' + error.message);
                 });
         }
 
