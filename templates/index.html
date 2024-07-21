@@ -97,7 +97,7 @@
             background-color: #555555;
         }
 
-        .restart-button, .update-button {
+        .restart-button {
             margin-top: 20px;
             padding: 10px 20px; /* Adjusted smaller padding */
             background-color: #ff4500; /* Orange-red */
@@ -108,7 +108,7 @@
             cursor: pointer;
         }
 
-        .restart-button:hover, .update-button:hover {
+        .restart-button:hover {
             background-color: #ff6347; /* Lighter shade on hover */
         }
 
@@ -145,7 +145,7 @@
                 margin-top: 0; /* Reset margin-top for better fit */
             }
 
-            .restart-button, .update-button {
+            .restart-button {
                 margin-top: auto; /* Push to the bottom */
             }
         }
@@ -179,9 +179,6 @@
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
-
-        <!-- Update Button -->
-        <button class="update-button" onclick="updateData()">Jetzt aktualisieren</button>
 
         <!-- Restart Button -->
         <button class="restart-button" onclick="restartPi()">Sensor Neustart</button>
@@ -275,126 +272,85 @@
                         },
                         ticks: {
                             color: '#aaaaaa', // Dimmed color for X axis tick marks
-                            maxRotation: 45, // Rotate labels for better fit
-                            minRotation: 45
-                        },
-                        grid: {
-                            color: '#666666' // Color of the grid lines
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#ffffff' // White color for legend text
-                        },
-                        onHover: function(event, legendItem) {
-                            // Set the line width to 5 when hovering over legend
-                            chart.data.datasets[legendItem.datasetIndex].borderWidth = 5;
-                            chart.update();
-                        },
-                        onLeave: function(event, legendItem) {
-                            // Reset the line width when not hovering
-                            chart.data.datasets[legendItem.datasetIndex].borderWidth = 2;
-                            chart.update();
+                            maxRotation: 0,
+                            autoSkip: true,
+                            maxTicksLimit: 10
                         }
                     }
                 }
             }
         });
 
-        function formatTimestamp(timestamp) {
-            var date = new Date(timestamp * 1000);
-            var options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-            return date.toLocaleString('de-DE', options);
+        // Function to format timestamp to show date and time
+        function formatTimestamp(ts) {
+            var date = new Date(ts);
+            var formattedDate = `${date.toLocaleDateString('de-DE')} ${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}`;
+            return formattedDate;
         }
 
+        // Function to filter data based on the selected time range
         function filterData(range) {
-            var now = Date.now() / 1000;
-            var startTime;
-
-            switch (range) {
-                case '6hours':
-                    startTime = now - 6 * 60 * 60;
-                    break;
-                case '12hours':
-                    startTime = now - 12 * 60 * 60;
-                    break;
-                case 'day':
-                    startTime = now - 24 * 60 * 60;
-                    break;
-                case 'week':
-                    startTime = now - 7 * 24 * 60 * 60;
-                    break;
-                case 'all':
-                    startTime = 0;
-                    break;
-                default:
-                    startTime = 0;
-            }
-
             var filteredTimestamps = [];
             var filteredSensorData = {};
+            var now = new Date();
 
-            for (var sensor in originalSensorData) {
-                filteredSensorData[sensor] = [];
+            if (range === 'day') {
+                var oneDayAgo = new Date(now - 24 * 60 * 60 * 1000);
+                filteredTimestamps = originalTimestamps.filter(ts => new Date(ts) >= oneDayAgo);
+            } else if (range === 'week') {
+                var oneWeekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
+                filteredTimestamps = originalTimestamps.filter(ts => new Date(ts) >= oneWeekAgo);
+            } else if (range === '12hours') {
+                var twelveHoursAgo = new Date(now - 12 * 60 * 60 * 1000);
+                filteredTimestamps = originalTimestamps.filter(ts => new Date(ts) >= twelveHoursAgo);
+            } else if (range === '6hours') {
+                var sixHoursAgo = new Date(now - 6 * 60 * 60 * 1000);
+                filteredTimestamps = originalTimestamps.filter(ts => new Date(ts) >= sixHoursAgo);
+            } else {
+                filteredTimestamps = originalTimestamps;
             }
 
-            for (var i = 0; i < originalTimestamps.length; i++) {
-                if (originalTimestamps[i] >= startTime) {
-                    filteredTimestamps.push(originalTimestamps[i]);
-                    for (var sensor in originalSensorData) {
-                        filteredSensorData[sensor].push(originalSensorData[sensor][i]);
-                    }
-                }
+            for (var sensor in originalSensorData) {
+                filteredSensorData[sensor] = originalSensorData[sensor].slice(originalTimestamps.length - filteredTimestamps.length);
             }
 
             chart.data.labels = filteredTimestamps.map(ts => formatTimestamp(ts));
-            for (var sensor in filteredSensorData) {
-                var datasetIndex = chart.data.datasets.findIndex(dataset => dataset.label === sensor);
-                if (datasetIndex !== -1) {
-                    chart.data.datasets[datasetIndex].data = filteredSensorData[sensor];
-                }
-            }
-
+            chart.data.datasets.forEach(dataset => {
+                dataset.data = filteredSensorData[dataset.label];
+            });
             chart.update();
 
             // Update button active state
-            var buttons = document.querySelectorAll('.filter-button');
-            buttons.forEach(function(button) {
+            document.querySelectorAll('.filter-button').forEach(button => {
                 button.classList.remove('active');
             });
-            var activeButton = document.querySelector('.filter-button[data-range="' + range + '"]');
-            if (activeButton) {
-                activeButton.classList.add('active');
-            }
+            document.querySelector(`.filter-button[data-range="${range}"]`).classList.add('active');
         }
 
+        // Function to restart the Raspberry Pi
         function restartPi() {
-            if (confirm('Are you sure you want to restart the Raspberry Pi?')) {
-                fetch('/restart', { method: 'POST' })
-                    .then(response => response.text())
-                    .then(data => alert(data))
-                    .catch(error => console.error('Error:', error));
-            }
-        }
-
-        function updateData() {
-            fetch('/update_now', { method: 'POST' })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        alert('Daten wurden erfolgreich aktualisiert.');
-                        location.reload();  // Optionally reload the page to reflect new data
-                    } else {
-                        throw new Error(data.message);
+            fetch('/restart', { method: 'POST' })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to restart Raspberry Pi');
                     }
+                    alert('Restarting Raspberry Pi...');
                 })
                 .catch(error => {
-                    console.error('Fehler beim Aktualisieren der Daten:', error);
-                    alert('Datenaktualisierung fehlgeschlagen.');
+                    console.error('Error restarting Raspberry Pi:', error);
+                    alert('Failed to restart Raspberry Pi');
                 });
         }
+
+        // Automatically select 'Last Day' filter when page loads
+        filterData('day');
+
+        // Automatically refresh the page every minute
+        function reloadPage() {
+            location.reload();
+        }
+
+        setTimeout(reloadPage, 60000); // Refresh every minute
     </script>
 </body>
 </html>
