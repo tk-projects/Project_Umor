@@ -1,9 +1,10 @@
 import os
 import sqlite3
-import subprocess
-from flask import Flask, render_template, request
+from flask import Flask, render_template, jsonify
 from functions.load_sensor_json import load_sensor_json
 from functions.get_cpu_temperature import get_cpu_temperature
+from functions.get_sensor import get_sensor  # Import the function to get sensor data
+from main import insert_data  # Import the function to insert data into the database
 
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'))
 
@@ -59,6 +60,32 @@ def restart_pi():
         return 'Raspberry Pi is restarting...', 200
     except Exception as e:
         return f'Error restarting Raspberry Pi: {str(e)}', 500
+
+# Route to handle update action
+@app.route('/update_now', methods=['POST'])
+def update_now():
+    try:
+        # Get sensor data
+        sensor_data = load_sensor_json()
+        sensor_ids = [sensor_info["sensor_id"] for sensor_info in sensor_data.values()]
+        sensors = [get_sensor(sensor_id) for sensor_id in sensor_ids]
+
+        # Fetch current sensor readings
+        sensor_readings = {}
+        for sensor in sensors:
+            try:
+                sensor_readings[sensor.name] = sensor.read()
+            except Exception as e:
+                print(f"Error reading sensor {sensor.name}: {e}")
+                sensor_readings[sensor.name] = 0.0
+
+        # Insert data into the database
+        insert_data(sensor_readings)
+
+        return jsonify({"status": "success", "message": "Data updated successfully."})
+    except Exception as e:
+        print(f"Error updating data: {e}")
+        return jsonify({"status": "error", "message": "Failed to update data."}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
