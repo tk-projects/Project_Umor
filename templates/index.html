@@ -112,6 +112,22 @@
             background-color: #ff6347; /* Lighter shade on hover */
         }
 
+        .update-button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #40E0D0; /* Turquoise color */
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        }
+
+        .update-button:hover {
+            background-color: #48D1CC; /* Lighter shade on hover */
+        }
+
+
         @media (max-width: 600px) {
             .container {
                 flex-direction: column;
@@ -145,8 +161,11 @@
                 margin-top: 0; /* Reset margin-top for better fit */
             }
 
-            .restart-button {
-                margin-top: auto; /* Push to the bottom */
+            .update-button, .restart-button {
+                margin-top: 10px;
+                width: 100%;
+                font-size: 14px; /* Smaller font size */
+                padding: 8px; /* Adjusted padding */
             }
         }
     </style>
@@ -179,6 +198,9 @@
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
+
+        <!-- Update Button -->
+        <button class="update-button" onclick="updateSensors()">Update Sensors</button>
 
         <!-- Restart Button -->
         <button class="restart-button" onclick="restartPi()">Sensor Neustart</button>
@@ -341,6 +363,26 @@
                     alert('Failed to restart Raspberry Pi');
                 });
         }
+
+        function updateSensors() {
+            fetch('/update_sensors', { method: 'POST' })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to update sensors');
+                    }
+                    alert('Sensors updated successfully.');
+                    reloadPage(); // Refresh the page to update the graphs
+                })
+                .catch(error => {
+                    console.error('Error updating sensors:', error);
+                    alert('Failed to update sensors');
+                });
+        }
+
+    // Existing function to reload the page
+    function reloadPage() {
+        location.reload();
+    }
 
         // Automatically select 'Last Day' filter when page loads
         filterData('day');
