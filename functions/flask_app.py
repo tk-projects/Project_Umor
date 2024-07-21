@@ -17,23 +17,25 @@ app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), '.
 
 
 def insert_data(sensor_readings):
-    parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
-    db_path = os.path.join(parent_dir, '..', 'SQL', 'sensor_data.db')
     try:
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
+
         current_timestamp = datetime.now()
         column_names = list(sensor_readings.keys())
         values = [sensor_readings[sensor_name] for sensor_name in column_names]
+
         columns_str = ", ".join(['timestamp'] + column_names)
         placeholders = ", ".join(["?"] * (len(column_names) + 1))
         insert_query = f"INSERT INTO humidity_data ({columns_str}) VALUES ({placeholders})"
+
         c.execute(insert_query, (current_timestamp,) + tuple(values))
         conn.commit()
         conn.close()
         print("Data inserted successfully.")
     except sqlite3.Error as e:
         print(f"SQLite error: {e}")
+        raise
 
 def get_sensor_readings():
     # Load sensor data and initialize sensors
@@ -97,12 +99,15 @@ def index():
 @app.route('/update_sensors', methods=['POST'])
 def update_sensors():
     try:
-        # Get sensor readings and insert into the database
+        print("Fetching sensor readings...")
         sensor_readings = get_sensor_readings()
+        print("Inserting data into database...")
         insert_data(sensor_readings)
         return jsonify({'message': 'Sensors updated and data inserted successfully.'}), 200
     except Exception as e:
+        print(f"Error in update_sensors: {e}")
         return jsonify({'error': f'Failed to update sensors: {str(e)}'}), 500
+
 
 # Route to handle restart action
 @app.route('/restart', methods=['POST'])
