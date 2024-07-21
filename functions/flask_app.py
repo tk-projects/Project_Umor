@@ -10,7 +10,7 @@ from functions import get_sensor
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
-app.logger.setLevel(logging.DEBUG)
+
 
 
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'))
