@@ -72,7 +72,9 @@ def restart_pi():
 def update_sensors():
     try:
         # Call the sensor_data_updater function directly
+        print("try to call sensor_data_updater function")
         sensor_data_updater()
+        print("function called")
         return jsonify({'message': 'Sensors updated and data inserted successfully.'}), 200
     except Exception as e:
         # Log the error and return a JSON error message
