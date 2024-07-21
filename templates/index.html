@@ -377,7 +377,7 @@
                         throw new Error(data.error);
                     }
                     alert(data.message);
-                    reloadPage(); // Refresh the page to update the graphs
+                    reloadPage();  // Refresh the page to reflect the updated data
                 })
                 .catch(error => {
                     console.error('Error updating sensors:', error);
