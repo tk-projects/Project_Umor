@@ -6,6 +6,7 @@ from datetime import datetime
 from time import sleep
 from functions.load_sensor_json import load_sensor_json
 from functions.get_sensor import get_sensor
+import argparse
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 sys.path.append(parent_dir)
@@ -69,6 +70,11 @@ def sensor_data_updater(sensors):
         sleep(sampling_rate)
 
 def main():
+    parser = argparse.ArgumentParser(description="Sensor Data Updater and Server")
+    parser.add_argument('--port', type=int, default=8080, help='Port number to run the server on')
+    args = parser.parse_args()
+
+    port = args.port
     try:
         # Get sensor data
         sensor_data = load_sensor_json()
@@ -96,7 +102,7 @@ def main():
 
         # Import and run the Flask app
         from functions.flask_app import app
-        app.run(host='0.0.0.0', port=8080, debug=True, use_reloader=False)
+        app.run(host='0.0.0.0', port=port, debug=True, use_reloader=False)
 
     except Exception as e:
         print(f"Unexpected error in main thread: {e}")
