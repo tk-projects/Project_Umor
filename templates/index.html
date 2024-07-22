@@ -57,6 +57,7 @@
             border-radius: 5px;
             background-color: #2a2a2a;
             padding: 10px; /* Added padding */
+            padding-right: 40px; /* Adjusted to make space for button */
         }
 
         .humidity-header {
@@ -84,7 +85,6 @@
             width: 70%;
             margin-top: 80px;
             margin-bottom: 20px;
-            order: 2; /* Position this element below filter-buttons */
         }
 
         .filter-buttons {
@@ -130,9 +130,13 @@
             background-color: #40E0D0; /* Turquoise color */
             color: #ffffff;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px; /* Rounded corners */
             font-size: 16px;
             cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 10px; /* Align with the top of "Momentane Feuchtigkeit:" */
+            z-index: 1; /* Ensure button is above other content */
         }
 
         .update-button:hover {
@@ -168,7 +172,7 @@
                 right: 10px;
                 top: 10px; /* Align with the top of "Momentane Feuchtigkeit:" */
                 position: static; /* Remove absolute positioning for mobile */
-                order: 4; /* Position this button in the correct order */
+                order: 2; /* Position this button in the correct order */
             }
 
             .filter-buttons {
@@ -217,6 +221,8 @@
                     <span class="sensor-humidity">{{ data[-1]|round(0) }}%</span> <!-- Round to nearest whole number -->
                 </div>
             {% endfor %}
+            <!-- Update Button -->
+            <button class="update-button" onclick="updateSensors()">↻</button>
         </div>
         <div class="filter-buttons">
             <button class="filter-button" data-range="6hours" onclick="filterData('6hours')">Last 6 Hours</button>
@@ -228,9 +234,6 @@
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
-
-        <!-- Update Button -->
-        <button class="update-button" onclick="updateSensors()">Update Sensors</button>
 
         <!-- Restart Button -->
         <button class="restart-button" onclick="restartPi()">Sensor Neustart</button>
@@ -320,7 +323,7 @@
                                 size: 24, // Increased X axis title font size
                                 weight: 'normal' // Normal font weight
                             },
-                            color: '#dddddd' // Dimmed color for axis title
+                            color: '#dddddd' // Dimmed color for X axis title
                         },
                         ticks: {
                             color: '#aaaaaa', // Dimmed color for X axis tick marks
