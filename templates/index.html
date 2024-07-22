@@ -30,6 +30,18 @@
             position: absolute;
             top: 10px;
             left: 20px;
+            display: flex; /* Align items horizontally */
+            align-items: center; /* Center items vertically */
+            font-size: 16px;
+            color: #dddddd;
+        }
+
+        .status-indicator {
+            width: 10px; /* Size of the circle */
+            height: 10px; /* Size of the circle */
+            background-color: #00FF00; /* Green color */
+            border-radius: 50%; /* Makes it a circle */
+            margin-right: 10px; /* Space between the circle and the text */
         }
 
         .cpu-temperature {
@@ -201,6 +213,12 @@
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
+
+        <div class="sensor-status">
+            <span class="status-indicator"></span>
+            Sensor Online
+        </div>
+        
 
         <!-- Update Button -->
         <button class="update-button" onclick="updateSensors()">Update Sensors</button>
