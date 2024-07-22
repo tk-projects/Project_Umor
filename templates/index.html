@@ -19,17 +19,24 @@
             position: relative; /* Position container relative for absolute positioning */
         }
 
-        .sensor-status, .cpu-temperature, .current-humidity {
+        .sensor-status {
+            display: flex;
+            align-items: center;
             width: auto;
             font-size: 16px;
             color: #dddddd;
             padding: 10px;
-        }
-
-        .sensor-status {
             position: absolute;
             top: 10px;
             left: 20px;
+        }
+
+        .status-indicator {
+            width: 10px; /* Size of the circle */
+            height: 10px; /* Size of the circle */
+            background-color: #00ff00; /* Green color */
+            border-radius: 50%; /* Make it a circle */
+            margin-right: 10px; /* Space between the circle and the text */
         }
 
         .cpu-temperature {
@@ -113,20 +120,19 @@
         }
 
         .update-button {
-        margin-top: 10px;
-        padding: 10px 20px;
-        background-color: #40E0D0; /* Turquoise color */
-        color: #ffffff;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #40E0D0; /* Turquoise color */
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
         .update-button:hover {
             background-color: #48D1CC; /* Lighter shade on hover */
         }
-
 
         @media (max-width: 600px) {
             .container {
@@ -365,26 +371,20 @@
         }
 
         function updateSensors() {
-        fetch('/update_sensor_now', { method: 'POST' })
-            .then(response => {
-                if (!response.ok) {
-                    // Handle non-JSON responses by returning text and throwing an error
-                    return response.text().then(text => { throw new Error(`HTTP error! status: ${response.status}, message: ${text}`); });
-                }
-                // If response is ok, refresh the page
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error updating sensors:', error);
-                alert('Failed to update sensors: ' + error.message);
-            });
+            fetch('/update_sensor_now', { method: 'POST' })
+                .then(response => {
+                    if (!response.ok) {
+                        // Handle non-JSON responses by returning text and throwing an error
+                        return response.text().then(text => { throw new Error(`HTTP error! status: ${response.status}, message: ${text}`); });
+                    }
+                    // If response is ok, refresh the page
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error updating sensors:', error);
+                    alert('Failed to update sensors: ' + error.message);
+                });
         }
-
-
-    // Existing function to reload the page
-    function reloadPage() {
-        location.reload();
-    }
 
         // Automatically select 'Last Day' filter when page loads
         filterData('day');

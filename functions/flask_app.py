@@ -83,6 +83,7 @@ def update_sensor_now():
 
     readings = update_sensor_data(sensors)
     update_database(readings)
+
     timestamps, sensor_data = fetch_all_sensor_data()
     cpu_temperature = get_cpu_temperature()  # Get CPU temperature
     sensor_online = is_sensor_online()  # Check if sensor is online
