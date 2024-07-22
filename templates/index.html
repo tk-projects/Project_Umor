@@ -50,7 +50,7 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            padding-right: 60px; /* Added space for the update button */
+            padding-right: 50px; /* Adjusted for smaller button */
             box-sizing: border-box; /* Ensures padding does not affect overall width */
         }
 
@@ -58,6 +58,7 @@
             margin-bottom: 10px;
             display: flex;
             align-items: center;
+            position: relative; /* To position the update button absolutely */
         }
 
         .sensor-value {
@@ -121,21 +122,20 @@
         }
 
         .update-button {
-            margin-top: 0;
-            width: 40px;
-            height: 40px;
+            width: 20px; /* 50% of original size */
+            height: 20px; /* 50% of original size */
             background-color: #40E0D0; /* Turquoise color */
             color: #ffffff;
             border: none;
-            border-radius: 8px; /* Rounded corners */
-            font-size: 18px; /* Adjusted font size */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 14px; /* Adjusted font size */
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             position: absolute;
             right: 10px;
-            top: 10px;
+            top: 5px; /* Aligned to the top of the header */
         }
 
         .update-button:hover {
@@ -157,7 +157,17 @@
             }
 
             .current-humidity {
-                padding-right: 50px; /* Adjusted for smaller screens */
+                padding-right: 40px; /* Adjusted for mobile screens */
+                position: relative; /* Remove absolute positioning for better layout on mobile */
+            }
+
+            .update-button {
+                position: absolute;
+                right: 10px;
+                top: 5px;
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
             }
 
             .filter-buttons {
@@ -262,12 +272,8 @@
             datasets.push({
                 label: sensor,
                 data: sensorData[sensor],
-                backgroundColor: color.background,
                 borderColor: color.border,
-                borderWidth: 2, // Increased line width
-                pointRadius: 1, // Reduced marker size
-                pointHoverRadius: 2, // Hover size for markers
-                hidden: false // Initially show all datasets
+                backgroundColor: color.background
             });
             colorIndex++;
         }
