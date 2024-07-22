@@ -57,7 +57,6 @@
             border-radius: 5px;
             background-color: #2a2a2a;
             padding: 10px; /* Added padding */
-            padding-right: 40px; /* Adjusted to make space for button */
         }
 
         .humidity-header {
@@ -91,7 +90,7 @@
             margin-bottom: 20px;
         }
 
-        .filter-button {
+        .filter-button, .update-button {
             padding: 10px 20px;
             margin: 5px;
             background-color: #444444;
@@ -101,7 +100,7 @@
             cursor: pointer;
         }
 
-        .filter-button:hover {
+        .filter-button:hover, .update-button:hover {
             background-color: #666666;
         }
 
@@ -124,25 +123,6 @@
             background-color: #ff6347; /* Lighter shade on hover */
         }
 
-        .update-button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #40E0D0; /* Turquoise color */
-            color: #ffffff;
-            border: none;
-            border-radius: 10px; /* Rounded corners */
-            font-size: 16px;
-            cursor: pointer;
-            position: absolute;
-            right: 10px;
-            top: 10px; /* Align with the top of "Momentane Feuchtigkeit:" */
-            z-index: 1; /* Ensure button is above other content */
-        }
-
-        .update-button:hover {
-            background-color: #48D1CC; /* Lighter shade on hover */
-        }
-
         @media (max-width: 600px) {
             .container {
                 flex-direction: column;
@@ -158,21 +138,8 @@
             }
 
             .current-humidity {
-                padding-right: 20px; /* Adjust padding for button */
                 margin-bottom: 20px; /* Add margin-bottom to avoid overlapping */
                 order: 1; /* Position this element above others */
-            }
-
-            .update-button {
-                margin-top: 0; /* Adjust margin for mobile view */
-                padding: 8px; /* Smaller padding */
-                width: 20px; /* Smaller width */
-                height: 20px; /* Smaller height */
-                font-size: 14px; /* Smaller font size */
-                right: 10px;
-                top: 10px; /* Align with the top of "Momentane Feuchtigkeit:" */
-                position: static; /* Remove absolute positioning for mobile */
-                order: 2; /* Position this button in the correct order */
             }
 
             .filter-buttons {
@@ -180,7 +147,7 @@
                 flex-direction: column;
                 align-items: stretch;
                 margin-bottom: 20px;
-                order: 3; /* Position this element below current-humidity */
+                order: 2; /* Position this element below current-humidity */
             }
 
             .filter-button {
@@ -191,7 +158,14 @@
             .graph-container {
                 width: 100%;
                 margin-top: 0; /* Reset margin-top for better fit */
-                order: 4; /* Position this element below filter-buttons */
+                order: 3; /* Position this element below filter-buttons */
+            }
+
+            .update-button {
+                width: 100%;
+                font-size: 14px; /* Smaller font size */
+                padding: 8px; /* Adjusted padding */
+                order: 4; /* Position this element below graph-container */
             }
 
             .restart-button {
@@ -199,7 +173,7 @@
                 width: 100%;
                 font-size: 14px; /* Smaller font size */
                 padding: 8px; /* Adjusted padding */
-                order: 5; /* Position this element below graph-container */
+                order: 5; /* Position this element below update-button */
             }
         }
     </style>
@@ -221,8 +195,6 @@
                     <span class="sensor-humidity">{{ data[-1]|round(0) }}%</span> <!-- Round to nearest whole number -->
                 </div>
             {% endfor %}
-            <!-- Update Button -->
-            <button class="update-button" onclick="updateSensors()">↻</button>
         </div>
         <div class="filter-buttons">
             <button class="filter-button" data-range="6hours" onclick="filterData('6hours')">Last 6 Hours</button>
@@ -234,6 +206,9 @@
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
+
+        <!-- Update Button -->
+        <button class="update-button" onclick="updateSensors()">Update</button>
 
         <!-- Restart Button -->
         <button class="restart-button" onclick="restartPi()">Sensor Neustart</button>
