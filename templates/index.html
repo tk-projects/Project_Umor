@@ -30,16 +30,6 @@
             position: absolute;
             top: 10px;
             left: 20px;
-            display: flex; /* Align items horizontally */
-            align-items: center; /* Center items vertically */
-        }
-
-        .status-indicator {
-            width: 10px; /* Size of the circle */
-            height: 10px; /* Size of the circle */
-            background-color: #00FF00; /* Green color */
-            border-radius: 50%; /* Makes it a circle */
-            margin-right: 10px; /* Space between the circle and the text */
         }
 
         .cpu-temperature {
@@ -56,11 +46,19 @@
             border: 1px solid #444444;
             border-radius: 5px;
             background-color: #2a2a2a;
-            padding: 10px; /* Added padding */
+            padding: 10px;
+            padding-right: 40px; /* Adjusted for button position */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            box-sizing: border-box; /* Ensures padding does not affect overall width */
         }
 
         .humidity-header {
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            position: relative; /* To position the update button absolutely */
         }
 
         .sensor-value {
@@ -124,14 +122,20 @@
         }
 
         .update-button {
-            margin-top: 10px;
-            padding: 10px 20px;
+            width: 20px; /* 50% of original size */
+            height: 20px; /* 50% of original size */
             background-color: #40E0D0; /* Turquoise color */
             color: #ffffff;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 5px; /* Rounded corners */
+            font-size: 14px; /* Adjusted font size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
+            position: absolute;
+            right: 10px; /* Positioned to the right edge of the container */
+            top: 5px; /* Positioned at the top of the header */
         }
 
         .update-button:hover {
@@ -150,6 +154,20 @@
                 width: auto;
                 margin: 10px;
                 padding: 5px;
+            }
+
+            .current-humidity {
+                padding-right: 20px; /* Adjusted for mobile screens */
+                position: relative; /* Remove absolute positioning for better layout on mobile */
+            }
+
+            .update-button {
+                position: absolute;
+                right: 10px;
+                top: 5px;
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
             }
 
             .filter-buttons {
@@ -177,24 +195,31 @@
                 font-size: 14px; /* Smaller font size */
                 padding: 8px; /* Adjusted padding */
             }
+
+            .current-humidity {
+                margin-bottom: 20px; /* Add margin-bottom to avoid overlapping */
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="sensor-status">
-            <span class="status-indicator"></span>
+            <span class="status-indicator" style="background-color: #00FF00; width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
             Sensor Online
         </div>
         <div class="cpu-temperature">
             Sensor Board Temperatur: {{ cpu_temperature }} °C <!-- Updated label -->
         </div>
         <div class="current-humidity">
-            <div class="humidity-header">Momentane Feuchtigkeit:</div>
+            <div class="humidity-header">
+                <span>Momentane Feuchtigkeit:</span>
+                <button class="update-button" onclick="updateSensors()">↻</button> <!-- Update button with refresh icon -->
+            </div>
             {% for sensor, data in sensor_data.items() %}
                 <div class="sensor-value">
                     <span class="sensor-name">{{ sensor }}:</span>
-                    <span class="sensor-humidity">{{ data[-1]|round(0) }}%</span> <!-- Round to nearest whole number -->
+                    <span class="sensor-humidity">{{ data[-1]|round(0) }}%</span>
                 </div>
             {% endfor %}
         </div>
@@ -208,9 +233,6 @@
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
-
-        <!-- Update Button -->
-        <button class="update-button" onclick="updateSensors()">Update Sensors</button>
 
         <!-- Restart Button -->
         <button class="restart-button" onclick="restartPi()">Sensor Neustart</button>
@@ -246,20 +268,16 @@
         }
 
         var colors = generateColors(Object.keys(sensorData).length);
-        var datasets = [];
         var colorIndex = 0;
 
+        var datasets = [];
         for (var sensor in sensorData) {
             var color = colors[colorIndex];
             datasets.push({
                 label: sensor,
                 data: sensorData[sensor],
-                backgroundColor: color.background,
                 borderColor: color.border,
-                borderWidth: 2, // Increased line width
-                pointRadius: 1, // Reduced marker size
-                pointHoverRadius: 2, // Hover size for markers
-                hidden: false // Initially show all datasets
+                backgroundColor: color.background
             });
             colorIndex++;
         }
@@ -268,11 +286,25 @@
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: timestamps.map(ts => formatTimestamp(ts)), // Format timestamps to show date and time
+                labels: timestamps.map(ts => formatTimestamp(ts)),
                 datasets: datasets
             },
             options: {
-                animation: false,
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#ffffff', // Legend text color
+                            font: {
+                                size: 16 // Font size for legend
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -300,7 +332,7 @@
                                 size: 24, // Increased X axis title font size
                                 weight: 'normal' // Normal font weight
                             },
-                            color: '#dddddd' // Dimmed color for axis title
+                            color: '#dddddd' // Dimmed color for X axis title
                         },
                         ticks: {
                             color: '#aaaaaa', // Dimmed color for X axis tick marks
