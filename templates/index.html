@@ -108,6 +108,10 @@
             background-color: #555555;
         }
 
+        .update-button {
+            background-color: #48d1cc; /* Turquoise color */
+        }
+
         .restart-button {
             margin-top: 20px;
             padding: 10px 20px; /* Adjusted smaller padding */
@@ -208,7 +212,7 @@
         </div>
 
         <!-- Update Button -->
-        <button class="update-button" onclick="updateSensors()">Update</button>
+        <button class="update-button" onclick="updateSensors()">Aktualisieren</button>
 
         <!-- Restart Button -->
         <button class="restart-button" onclick="restartPi()">Sensor Neustart</button>
@@ -270,6 +274,8 @@
                 datasets: datasets
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 animation: false,
                 scales: {
                     y: {
