@@ -4,6 +4,8 @@ import subprocess
 from flask import Flask, render_template, request
 from functions.load_sensor_json import load_sensor_json
 from functions.get_cpu_temperature import get_cpu_temperature
+from functions.update_sensor_data import update_sensor_data
+from functions.update_database import update_database
 
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'))
 
@@ -59,6 +61,31 @@ def restart_pi():
         return 'Raspberry Pi is restarting...', 200
     except Exception as e:
         return f'Error restarting Raspberry Pi: {str(e)}', 500
+
+# Route to handle update now action
+@app.route('/update_sensor_now', methods=['POST'])
+def update_sensor_now():
+    # get all awailable sensors:
+    sensor_data = load_sensor_json()
+
+    # Get sensor IDs
+    sensor_ids = [sensor_info["sensor_id"] for sensor_info in sensor_data.values()]
+    print("Sensors loaded by flask app:",sensor_ids)
+    sensors = []
+    for sensor_id in sensor_ids:
+        sensor = get_sensor(sensor_id)
+        if sensor:
+            sensors.append(sensor)
+    print("All sensors:", sensors)
+
+    print("Now updating sensor database ...")
+
+    readings = update_sensor_data(sensors)
+    update_database(readings)
+    
+
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

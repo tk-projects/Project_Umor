@@ -365,7 +365,7 @@
         }
 
         function updateSensors() {
-            fetch('/update_sensors', { method: 'POST' })
+            fetch('/update_sensor_now', { method: 'POST' })
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
