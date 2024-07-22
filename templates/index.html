@@ -50,6 +50,8 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            padding-right: 60px; /* Added space for the update button */
+            box-sizing: border-box; /* Ensures padding does not affect overall width */
         }
 
         .humidity-header {
@@ -152,6 +154,10 @@
                 padding: 5px;
             }
 
+            .current-humidity {
+                padding-right: 50px; /* Adjusted for smaller screens */
+            }
+
             .filter-buttons {
                 display: flex;
                 flex-direction: column;
@@ -183,7 +189,7 @@
 <body>
     <div class="container">
         <div class="sensor-status">
-            <span class="status-indicator" style="background-color: green; width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
+            <span class="status-indicator" style="background-color: #00FF00; width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
             Sensor Online
         </div>
         <div class="cpu-temperature">
@@ -266,11 +272,25 @@
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: timestamps.map(ts => formatTimestamp(ts)), // Format timestamps to show date and time
+                labels: timestamps.map(ts => formatTimestamp(ts)),
                 datasets: datasets
             },
             options: {
-                animation: false,
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#ffffff', // Legend text color
+                            font: {
+                                size: 16 // Font size for legend
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false
+                },
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -298,7 +318,7 @@
                                 size: 24, // Increased X axis title font size
                                 weight: 'normal' // Normal font weight
                             },
-                            color: '#dddddd' // Dimmed color for axis title
+                            color: '#dddddd' // Dimmed color for X axis title
                         },
                         ticks: {
                             color: '#aaaaaa', // Dimmed color for X axis tick marks
