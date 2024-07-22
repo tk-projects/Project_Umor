@@ -56,6 +56,8 @@
 
         .humidity-header {
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
         }
 
         .sensor-value {
@@ -119,14 +121,14 @@
         }
 
         .update-button {
-            margin-top: 10px;
+            margin-top: 0;
             width: 40px;
             height: 40px;
             background-color: #40E0D0; /* Turquoise color */
             color: #ffffff;
             border: none;
-            border-radius: 50%;
-            font-size: 24px;
+            border-radius: 8px; /* Rounded corners */
+            font-size: 18px; /* Adjusted font size */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -196,14 +198,16 @@
             Sensor Board Temperatur: {{ cpu_temperature }} °C <!-- Updated label -->
         </div>
         <div class="current-humidity">
-            <div class="humidity-header">Momentane Feuchtigkeit:</div>
+            <div class="humidity-header">
+                <span>Momentane Feuchtigkeit:</span>
+                <button class="update-button" onclick="updateSensors()">↻</button> <!-- Update button with refresh icon -->
+            </div>
             {% for sensor, data in sensor_data.items() %}
                 <div class="sensor-value">
                     <span class="sensor-name">{{ sensor }}:</span>
                     <span class="sensor-humidity">{{ data[-1]|round(0) }}%</span>
                 </div>
             {% endfor %}
-            <button class="update-button" onclick="updateSensors()">↻</button> <!-- Update button with refresh icon -->
         </div>
         <div class="filter-buttons">
             <button class="filter-button" data-range="6hours" onclick="filterData('6hours')">Last 6 Hours</button>
