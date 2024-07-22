@@ -6,6 +6,7 @@ from functions.load_sensor_json import load_sensor_json
 from functions.get_cpu_temperature import get_cpu_temperature
 from functions.update_sensor_data import update_sensor_data
 from functions.update_database import update_database
+from functions.get_sensor import get_sensor
 
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), '..', 'templates'))
 
