@@ -194,7 +194,7 @@
             {% for sensor, data in sensor_data.items() %}
                 <div class="sensor-value">
                     <span class="sensor-name">{{ sensor }}:</span>
-                    <span class="sensor-humidity">{{ data[-1] }}%</span>
+                    <span class="sensor-humidity">{{ data[-1]|round(0) }}%</span> <!-- Round to nearest whole number -->
                 </div>
             {% endfor %}
         </div>
