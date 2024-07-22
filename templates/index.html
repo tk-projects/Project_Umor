@@ -32,8 +32,6 @@
             left: 20px;
             display: flex; /* Align items horizontally */
             align-items: center; /* Center items vertically */
-            font-size: 16px;
-            color: #dddddd;
         }
 
         .status-indicator {
@@ -58,31 +56,29 @@
             border: 1px solid #444444;
             border-radius: 5px;
             background-color: #2a2a2a;
-            padding: 6px; /* Reduced padding */
-            box-sizing: border-box; /* Ensures padding doesn't affect the total width/height */
+            padding: 10px; /* Added padding */
         }
 
         .humidity-header {
-            margin-bottom: 7px; /* Reduced space between header and sensor values */
+            margin-bottom: 10px;
         }
 
         .sensor-value {
-            margin-top: 3px; /* Reduced space between sensor values */
+            margin-top: 5px;
             display: flex;
             align-items: center;
         }
 
         .sensor-name {
-            width: 100px; /* Adjusted width for better alignment */
+            width: 100px;
             color: #aaaaaa;
-            margin-bottom: 3px; /* Reduced space below sensor names */
+            margin-bottom: 5px;
         }
 
         .sensor-humidity {
-            margin-left: 5px; /* Reduced space between sensor name and value */
+            margin-left: 10px;
             color: #ffffff;
         }
-
 
         .graph-container {
             width: 70%;
@@ -128,20 +124,19 @@
         }
 
         .update-button {
-        margin-top: 10px;
-        padding: 10px 20px;
-        background-color: #40E0D0; /* Turquoise color */
-        color: #ffffff;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #40E0D0; /* Turquoise color */
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
         .update-button:hover {
             background-color: #48D1CC; /* Lighter shade on hover */
         }
-
 
         @media (max-width: 600px) {
             .container {
@@ -213,12 +208,6 @@
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
-
-        <div class="sensor-status">
-            <span class="status-indicator"></span>
-            Sensor Online
-        </div>
-        
 
         <!-- Update Button -->
         <button class="update-button" onclick="updateSensors()">Update Sensors</button>
@@ -386,26 +375,20 @@
         }
 
         function updateSensors() {
-        fetch('/update_sensor_now', { method: 'POST' })
-            .then(response => {
-                if (!response.ok) {
-                    // Handle non-JSON responses by returning text and throwing an error
-                    return response.text().then(text => { throw new Error(`HTTP error! status: ${response.status}, message: ${text}`); });
-                }
-                // If response is ok, refresh the page
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error updating sensors:', error);
-                alert('Failed to update sensors: ' + error.message);
-            });
+            fetch('/update_sensor_now', { method: 'POST' })
+                .then(response => {
+                    if (!response.ok) {
+                        // Handle non-JSON responses by returning text and throwing an error
+                        return response.text().then(text => { throw new Error(`HTTP error! status: ${response.status}, message: ${text}`); });
+                    }
+                    // If response is ok, refresh the page
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error updating sensors:', error);
+                    alert('Failed to update sensors: ' + error.message);
+                });
         }
-
-
-    // Existing function to reload the page
-    function reloadPage() {
-        location.reload();
-    }
 
         // Automatically select 'Last Day' filter when page loads
         filterData('day');
