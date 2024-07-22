@@ -30,16 +30,6 @@
             position: absolute;
             top: 10px;
             left: 20px;
-            display: flex; /* Align items horizontally */
-            align-items: center; /* Center items vertically */
-        }
-
-        .status-indicator {
-            width: 10px; /* Size of the circle */
-            height: 10px; /* Size of the circle */
-            background-color: #00FF00; /* Green color */
-            border-radius: 50%; /* Makes it a circle */
-            margin-right: 10px; /* Space between the circle and the text */
         }
 
         .cpu-temperature {
@@ -56,7 +46,10 @@
             border: 1px solid #444444;
             border-radius: 5px;
             background-color: #2a2a2a;
-            padding: 10px; /* Added padding */
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .humidity-header {
@@ -125,13 +118,20 @@
 
         .update-button {
             margin-top: 10px;
-            padding: 10px 20px;
+            width: 40px;
+            height: 40px;
             background-color: #40E0D0; /* Turquoise color */
             color: #ffffff;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 50%;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 10px;
         }
 
         .update-button:hover {
@@ -183,7 +183,7 @@
 <body>
     <div class="container">
         <div class="sensor-status">
-            <span class="status-indicator"></span>
+            <span class="status-indicator" style="background-color: green; width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 5px;"></span>
             Sensor Online
         </div>
         <div class="cpu-temperature">
@@ -194,9 +194,10 @@
             {% for sensor, data in sensor_data.items() %}
                 <div class="sensor-value">
                     <span class="sensor-name">{{ sensor }}:</span>
-                    <span class="sensor-humidity">{{ data[-1]|round(0) }}%</span> <!-- Round to nearest whole number -->
+                    <span class="sensor-humidity">{{ data[-1]|round(0) }}%</span>
                 </div>
             {% endfor %}
+            <button class="update-button" onclick="updateSensors()">↻</button> <!-- Update button with refresh icon -->
         </div>
         <div class="filter-buttons">
             <button class="filter-button" data-range="6hours" onclick="filterData('6hours')">Last 6 Hours</button>
@@ -208,9 +209,6 @@
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
-
-        <!-- Update Button -->
-        <button class="update-button" onclick="updateSensors()">Update Sensors</button>
 
         <!-- Restart Button -->
         <button class="restart-button" onclick="restartPi()">Sensor Neustart</button>
