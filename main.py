@@ -8,6 +8,7 @@ from functions.load_sensor_json import load_sensor_json
 from functions.get_sensor import get_sensor
 import argparse
 import math
+import heapq
 
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 sys.path.append(parent_dir)
@@ -64,7 +65,7 @@ def sensor_data_updater(sensors):
                         sleep(1)
                     
                     sensor_average = sum(sensor_vals)/len(sensor_vals)
-                    sensor_min = sensor_average.slice().sort((a, b) => a - b).slice(0, 5)#math.min(sensor_vals)
+                    sensor_min = heapq.nsmallest(5, values)#math.min(sensor_vals)
                     #print("SENSOR AVERAGE IS:",sensor_average)
                     print("SENSOR Min IS:",sensor_min)
                     sensor_readings[sensor.name] = sensor_average
