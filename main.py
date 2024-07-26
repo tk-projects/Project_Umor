@@ -65,7 +65,7 @@ def sensor_data_updater(sensors):
                         sleep(1)
                     
                     sensor_average = sum(sensor_vals)/len(sensor_vals)
-                    sensor_min = heapq.nsmallest(5, values)#math.min(sensor_vals)
+                    sensor_min = sum(heapq.nsmallest(5, sensor_vals))/len(sensor_vals)#math.min(sensor_vals)
                     #print("SENSOR AVERAGE IS:",sensor_average)
                     print("SENSOR Min IS:",sensor_min)
                     sensor_readings[sensor.name] = sensor_average
