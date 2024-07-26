@@ -64,7 +64,7 @@ def sensor_data_updater(sensors):
                         sleep(1)
                     
                     sensor_average = sum(sensor_vals)/len(sensor_vals)
-                    sensor_min = math.min(sensor_vals)
+                    sensor_min = sensor_average.slice().sort((a, b) => a - b).slice(0, 5)#math.min(sensor_vals)
                     #print("SENSOR AVERAGE IS:",sensor_average)
                     print("SENSOR Min IS:",sensor_min)
                     sensor_readings[sensor.name] = sensor_average
