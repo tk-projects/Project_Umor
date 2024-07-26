@@ -53,9 +53,18 @@ def sensor_data_updater(sensors):
         try:
             # Fetch sensor readings
             sensor_readings = {}
+            sensor_vals = []
+             
             for sensor in sensors:
                 try:
-                    sensor_readings[sensor.name] = sensor.read()
+                    for i in range(0,30):
+                        sensor_vals.append(sensor.read())
+                        print(sensor.name,":",sensor.read())
+                        sleep(1)
+                    
+                    sensor_average = sum(sensor_vals)/len(sensor_vals)
+                    print("SENSOR AVERAGE IS:",sensor_average)
+                    sensor_readings[sensor.name] = sensor_average
                 except Exception as e:
                     print(f"Error reading sensor {sensor.name}: {e}")
                     sensor_readings[sensor.name] = 0.0
