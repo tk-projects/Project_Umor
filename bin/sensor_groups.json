@@ -1,0 +1,12 @@
+{
+    "Prototype Salam": {
+        "group_id": 1,
+        "name": "Prototype Salam",
+        "location": "Michendorf",
+        "owner": "Salam",
+        "sensors": {
+            "0": 10,
+            "1": 11
+        }
+    }
+}

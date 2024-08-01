@@ -59,7 +59,7 @@ def sensor_data_updater(sensors):
              
             for sensor in sensors:
                 try:
-                    for i in range(0,30):
+                    for i in range(0,5):
                         sensor_vals.append(sensor.read())
                         print(sensor.name,":",sensor.read())
                         sleep(1)

@@ -1,0 +1,10 @@
+{
+    "sensor_1": {
+        "sensor_id": 1,
+        "name": "sensor_1",
+        "adc_channel": 0,
+        "unit": "%",
+        "min_calibration_value": 9951,
+        "max_calibration_value": 20461
+    }
+}
