@@ -55,14 +55,15 @@ def sensor_data_updater(sensors):
         try:
             # Fetch sensor readings
             sensor_readings = {}
-            sensor_vals = []
+            
              
             for sensor in sensors:
+                sensor_vals = []
                 try:
                     for i in range(0,5):
                         sensor_vals.append(sensor.read())
                         print(sensor.name,":",sensor.read())
-                        sleep(1)
+                        sleep(0.5)
                     
                     sensor_average = sum(sensor_vals)/len(sensor_vals)
                     sensor_min = sum(heapq.nsmallest(5, sensor_vals))/len(sensor_vals)#math.min(sensor_vals)
