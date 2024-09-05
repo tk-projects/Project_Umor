@@ -51,6 +51,7 @@ def index():
     timestamps, sensor_data = fetch_all_sensor_data()
     cpu_temperature = get_cpu_temperature()  # Get CPU temperature
     sensor_online = is_sensor_online()  # Check if sensor is online
+    print("Sensor_by_date is:",sensor_data)
     return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data,
                            cpu_temperature=cpu_temperature, sensor_online=sensor_online)
 
