@@ -249,9 +249,9 @@
 
         for (var sensor in sensorData) {
             var color = colors[colorIndex];
-            var title = sensor_characteristics[sensor].title;
+
             datasets.push({
-                label: title,
+                label: sensor,
                 data: sensorData[sensor],
                 backgroundColor: color.background,
                 borderColor: color.border,
