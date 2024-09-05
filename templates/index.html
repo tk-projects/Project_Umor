@@ -5,15 +5,213 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sensor Data Visualization</title>
     <style>
-        /* Dein CSS hier */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a; /* Dark background */
+            color: #ffffff; /* Light text color */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 5%;
+            position: relative; /* Position container relative for absolute positioning */
+        }
+
+        .sensor-status, .cpu-temperature, .current-humidity {
+            width: auto;
+            font-size: 16px;
+            color: #dddddd;
+            padding: 10px;
+        }
+
+        .sensor-status {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            display: flex; /* Align items horizontally */
+            align-items: center; /* Center items vertically */
+        }
+
+        .status-indicator {
+            width: 10px; /* Size of the circle */
+            height: 10px; /* Size of the circle */
+            background-color: #00FF00; /* Green color */
+            border-radius: 50%; /* Makes it a circle */
+            margin-right: 10px; /* Space between the circle and the text */
+        }
+
+        .cpu-temperature {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            text-align: right;
+        }
+
+        .current-humidity {
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            border: 1px solid #444444;
+            border-radius: 5px;
+            background-color: #2a2a2a;
+            padding: 10px; /* Added padding */
+        }
+
+        .humidity-header {
+            margin-bottom: 10px;
+        }
+
+        .sensor-value {
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .sensor-name {
+            width: 100px;
+            color: #aaaaaa;
+            margin-bottom: 5px;
+        }
+
+        .sensor-humidity {
+            margin-left: 10px;
+            color: #ffffff;
+        }
+
+        .graph-container {
+            width: 70%;
+            margin-top: 80px;
+            margin-bottom: 20px;
+        }
+
+        .filter-buttons {
+            margin-bottom: 20px;
+        }
+
+        .filter-button, .update-button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #444444;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .filter-button:hover, .update-button:hover {
+            background-color: #666666;
+        }
+
+        .filter-button.active {
+            background-color: #555555;
+        }
+
+        .restart-button {
+            margin-top: 20px;
+            padding: 10px 20px; /* Adjusted smaller padding */
+            background-color: #ff4500; /* Orange-red */
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px; /* Smaller font size */
+            cursor: pointer;
+        }
+
+        .restart-button:hover {
+            background-color: #ff6347; /* Lighter shade on hover */
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                flex-direction: column;
+                align-items: stretch;
+                margin-top: 10px;
+            }
+
+            .sensor-status, .cpu-temperature, .current-humidity {
+                position: static;
+                width: auto;
+                margin: 10px;
+                padding: 5px;
+            }
+
+            .current-humidity {
+                margin-bottom: 20px; /* Add margin-bottom to avoid overlapping */
+                order: 1; /* Position this element above others */
+            }
+
+            .filter-buttons {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                margin-bottom: 20px;
+                order: 2; /* Position this element below current-humidity */
+            }
+
+            .filter-button {
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            .graph-container {
+                width: 100%;
+                margin-top: 0; /* Reset margin-top for better fit */
+                order: 3; /* Position this element below filter-buttons */
+            }
+
+            .update-button {
+                width: 100%;
+                font-size: 14px; /* Smaller font size */
+                padding: 8px; /* Adjusted padding */
+                order: 4; /* Position this element below graph-container */
+            }
+
+            .restart-button {
+                margin-top: 10px;
+                width: 100%;
+                font-size: 14px; /* Smaller font size */
+                padding: 8px; /* Adjusted padding */
+                order: 5; /* Position this element below update-button */
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Dein HTML hier -->
+        <div class="sensor-status">
+            <span class="status-indicator"></span>
+            Sensor Online
+        </div>
+        <div class="cpu-temperature">
+            Sensor Board Temperatur: {{ cpu_temperature }} °C <!-- Updated label -->
+        </div>
+        <div class="current-humidity">
+            <div class="humidity-header">Momentane Feuchtigkeit:</div>
+            {% for sensor, data in sensor_data.items() %}
+                <div class="sensor-value">
+                    <span class="sensor-name">{{ sensor_characteristics[sensor].title }}:</span>
+                    <span class="sensor-humidity">{{ data[-1]|round(0) }}%</span> <!-- Round to nearest whole number -->
+                </div>
+            {% endfor %}
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-button" data-range="6hours" onclick="filterData('6hours')">Last 6 Hours</button>
+            <button class="filter-button" data-range="12hours" onclick="filterData('12hours')">Last 12 Hours</button>
+            <button class="filter-button active" data-range="day" onclick="filterData('day')">Last Day</button>
+            <button class="filter-button" data-range="week" onclick="filterData('week')">Last Week</button>
+            <button class="filter-button" data-range="all" onclick="filterData('all')">All Data</button>
+        </div>
         <div class="graph-container">
             <canvas id="sensorChart"></canvas>
         </div>
+
+        <!-- Update Button -->
+        <button class="update-button" onclick="updateSensors()">Update</button>
+
+        <!-- Restart Button -->
+        <button class="restart-button" onclick="restartPi()">Sensor Neustart</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -55,7 +253,7 @@
             var title = sensorCharacteristics[sensor] ? sensorCharacteristics[sensor].title : sensor; // Get the title from sensor_characteristics
 
             datasets.push({
-                label: title, // Use title instead of sensor name
+                label: title,
                 data: sensorData[sensor],
                 backgroundColor: color.background,
                 borderColor: color.border,
@@ -181,8 +379,10 @@
             fetch('/update_sensor_now', { method: 'POST' })
                 .then(response => {
                     if (!response.ok) {
+                        // Handle non-JSON responses by returning text and throwing an error
                         return response.text().then(text => { throw new Error(`HTTP error! status: ${response.status}, message: ${text}`); });
                     }
+                    // If response is ok, refresh the page
                     location.reload();
                 })
                 .catch(error => {
