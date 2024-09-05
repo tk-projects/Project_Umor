@@ -350,7 +350,9 @@
 
             chart.data.labels = filteredTimestamps.map(ts => formatTimestamp(ts));
             chart.data.datasets.forEach(dataset => {
-                dataset.data = filteredSensorData[dataset.label];
+                var sensorKey = Object.keys(sensorCharacteristics).find(key => sensorCharacteristics[key].title === dataset.label);
+                dataset.data = filteredSensorData[sensorKey];
+
             });
             chart.update();
 
