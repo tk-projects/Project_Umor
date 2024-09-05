@@ -218,6 +218,7 @@
     <script>
         var timestamps = {{ timestamps | tojson }};
         var sensorData = {{ sensor_data | tojson }};
+        var sensorCharacteristics = {{ sensor_characteristics | tojson }};
         var originalTimestamps = [...timestamps]; // Save the original timestamps
         var originalSensorData = JSON.parse(JSON.stringify(sensorData)); // Save the original sensor data
         var chart; // Variable to hold the Chart.js instance
@@ -249,9 +250,11 @@
 
         for (var sensor in sensorData) {
             var color = colors[colorIndex];
+            var sensor_title = sensorCharacteristics[sensor] ? sensorCharacteristics[sensor].title : sensor; // Get the title from sensor_characteristics
+
 
             datasets.push({
-                label: sensor,
+                label: sensor_title,
                 data: sensorData[sensor],
                 backgroundColor: color.background,
                 borderColor: color.border,
