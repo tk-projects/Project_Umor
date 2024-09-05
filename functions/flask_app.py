@@ -28,6 +28,9 @@ def fetch_all_sensor_data():
     sensor_data = load_sensor_json()
     sensor_names = list(sensor_data.keys())
 
+    # Generate sensor characteristics data
+    sensor_characterisitcs = load_sensor_json()
+
     # Prepare the query to fetch data for all sensors
     columns = ['timestamp'] + sensor_names
     columns_str = ', '.join(columns)
@@ -44,7 +47,7 @@ def fetch_all_sensor_data():
         for i, sensor_name in enumerate(sensor_names):
             data_by_sensor[sensor_name].append(row[i + 1])
 
-    return timestamps, data_by_sensor
+    return timestamps, data_by_sensor, sensor_characteristics
 
 @app.route('/')
 def index():
@@ -85,10 +88,10 @@ def update_sensor_now():
     readings = update_sensor_data(sensors)
     update_database(readings)
 
-    timestamps, sensor_data = fetch_all_sensor_data()
+    timestamps, sensor_data, sensor_characteristics = fetch_all_sensor_data()
     cpu_temperature = get_cpu_temperature()  # Get CPU temperature
     sensor_online = is_sensor_online()  # Check if sensor is online
-    return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data,
+    return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data,sensor_characteristics =sensor_characteristics,
                            cpu_temperature=cpu_temperature, sensor_online=sensor_online)
     
 

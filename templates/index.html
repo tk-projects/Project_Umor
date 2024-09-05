@@ -191,7 +191,7 @@
             <div class="humidity-header">Momentane Feuchtigkeit:</div>
             {% for sensor, data in sensor_data.items() %}
                 <div class="sensor-value">
-                    <span class="sensor-name">{{ sensor }}:</span>
+                    <span class="sensor-name">{{ sensor_characteristics[sensor].title }}:</span>
                     <span class="sensor-humidity">{{ data[-1]|round(0) }}%</span> <!-- Round to nearest whole number -->
                 </div>
             {% endfor %}
