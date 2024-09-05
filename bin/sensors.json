@@ -1,7 +1,7 @@
 {
     "Sensor_1_0": {
         "sensor_id": 10,
-	"title": "Oberfläche (0 cm)",
+	"title": "Oberfläche",
         "name": "Sensor_1_0",
         "adc_channel": 0,
         "unit": "%",
