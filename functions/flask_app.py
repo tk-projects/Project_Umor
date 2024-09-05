@@ -29,7 +29,7 @@ def fetch_all_sensor_data():
     sensor_names = list(sensor_data.keys())
 
     # Generate sensor characteristics data
-    sensor_characterisitcs = load_sensor_json()
+    sensor_characteristics = load_sensor_json()
 
     # Prepare the query to fetch data for all sensors
     columns = ['timestamp'] + sensor_names
@@ -51,11 +51,11 @@ def fetch_all_sensor_data():
 
 @app.route('/')
 def index():
-    timestamps, sensor_data = fetch_all_sensor_data()
+    timestamps, sensor_data, sensor_characteristics = fetch_all_sensor_data()
     cpu_temperature = get_cpu_temperature()  # Get CPU temperature
     sensor_online = is_sensor_online()  # Check if sensor is online
     print("Sensor_by_date is:",sensor_data)
-    return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data,
+    return render_template('index.html', timestamps=timestamps, sensor_data=sensor_data,sensor_characteristics =sensor_characteristics,
                            cpu_temperature=cpu_temperature, sensor_online=sensor_online)
 
 # Route to handle restart action
