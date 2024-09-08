@@ -1,7 +1,7 @@
 {
     "Sensor_1_0": {
         "sensor_id": 10,
-	"title": "Oberfläche",
+        "title": "Oberfläche",
         "name": "Sensor_1_0",
         "adc_channel": 0,
         "unit": "%",
@@ -12,12 +12,23 @@
     },
     "Sensor_1_1": {
         "sensor_id": 11,
-	"title": "Tiefe",
+        "title": "20 cm tief",
         "name": "Sensor_1_1",
         "adc_channel": 1,
         "unit": "%",
-        "min_calibration_value": 10061,
+        "min_calibration_value": 10000,
         "max_calibration_value": 19801,
+        "sensor_group": 1,
+        "sensor_cluster": 1
+    },
+    "Sensor_1_2": {
+        "sensor_id": 12,
+        "title": "40 cm tief",
+        "name": "Sensor_1_2",
+        "adc_channel": 2,
+        "unit": "%",
+        "min_calibration_value": 14342,
+        "max_calibration_value": 20176,
         "sensor_group": 1,
         "sensor_cluster": 1
     }
