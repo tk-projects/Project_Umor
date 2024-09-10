@@ -223,26 +223,47 @@
         var originalSensorData = JSON.parse(JSON.stringify(sensorData)); // Save the original sensor data
         var chart; // Variable to hold the Chart.js instance
 
-        // Function to generate colors with adjusted gradients
-        function generateColors(numColors) {
-            var colors = [];
-            var startColor = [135, 206, 250]; // Light Blue (more blueish)
-            var endColor = [72, 209, 204];   // Turquoise (less greenish, more blueish)
+    // Function to generate colors with adjusted gradients
+    function generateColors(numColors) {
+        var colors = [];
+        
+        // Define the color stops
+        var startColor = [0, 0, 255];    // Blue
+        var middleColor = [72, 209, 204]; // Turquoise
+        var endColor = [255, 165, 0];    // Light Orange
 
-            for (var i = 0; i < numColors; i++) {
-                var ratio = i / (numColors - 1);
-                var color = [
-                    Math.round(startColor[0] * (1 - ratio) + endColor[0] * ratio),
-                    Math.round(startColor[1] * (1 - ratio) + endColor[1] * ratio),
-                    Math.round(startColor[2] * (1 - ratio) + endColor[2] * ratio)
-                ];
-                colors.push({
-                    border: `rgba(${color.join(',')}, 1)`,
-                    background: `rgba(${color.join(',')}, 0.2)`
-                });
-            }
-            return colors;
+        // First half: blue to turquoise
+        var halfColors = Math.floor(numColors / 2);
+        for (var i = 0; i < halfColors; i++) {
+            var ratio = i / (halfColors - 1);
+            var color = [
+                Math.round(startColor[0] * (1 - ratio) + middleColor[0] * ratio),
+                Math.round(startColor[1] * (1 - ratio) + middleColor[1] * ratio),
+                Math.round(startColor[2] * (1 - ratio) + middleColor[2] * ratio)
+            ];
+            colors.push({
+                border: `rgba(${color.join(',')}, 1)`,
+                background: `rgba(${color.join(',')}, 0.2)`
+            });
         }
+
+        // Second half: turquoise to light orange
+        for (var i = halfColors; i < numColors; i++) {
+            var ratio = (i - halfColors) / (numColors - halfColors - 1);
+            var color = [
+                Math.round(middleColor[0] * (1 - ratio) + endColor[0] * ratio),
+                Math.round(middleColor[1] * (1 - ratio) + endColor[1] * ratio),
+                Math.round(middleColor[2] * (1 - ratio) + endColor[2] * ratio)
+            ];
+            colors.push({
+                border: `rgba(${color.join(',')}, 1)`,
+                background: `rgba(${color.join(',')}, 0.2)`
+            });
+        }
+
+        return colors;
+    }
+
 
         var colors = generateColors(Object.keys(sensorData).length);
         var datasets = [];
